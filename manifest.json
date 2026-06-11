@@ -1,0 +1,29 @@
+{
+  "id": "./",
+  "name": "SepsiGo — Sepsis Early Detection System",
+  "short_name": "SepsiGo",
+  "description": "Alat bantu skrining sepsis berbasis Cell Population Data (CPD) Sysmex XN-Series",
+  "start_url": "./SepsiGo.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1565C0",
+  "theme_color": "#1565C0",
+  "lang": "id",
+  "categories": ["medical", "health"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
