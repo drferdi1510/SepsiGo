@@ -658,21 +658,32 @@
      TAB TRANSITION LOADER
   ══════════════════════════════════════════ */
   #tab-loader {
-    display: none;
     position: fixed;
     top: 0; right: 0; bottom: 0; left: 0;
-    z-index: 200;
-    background: rgba(6,14,36,.72);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    z-index: 99990;
+    background: rgba(6,14,36,.80);
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
     align-items: center;
+    -webkit-justify-content: center;
     justify-content: center;
-    animation: tabLoaderFadeIn .18s ease;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    -webkit-transition: opacity .22s ease, visibility .22s ease;
+    transition: opacity .22s ease, visibility .22s ease;
   }
-  #tab-loader.show { display: flex; }
-  #tab-loader.hiding { animation: tabLoaderFadeOut .30s ease forwards; }
-  @keyframes tabLoaderFadeIn  { from { opacity:0 } to { opacity:1 } }
-  @keyframes tabLoaderFadeOut { from { opacity:1 } to { opacity:0 } }
+  #tab-loader.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  #tab-loader.hiding {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 
   .tab-loader-inner {
     display: flex;
@@ -757,22 +768,34 @@
      CALCULATION LOADER
   ══════════════════════════════════════════ */
   #calc-loader {
-    display: none;
     position: fixed;
-    inset: 0;
-    z-index: 300;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 99995;
     background: linear-gradient(135deg, #060E24 0%, #0D1B3E 50%, #0A0F2E 100%);
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
     align-items: center;
+    -webkit-justify-content: center;
     justify-content: center;
+    -webkit-flex-direction: column;
     flex-direction: column;
-    animation: calcLoaderIn .3s cubic-bezier(.4,0,.2,1);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    -webkit-transition: opacity .3s cubic-bezier(.4,0,.2,1), visibility .3s cubic-bezier(.4,0,.2,1);
+    transition: opacity .3s cubic-bezier(.4,0,.2,1), visibility .3s cubic-bezier(.4,0,.2,1);
   }
-  #calc-loader.show { display: flex; }
+  #calc-loader.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
   #calc-loader.hiding {
-    animation: calcLoaderOut .4s cubic-bezier(.4,0,.2,1) forwards;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
-  @keyframes calcLoaderIn  { from { opacity:0; transform:scale(.97) } to { opacity:1; transform:none } }
-  @keyframes calcLoaderOut { from { opacity:1; transform:none } to { opacity:0; transform:scale(1.03) } }
 
   /* BG effects */
   #calc-loader .cl-bg-orb {
@@ -928,9 +951,166 @@
     transition: opacity .4s;
     font-style: italic;
   }
+
+  /* ── APP SPLASH OVERLAY ── */
+  #app-splash {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 99999;
+    background: #060E24;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow: hidden;
+    -webkit-transition: opacity .5s ease;
+    transition: opacity .5s ease;
+  }
+  #app-splash.hiding { opacity: 0; pointer-events: none; }
+  #app-splash .sp-bg {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(37,99,235,.40) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,92,246,.30) 0%, transparent 55%),
+      linear-gradient(135deg, #060E24 0%, #0D1B3E 50%, #0A0F2E 100%);
+  }
+  #app-splash .sp-dot-grid {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+  #app-splash .sp-card {
+    position: relative;
+    z-index: 2;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-align-items: center;
+    align-items: center;
+    width: min(90vw, 360px);
+    -webkit-animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
+    animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @-webkit-keyframes spCardIn { from { opacity:0; -webkit-transform:scale(.80) translateY(30px); } to { opacity:1; -webkit-transform:none; } }
+  @keyframes spCardIn         { from { opacity:0; transform:scale(.80) translateY(30px); }          to { opacity:1; transform:none; } }
+  #app-splash .sp-logo-wrap { position: relative; margin-bottom: 28px; }
+  #app-splash .sp-ring {
+    position: absolute;
+    top: -20px; right: -20px; bottom: -20px; left: -20px;
+    border-radius: 28px;
+    border: 1.5px solid rgba(37,99,235,.5);
+    -webkit-animation: spRing 2.4s ease-out infinite;
+    animation: spRing 2.4s ease-out infinite;
+  }
+  #app-splash .sp-ring:nth-child(2) { top:-36px;right:-36px;bottom:-36px;left:-36px;border-radius:36px;-webkit-animation-delay:.6s;animation-delay:.6s;border-color:rgba(139,92,246,.35); }
+  #app-splash .sp-ring:nth-child(3) { top:-54px;right:-54px;bottom:-54px;left:-54px;border-radius:44px;-webkit-animation-delay:1.2s;animation-delay:1.2s;border-color:rgba(6,182,212,.25); }
+  @-webkit-keyframes spRing { 0%{opacity:.8;-webkit-transform:scale(1);}100%{opacity:0;-webkit-transform:scale(1.15);} }
+  @keyframes spRing         { 0%{opacity:.8;transform:scale(1);}         100%{opacity:0;transform:scale(1.15);} }
+  #app-splash .sp-logo-card {
+    position: relative; z-index: 2;
+    background: #fff; border-radius: 20px; padding: 20px 28px;
+    box-shadow: 0 8px 32px rgba(37,99,235,.25), 0 32px 80px rgba(0,0,0,.40);
+    -webkit-animation: spLogoFloat 4s ease-in-out infinite;
+    animation: spLogoFloat 4s ease-in-out infinite;
+  }
+  #app-splash .sp-logo-card img { width: 220px; height: auto; display: block; }
+  @-webkit-keyframes spLogoFloat { 0%,100%{-webkit-transform:translateY(0);}50%{-webkit-transform:translateY(-4px);} }
+  @keyframes spLogoFloat         { 0%,100%{transform:translateY(0);}         50%{transform:translateY(-4px);} }
+  #app-splash .sp-tagline {
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,.50); letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 28px;
+    -webkit-animation: spFadeUp .8s .4s cubic-bezier(.4,0,.2,1) both;
+    animation: spFadeUp .8s .4s cubic-bezier(.4,0,.2,1) both;
+  }
+  @-webkit-keyframes spFadeUp { from{opacity:0;-webkit-transform:translateY(8px);}to{opacity:1;-webkit-transform:none;} }
+  @keyframes spFadeUp         { from{opacity:0;transform:translateY(8px);}        to{opacity:1;transform:none;} }
+  #app-splash .sp-pulse-wrap {
+    width: 100%; margin-bottom: 20px; height: 36px; overflow: hidden;
+    -webkit-animation: spFadeUp .8s .6s both; animation: spFadeUp .8s .6s both;
+  }
+  #app-splash .sp-ecg {
+    width: 200%; height: 36px;
+    -webkit-animation: spScan 2s linear infinite; animation: spScan 2s linear infinite;
+  }
+  @-webkit-keyframes spScan { from{-webkit-transform:translateX(0);}to{-webkit-transform:translateX(-50%);} }
+  @keyframes spScan         { from{transform:translateX(0);}         to{transform:translateX(-50%);} }
+  #app-splash .sp-progress {
+    width: 100%; margin-bottom: 16px;
+    -webkit-animation: spFadeUp .8s .7s both; animation: spFadeUp .8s .7s both;
+  }
+  #app-splash .sp-track {
+    width: 100%; height: 4px; background: rgba(255,255,255,.10);
+    border-radius: 4px; overflow: hidden;
+  }
+  #app-splash .sp-fill {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, #2563EB, #8B5CF6, #06B6D4);
+    background-size: 200% 100%;
+    -webkit-animation: spGrow 2.6s cubic-bezier(.4,0,.2,1) forwards, spShimmer 1.5s linear infinite;
+    animation: spGrow 2.6s cubic-bezier(.4,0,.2,1) forwards, spShimmer 1.5s linear infinite;
+    width: 0%;
+  }
+  @-webkit-keyframes spGrow { 0%{width:0%;}40%{width:60%;}70%{width:80%;}90%{width:92%;}100%{width:100%;} }
+  @keyframes spGrow         { 0%{width:0%;}40%{width:60%;}70%{width:80%;}90%{width:92%;}100%{width:100%;} }
+  @-webkit-keyframes spShimmer { 0%{background-position:200% center;}100%{background-position:-200% center;} }
+  @keyframes spShimmer         { 0%{background-position:200% center;}100%{background-position:-200% center;} }
+  #app-splash .sp-status {
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,.40); letter-spacing: 1px; height: 16px;
+    -webkit-transition: opacity .3s; transition: opacity .3s;
+    -webkit-animation: spFadeUp .8s .8s both; animation: spFadeUp .8s .8s both;
+  }
 </style>
 </head>
 <body>
+
+<!-- ── APP SPLASH OVERLAY ── -->
+<div id="app-splash">
+  <div class="sp-bg"></div>
+  <div class="sp-dot-grid"></div>
+  <div class="sp-card">
+    <div class="sp-logo-wrap">
+      <div class="sp-ring"></div>
+      <div class="sp-ring"></div>
+      <div class="sp-ring"></div>
+      <div class="sp-logo-card">
+        <img src="./Logo.png" alt="SepsiGo" onerror="this.src='./icons/icon-192.png';this.style.width='80px';this.style.padding='4px'">
+      </div>
+    </div>
+    <div class="sp-tagline">Sepsis Early Detection System</div>
+    <div class="sp-pulse-wrap">
+      <svg class="sp-ecg" viewBox="0 0 400 36" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 18 L60 18 L75 18 L80 6 L87 30 L92 2 L100 34 L107 18 L120 18 L180 18 L195 18 L200 6 L207 30 L212 2 L220 34 L227 18 L240 18 L300 18 L315 18 L320 6 L327 30 L332 2 L340 34 L347 18 L360 18 L400 18"
+          stroke="url(#spEcgGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="spEcgGrad" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
+            <stop offset="30%" stop-color="#2563EB"/>
+            <stop offset="60%" stop-color="#8B5CF6"/>
+            <stop offset="80%" stop-color="#06B6D4"/>
+            <stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="sp-progress"><div class="sp-track"><div class="sp-fill"></div></div></div>
+    <div class="sp-status" id="sp-status-text">Memuat sistem<span style="-webkit-animation:spBlink .8s ease-in-out infinite;animation:spBlink .8s ease-in-out infinite">...</span></div>
+  </div>
+</div>
+<style>
+  @-webkit-keyframes spBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
+  @keyframes spBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
+</style>
 
 <!-- ── ADMIN LOGIN MODAL ── -->
 <div id="admin-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
@@ -4273,6 +4453,48 @@ function showUpdateBanner(newWorker) {
   banner.appendChild(btn);
   document.body.appendChild(banner);
 }
+
+// ─── APP SPLASH ───────────────────────────────────────────────────────────
+(function() {
+  var splash = document.getElementById('app-splash');
+  if (!splash) return;
+
+  // Skip splash if user came through index.html (which already showed one)
+  if (sessionStorage.getItem('sp_from_index') === '1') {
+    sessionStorage.removeItem('sp_from_index');
+    splash.parentNode.removeChild(splash);
+    return;
+  }
+
+  // Show splash — cycle status messages
+  var spMsgs = ['Memuat sistem','Menginisialisasi algoritma','Menyiapkan parameter CPD','Siap digunakan'];
+  var spIdx = 0;
+  var spEl = document.getElementById('sp-status-text');
+  var spTicker = setInterval(function() {
+    spIdx++;
+    if (spIdx >= spMsgs.length) { clearInterval(spTicker); return; }
+    if (!spEl) return;
+    spEl.style.opacity = '0';
+    setTimeout(function() {
+      if (!spEl) return;
+      if (spIdx < spMsgs.length - 1) {
+        spEl.innerHTML = spMsgs[spIdx] + '<span style="-webkit-animation:spBlink .8s ease-in-out infinite;animation:spBlink .8s ease-in-out infinite">...</span>';
+      } else {
+        spEl.innerHTML = spMsgs[spIdx] + ' <span style="color:#10B981">✓</span>';
+      }
+      spEl.style.opacity = '1';
+    }, 300);
+  }, 600);
+
+  // Dismiss after 3 seconds
+  setTimeout(function() {
+    clearInterval(spTicker);
+    splash.classList.add('hiding');
+    setTimeout(function() {
+      if (splash.parentNode) splash.parentNode.removeChild(splash);
+    }, 520);
+  }, 3000);
+})();
 </script>
 </body>
 </html>

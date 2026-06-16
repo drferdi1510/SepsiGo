@@ -367,6 +367,8 @@
     setTimeout(() => {
       document.body.classList.add('fade-out');
       setTimeout(() => {
+        // Tell SepsiGo.html that splash was already shown here
+        try { sessionStorage.setItem('sp_from_index', '1'); } catch(e) {}
         window.location.replace('./SepsiGo.html');
       }, 500);
     }, 3000);
