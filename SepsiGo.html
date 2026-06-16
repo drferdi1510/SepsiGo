@@ -9,7 +9,7 @@
 <link rel="manifest" href="./manifest.json">
 
 <!-- ── PWA: Theme & Status Bar ── -->
-<meta name="theme-color" content="#1565C0">
+<meta name="theme-color" content="#1E40AF">
 <meta name="mobile-web-app-capable" content="yes">
 
 <!-- ── iOS Safari PWA ── -->
@@ -30,273 +30,903 @@
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
   :root {
-    --bg: #f0f4f8; --surface: #ffffff; --card: #ffffff; --border: #d0dce8;
-    --accent: #1565C0; --accent2: #1976D2; --red: #D32F2F; --green: #2e7d32;
-    --yellow: #f57f17; --text: #1a2535; --muted: #546e8a; --dim: #b0c4d8;
-    --header-bg: #1565C0; --nav-bg: #ffffff;
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --border: #dde8f8;
+    --accent: #2563EB;
+    --accent2: #3B82F6;
+    --accent-dark: #1D4ED8;
+    --red: #EF4444;
+    --red-dark: #DC2626;
+    --green: #10B981;
+    --yellow: #F59E0B;
+    --purple: #8B5CF6;
+    --cyan: #06B6D4;
+    --text: #0F172A;
+    --muted: #64748B;
+    --dim: #CBD5E1;
+    --header-bg: #1E40AF;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.05), 0 4px 16px rgba(37,99,235,.08);
+    --shadow-md: 0 4px 24px rgba(37,99,235,.12), 0 8px 32px rgba(0,0,0,.06);
+    --shadow-lg: 0 8px 40px rgba(37,99,235,.2), 0 16px 48px rgba(0,0,0,.10);
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(180deg,#eef4fb 0%,#f3f7fc 280px,#f6f9fc 100%); color: var(--text); min-height: 100vh; line-height: 1.5; }
 
-  .header { background: linear-gradient(135deg,#1565C0,#1976D2,#0d47a1); border-bottom: 1px solid #0d47a1; padding: 14px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(13,71,161,.35); height: 86px; }
-  .header-inner { max-width: 740px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg,#00c2ff,#6ee7ff); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-  .logo-text { font-size: 20px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
-  .logo-sub { font-size: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-top: 1px; letter-spacing: .3px; }
-  .lang-btn { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.5); border-radius: 999px; padding: 6px 16px; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: all .2s; backdrop-filter: blur(6px); letter-spacing: .5px; }
-  .lang-btn:hover { background: rgba(255,255,255,.28); color: #fff; border-color: rgba(255,255,255,.8); }
-
-  .nav { background: rgba(255,255,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid #e3ecf6; padding: 0 20px; position: sticky; top: 86px; z-index: 99; box-shadow: 0 1px 6px rgba(21,101,192,.06); }
-  .nav-inner { max-width: 740px; margin: 0 auto; display: flex; }
-  .nav-btn { background: none; border: none; border-bottom: 2px solid transparent; color: #7d92ab; padding: 13px 18px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s ease; font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: .2px; }
-  .nav-btn.active { color: #D32F2F; border-bottom-color: #D32F2F; font-weight: 800; }
-  .nav-btn:hover { color: #1565C0; }
-
-  .main { max-width: 740px; margin: 0 auto; padding: 22px 16px 100px; }
-
-  .section { background: #ffffff; border: 1px solid #e6eef7; border-radius: 18px; padding: 20px 22px; margin-bottom: 16px; animation: fadeUp .35s ease both; box-shadow: 0 1px 3px rgba(21,101,192,.04), 0 8px 24px -16px rgba(21,101,192,.18); }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
-  .section-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 2.5px; color: #1565C0; text-transform: uppercase; margin-bottom: 14px; }
-
-  input[type=number], input[type=text], select {
-    background: #f6f9ff; border: 1px solid #d4e2f5; border-radius: 9px;
-    color: var(--text); padding: 7px 11px; font-size: 13px;
-    font-family: 'JetBrains Mono', monospace; transition: border .2s, box-shadow .2s;
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #EEF2FF;
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(37,99,235,.10) 0%, transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(139,92,246,.08) 0%, transparent 50%);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
   }
-  input:focus, select:focus { outline: none; border-color: #1565C0; box-shadow: 0 0 0 3px rgba(21,101,192,.10); }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 45%, #1D4ED8 100%);
+    border-bottom: none;
+    padding: 14px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 30px rgba(30,64,175,.40), 0 1px 0 rgba(255,255,255,.08) inset;
+    height: 86px;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 0% 50%, rgba(96,165,250,.30) 0%, transparent 60%),
+      radial-gradient(ellipse at 100% 50%, rgba(139,92,246,.20) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+    pointer-events: none;
+  }
+  .header-inner { max-width: 740px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; position: relative; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, rgba(255,255,255,.25), rgba(255,255,255,.10));
+    border: 1px solid rgba(255,255,255,.30);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0,0,0,.15), 0 1px 0 rgba(255,255,255,.20) inset;
+  }
+  .logo-text {
+    font-size: 22px; font-weight: 800; color: #fff;
+    letter-spacing: -0.5px;
+    text-shadow: 0 1px 3px rgba(0,0,0,.20);
+  }
+  .logo-sub {
+    font-size: 10px; color: rgba(255,255,255,.70);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 1px; letter-spacing: .3px;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 999px;
+    padding: 7px 18px;
+    color: #fff; font-size: 12px; font-weight: 700;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all .25s;
+    backdrop-filter: blur(8px);
+    letter-spacing: .5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .lang-btn:hover {
+    background: rgba(255,255,255,.28);
+    border-color: rgba(255,255,255,.65);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.20);
+  }
+
+  #pwa-install-btn:hover {
+    background: rgba(255,255,255,.28) !important;
+    border-color: rgba(255,255,255,.65) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.20) !important;
+  }
+  #pwa-install-btn:active { transform: translateY(0); }
+
+  @keyframes modalFadeIn { from{opacity:0} to{opacity:1} }
+
+  /* ── TOP NAV ── */
+  .nav {
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(37,99,235,.10);
+    padding: 0 16px;
+    position: sticky;
+    top: 86px;
+    z-index: 99;
+    box-shadow: 0 2px 12px rgba(37,99,235,.07);
+  }
+  .nav-inner { max-width: 740px; margin: 0 auto; display: flex; gap: 4px; padding: 8px 0; }
+  .nav-btn {
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    color: #94A3B8;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .22s cubic-bezier(.4,0,.2,1);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: .1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    justify-content: center;
+    position: relative;
+  }
+  .nav-btn .nav-icon { font-size: 15px; line-height: 1; }
+  .nav-btn.active {
+    background: linear-gradient(135deg, #2563EB, #3B82F6);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 3px 12px rgba(37,99,235,.35);
+    transform: translateY(-1px);
+  }
+  .nav-btn:hover:not(.active) {
+    background: rgba(37,99,235,.07);
+    color: #2563EB;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 740px; margin: 0 auto; padding: 20px 14px 110px; }
+
+  /* ── SECTION CARDS ── */
+  .section {
+    background: rgba(255,255,255,.92);
+    border: 1px solid rgba(37,99,235,.10);
+    border-radius: 20px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    animation: fadeUp .35s cubic-bezier(.4,0,.2,1) both;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04), 0 8px 32px rgba(37,99,235,.08);
+    backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+  }
+  .section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #2563EB, #8B5CF6, #06B6D4);
+    border-radius: 20px 20px 0 0;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #2563EB;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, rgba(37,99,235,.10), rgba(139,92,246,.08));
+    border: 1px solid rgba(37,99,235,.18);
+    border-radius: 999px;
+    padding: 5px 14px;
+  }
+
+  /* ── INPUTS ── */
+  input[type=number], input[type=text], select {
+    background: #F8FAFF;
+    border: 1.5px solid #DBEAFE;
+    border-radius: 10px;
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: border .2s, box-shadow .2s, background .2s;
+    appearance: auto;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: #2563EB;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+  }
   input[type=number] { width: 110px; }
-  input[type=text] { width: 100%; }
+  input[type=text]   { width: 100%; }
   select { color: var(--text); }
 
-  /* CPD INPUT CARD */
+  /* ── CPD INPUT CARD ── */
   .cpd-card {
-    background: #f5f8ff; border-radius: 10px; padding: 14px 16px;
-    margin-bottom: 10px; border: 1px solid #d0e4fa;
+    background: linear-gradient(135deg, #F0F7FF, #F5F0FF);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(37,99,235,.15);
+    transition: box-shadow .2s, transform .2s;
+  }
+  .cpd-card:hover {
+    box-shadow: 0 4px 20px rgba(37,99,235,.12);
+    transform: translateY(-1px);
   }
   .cpd-card-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
-  .cpd-param-name { font-size: 15px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--text); }
+  .cpd-param-name { font-size: 16px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #1E40AF; }
   .cpd-cutoff-badge {
     font-size: 11px; font-family: 'JetBrains Mono', monospace;
-    background: #e8f0fe; border: 1px solid #c5d8f0;
-    border-radius: 6px; padding: 3px 10px; color: #1565C0;
+    background: linear-gradient(135deg, rgba(37,99,235,.12), rgba(139,92,246,.10));
+    border: 1px solid rgba(37,99,235,.20);
+    border-radius: 999px; padding: 4px 12px; color: #2563EB; font-weight: 600;
   }
-  .cpd-stats { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .cpd-stats { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
   .cpd-stat {
     font-size: 11px; font-family: 'JetBrains Mono', monospace;
-    background: rgba(21,101,192,.08); border: 1px solid rgba(21,101,192,.2);
-    border-radius: 5px; padding: 3px 9px; color: #1565C0;
+    background: rgba(37,99,235,.07);
+    border: 1px solid rgba(37,99,235,.18);
+    border-radius: 999px; padding: 3px 10px; color: #2563EB;
   }
   .cpd-input-row { display: flex; align-items: center; gap: 10px; }
-  .cpd-input-label { font-size: 11px; color: var(--muted); min-width: 60px; }
+  .cpd-input-label { font-size: 11px; color: var(--muted); min-width: 60px; font-weight: 600; }
 
-  /* FLAG */
-  .flag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 5px; font-family: 'JetBrains Mono', monospace; }
-  .flag-high { background: rgba(255,77,109,.18); color: var(--red); border: 1px solid rgba(255,77,109,.4); }
-  .flag-norm { background: rgba(0,229,160,.12); color: var(--green); border: 1px solid rgba(0,229,160,.3); }
+  /* ── FLAGS ── */
+  .flag {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 4px 12px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .flag-high {
+    background: linear-gradient(135deg, rgba(239,68,68,.15), rgba(239,68,68,.08));
+    color: #DC2626;
+    border: 1px solid rgba(239,68,68,.35);
+  }
+  .flag-norm {
+    background: linear-gradient(135deg, rgba(16,185,129,.12), rgba(16,185,129,.06));
+    color: #059669;
+    border: 1px solid rgba(16,185,129,.30);
+  }
 
-  /* ORGAN CARD */
-  .organ-card { background: #f7faff; border-radius: 12px; padding: 13px 15px; margin-bottom: 10px; border: 1px solid #e6eefb; border-left: 3px solid var(--dim); transition: border-color .2s; }
+  /* ── ORGAN CARDS ── */
+  .organ-card {
+    background: #F8FAFF;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid #E2EEFF;
+    border-left: 3px solid var(--dim);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .organ-card:hover { border-left-color: #2563EB; box-shadow: 0 4px 16px rgba(37,99,235,.10); }
   .organ-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .organ-name { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; }
-  .organ-score { background: var(--card); border-radius: 5px; padding: 2px 12px; font-size: 16px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+  .organ-name { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; color: #1E40AF; }
+  .organ-score {
+    background: linear-gradient(135deg, #EFF6FF, #F5F0FF);
+    border: 1px solid rgba(37,99,235,.20);
+    border-radius: 8px; padding: 3px 14px;
+    font-size: 18px; font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    color: #1E40AF;
+  }
   .organ-inputs { display: flex; gap: 10px; flex-wrap: wrap; }
   .organ-input-group { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 100px; }
-  .organ-input-label { font-size: 10px; color: #546e8a; }
-  .sofa-hint { font-size: 10px; color: #7a9dbf; font-family: 'JetBrains Mono', monospace; margin-top: 5px; }
+  .organ-input-label { font-size: 10px; color: #546e8a; font-weight: 600; }
+  .sofa-hint { font-size: 10px; color: #7a9dbf; font-family: 'JetBrains Mono', monospace; margin-top: 5px; line-height: 1.6; }
 
-  .sofa-total { background: #f0f6ff; border-radius: 10px; padding: 14px 16px; margin-top: 14px; border: 1px solid #d0e4fa; }
-  .sofa-total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .sofa-total {
+    background: linear-gradient(135deg, #EFF6FF, #F5F0FF);
+    border-radius: 14px; padding: 16px 18px; margin-top: 14px;
+    border: 1px solid rgba(37,99,235,.18);
+    box-shadow: 0 2px 12px rgba(37,99,235,.08);
+  }
+  .sofa-total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
   .sofa-total-label { font-size: 13px; color: #546e8a; font-weight: 600; }
-  .sofa-total-val { font-size: 24px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-  .sofa-bar-bg { background: #d0dce8; border-radius: 6px; height: 10px; overflow: hidden; }
-  .sofa-bar { height: 100%; border-radius: 6px; transition: width .5s cubic-bezier(.4,0,.2,1); }
-  .sofa-interpret { font-size: 11px; color: #546e8a; margin-top: 6px; font-family: 'JetBrains Mono', monospace; }
+  .sofa-total-val { font-size: 28px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #1E40AF; }
+  .sofa-bar-bg { background: #DBEAFE; border-radius: 8px; height: 10px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.08); }
+  .sofa-bar { height: 100%; border-radius: 8px; transition: width .6s cubic-bezier(.4,0,.2,1); background: linear-gradient(90deg, #2563EB, #8B5CF6); }
+  .sofa-interpret { font-size: 11px; color: #64748B; margin-top: 8px; font-family: 'JetBrains Mono', monospace; }
 
+  /* ── PATIENT GRID ── */
   .patient-grid { display: flex; gap: 10px; flex-wrap: wrap; }
   .patient-field { flex: 1; min-width: 100px; }
-  .patient-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .patient-label { font-size: 11px; color: var(--muted); margin-bottom: 5px; font-weight: 600; letter-spacing: .3px; }
   .patient-field select, .patient-field input { width: 100%; }
 
+  /* ── BUTTONS ── */
   .btn-row { display: flex; gap: 10px; margin-bottom: 16px; }
-  .btn-calc { flex: 3; background: linear-gradient(135deg,#D32F2F,#b71c1c); border: none; border-radius: 10px; color: #fff; padding: 14px 0; font-size: 15px; font-weight: 800; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 4px 20px rgba(211,47,47,.3); transition: all .2s; }
-  .btn-calc:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(211,47,47,.45); }
-  .btn-reset { flex: 1; background: #f0f4f8; border: 1px solid #c5d8f0; border-radius: 10px; color: var(--muted); padding: 14px 0; font-size: 13px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all .2s; }
-  .btn-reset:hover { border-color: #1565C0; color: #1565C0; }
-  
-  /* BUTTON VARIANTS */
-  .btn-calc.blue { background: linear-gradient(135deg,#1565C0,#1976D2); }
-  .btn-calc.blue:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(21,101,192,.35); }
 
-  /* RESULT */
-  .result { border-radius: 14px; padding: 22px 20px; margin-bottom: 20px; animation: fadeUp .4s ease; }
-  .result.sepsis { background: linear-gradient(135deg,#fff5f5,#fff0f0); border: 2px solid #D32F2F; box-shadow: 0 4px 20px rgba(211,47,47,.12); }
-  .result.no-sepsis { background: linear-gradient(135deg,#f5fff8,#f0fff4); border: 2px solid #2e7d32; box-shadow: 0 4px 20px rgba(46,125,50,.1); }
-  .result-label { font-size: 10px; letter-spacing: 2px; color: #546e8a; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; }
-  .result-verdict { font-size: 22px; font-weight: 900; margin-bottom: 18px; }
+  .btn-calc {
+    flex: 3;
+    background: linear-gradient(135deg, #EF4444, #DC2626, #B91C1C);
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    padding: 15px 0;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    box-shadow: 0 4px 24px rgba(239,68,68,.35), 0 1px 0 rgba(255,255,255,.15) inset;
+    transition: all .25s cubic-bezier(.4,0,.2,1);
+    letter-spacing: .2px;
+  }
+  .btn-calc:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(239,68,68,.45), 0 1px 0 rgba(255,255,255,.15) inset;
+  }
+  .btn-calc:active { transform: translateY(0); }
+
+  .btn-calc.blue {
+    background: linear-gradient(135deg, #2563EB, #3B82F6, #1D4ED8);
+    box-shadow: 0 4px 24px rgba(37,99,235,.35), 0 1px 0 rgba(255,255,255,.15) inset;
+  }
+  .btn-calc.blue:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(37,99,235,.45), 0 1px 0 rgba(255,255,255,.15) inset;
+  }
+
+  .btn-reset {
+    flex: 1;
+    background: rgba(248,250,255,.9);
+    border: 1.5px solid #DBEAFE;
+    border-radius: 14px;
+    color: #64748B;
+    padding: 15px 0;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .22s;
+  }
+  .btn-reset:hover { border-color: #2563EB; color: #2563EB; background: rgba(37,99,235,.06); }
+
+  /* ── RESULT CARDS ── */
+  .result {
+    border-radius: 20px; padding: 24px 22px; margin-bottom: 20px;
+    animation: fadeUp .4s cubic-bezier(.4,0,.2,1);
+    position: relative; overflow: hidden;
+  }
+  .result::before {
+    content: '';
+    position: absolute; inset: 0;
+    opacity: .04;
+    background-image: radial-gradient(circle at 70% 30%, white 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+  .result.sepsis {
+    background: linear-gradient(135deg, #FFF1F2, #FEE2E2, #FECACA);
+    border: 2px solid rgba(239,68,68,.40);
+    box-shadow: 0 6px 32px rgba(239,68,68,.18), 0 2px 8px rgba(239,68,68,.12);
+  }
+  .result.no-sepsis {
+    background: linear-gradient(135deg, #F0FDF4, #DCFCE7, #D1FAE5);
+    border: 2px solid rgba(16,185,129,.35);
+    box-shadow: 0 6px 32px rgba(16,185,129,.14), 0 2px 8px rgba(16,185,129,.10);
+  }
+  .result-label { font-size: 10px; letter-spacing: 2.5px; color: #64748B; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .result-verdict { font-size: 23px; font-weight: 900; margin-bottom: 18px; letter-spacing: -.3px; }
   .result-block { margin-bottom: 16px; }
-  .result-block-title { font-size: 11px; font-weight: 700; color: #1565C0; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; text-transform: uppercase; }
+  .result-block-title {
+    font-size: 10px; font-weight: 700; color: #2563EB; margin-bottom: 10px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 1.5px; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(37,99,235,.08); border: 1px solid rgba(37,99,235,.15);
+    border-radius: 999px; padding: 4px 12px;
+  }
 
+  /* ── SOFA CHIPS ── */
   .sofa-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-  .sofa-chip { background: #f0f6ff; border-radius: 8px; padding: 8px 12px; text-align: center; min-width: 58px; border: 1px solid transparent; }
-  .sofa-chip-label { font-size: 9px; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; margin-bottom: 2px; }
-  .sofa-chip-val { font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+  .sofa-chip {
+    background: linear-gradient(135deg, #EFF6FF, #F5F0FF);
+    border-radius: 12px; padding: 10px 14px; text-align: center; min-width: 60px;
+    border: 1px solid rgba(37,99,235,.15);
+    box-shadow: 0 2px 8px rgba(37,99,235,.07);
+    transition: transform .2s;
+  }
+  .sofa-chip:hover { transform: translateY(-2px); }
+  .sofa-chip-label { font-size: 9px; font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; margin-bottom: 3px; color: #64748B; font-weight: 600; }
+  .sofa-chip-val { font-size: 20px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: #1E40AF; }
 
-  /* CPD RESULT CARDS */
+  /* ── CPD RESULT CARDS ── */
   .cpd-result-grid { display: flex; gap: 8px; flex-wrap: wrap; }
   .cpd-result-card {
-    flex: 1; min-width: 140px; border-radius: 10px; padding: 12px 14px;
-    border: 1px solid #d0e4fa; background: #f5f8ff;
+    flex: 1; min-width: 140px; border-radius: 14px; padding: 14px 16px;
+    border: 1px solid rgba(37,99,235,.15);
+    background: linear-gradient(135deg, #F0F7FF, #F8F5FF);
+    transition: transform .2s, box-shadow .2s;
   }
-  .cpd-result-card.abnormal { border-color: rgba(255,77,109,.5); background: rgba(255,77,109,.06); }
-  .cpd-result-card.normal   { border-color: rgba(0,229,160,.4); background: rgba(0,229,160,.05); }
-  .cpd-result-card.empty    { border-color: #d0dce8; opacity: .6; }
-  .cpd-result-name { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
-  .cpd-result-val  { font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
+  .cpd-result-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,.12); }
+  .cpd-result-card.abnormal {
+    border-color: rgba(239,68,68,.40);
+    background: linear-gradient(135deg, rgba(254,242,242,.9), rgba(254,226,226,.7));
+    box-shadow: 0 3px 12px rgba(239,68,68,.10);
+  }
+  .cpd-result-card.normal {
+    border-color: rgba(16,185,129,.35);
+    background: linear-gradient(135deg, rgba(240,253,244,.9), rgba(220,252,231,.7));
+    box-shadow: 0 3px 12px rgba(16,185,129,.10);
+  }
+  .cpd-result-card.empty { border-color: #E2E8F0; opacity: .55; }
+  .cpd-result-name { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; margin-bottom: 5px; color: #1E40AF; }
+  .cpd-result-val  { font-size: 20px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin-bottom: 4px; }
   .cpd-result-cutoff { font-size: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
-  .cpd-result-flag { font-size: 10px; font-weight: 700; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+  .cpd-result-flag { font-size: 10px; font-weight: 700; margin-top: 5px; font-family: 'JetBrains Mono', monospace; }
 
-  .rec-item { display: flex; gap: 8px; margin-bottom: 6px; }
-  .rec-arrow { font-weight: 800; }
-  .rec-text { font-size: 13px; color: #2c4a6e; }
+  /* ── RECOMMENDATIONS ── */
+  .rec-item { display: flex; gap: 8px; margin-bottom: 8px; }
+  .rec-arrow { font-weight: 800; color: #2563EB; }
+  .rec-text { font-size: 13px; color: #1E3A5F; line-height: 1.6; }
 
-  /* CULTURE TOGGLE */
+  /* ── CULTURE TOGGLE ── */
   .cult-toggle {
-    background: #f0f6ff; border: 1px solid #c5d8f0; border-radius: 7px;
-    color: #546e8a; padding: 7px 18px; font-size: 13px; font-weight: 600;
-    cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all .2s;
+    background: rgba(248,250,255,.9);
+    border: 1.5px solid #DBEAFE;
+    border-radius: 10px;
+    color: #64748B; padding: 8px 20px; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all .22s;
   }
-  .cult-toggle.active { background: #1565C0; border-color: #1565C0; color: #fff; }
-  .cult-toggle:hover:not(.active) { border-color: #1565C0; color: #1565C0; }
+  .cult-toggle.active {
+    background: linear-gradient(135deg, #2563EB, #3B82F6);
+    border-color: transparent; color: #fff;
+    box-shadow: 0 3px 12px rgba(37,99,235,.30);
+  }
+  .cult-toggle:hover:not(.active) { border-color: #2563EB; color: #2563EB; background: rgba(37,99,235,.06); }
 
-  /* CULTURE CLASSIFICATION */
+  /* ── CULTURE CLASSIFICATION ── */
   .cult-class-card {
-    border-radius: 10px; padding: 12px 14px; margin-top: 10px;
-    border: 1px solid #d0e4fa;
+    border-radius: 14px; padding: 14px 16px; margin-top: 10px;
+    border: 1px solid rgba(37,99,235,.15);
+    background: linear-gradient(135deg, #F8FAFF, #F5F0FF);
   }
   .cult-class-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
   .cult-badge {
     font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
-    padding: 3px 10px; border-radius: 5px; letter-spacing: 0.5px;
+    padding: 4px 12px; border-radius: 999px; letter-spacing: 0.5px;
   }
-  .cult-badge-gneg  { background: rgba(0,194,255,.15); color: #00c2ff; border: 1px solid rgba(0,194,255,.4); }
-  .cult-badge-gpos  { background: rgba(167,139,250,.15); color: #a78bfa; border: 1px solid rgba(167,139,250,.4); }
-  .cult-badge-fungi { background: rgba(251,191,36,.15); color: #fbbf24; border: 1px solid rgba(251,191,36,.4); }
-  .cult-badge-true  { background: rgba(255,77,109,.15); color: var(--red); border: 1px solid rgba(255,77,109,.4); }
-  .cult-badge-comm  { background: rgba(0,229,160,.12); color: var(--green); border: 1px solid rgba(0,229,160,.3); }
-  .cult-badge-comm-warn { background: rgba(255,159,67,.15); color: #ff9f43; border: 1px solid rgba(255,159,67,.4); }
-  .cult-org-name { font-size: 14px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-  .cult-note { font-size: 11px; color: #546e8a; margin-top: 4px; line-height: 1.5; }
+  .cult-badge-gneg  { background: rgba(6,182,212,.12); color: #0891B2; border: 1px solid rgba(6,182,212,.30); }
+  .cult-badge-gpos  { background: rgba(139,92,246,.12); color: #7C3AED; border: 1px solid rgba(139,92,246,.30); }
+  .cult-badge-fungi { background: rgba(245,158,11,.12); color: #D97706; border: 1px solid rgba(245,158,11,.30); }
+  .cult-badge-true  { background: rgba(239,68,68,.12); color: #DC2626; border: 1px solid rgba(239,68,68,.30); }
+  .cult-badge-comm  { background: rgba(16,185,129,.10); color: #059669; border: 1px solid rgba(16,185,129,.28); }
+  .cult-badge-comm-warn { background: rgba(245,158,11,.12); color: #B45309; border: 1px solid rgba(245,158,11,.30); }
+  .cult-org-name { font-size: 14px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: #1E40AF; }
+  .cult-note { font-size: 11px; color: #64748B; margin-top: 5px; line-height: 1.6; }
 
-  .organ-input-label-sm { font-size: 11px; color: #546e8a; margin-bottom: 4px; }
+  .organ-input-label-sm { font-size: 11px; color: #546e8a; margin-bottom: 4px; font-weight: 600; }
 
-  /* EXPORT BUTTONS */
+  /* ── EXPORT BUTTONS ── */
   .btn-export-sheets {
     flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-    background: linear-gradient(135deg,#1e8e3e,#137333);
-    border: none; border-radius: 10px; color: #fff; padding: 12px 16px;
+    background: linear-gradient(135deg, #059669, #10B981, #047857);
+    border: none; border-radius: 12px; color: #fff; padding: 13px 16px;
     font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
-    box-shadow: 0 3px 12px rgba(30,142,62,.25); transition: all .2s;
+    box-shadow: 0 4px 18px rgba(16,185,129,.30); transition: all .22s;
   }
-  .btn-export-sheets:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(30,142,62,.35); }
-  details summary::-webkit-details-marker { color: #1565C0; }
+  .btn-export-sheets:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(16,185,129,.40);
+  }
+  details summary::-webkit-details-marker { color: #2563EB; }
 
-  /* ABOUT */
-  .about-text { font-size: 13px; color: #3a5a7a; line-height: 1.8; margin-bottom: 16px; }
-  .about-list-item { display: flex; gap: 8px; margin-bottom: 6px; font-size: 13px; color: #2c4a6e; }
-  .about-dot { color: #D32F2F; flex-shrink: 0; }
-  .disclaimer { background: #fffde7; border: 1px solid #f9a825; border-radius: 10px; padding: 14px 16px; margin-top: 10px; }
-  .disclaimer-title { font-size: 11px; font-weight: 700; color: #e65100; letter-spacing: 2px; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; }
-  .disclaimer-text { font-size: 12px; color: #5d4037; line-height: 1.7; }
-  .ref-text { font-size: 10px; color: #7a9dbf; margin-top: 10px; font-family: 'JetBrains Mono', monospace; line-height: 1.7; }
+  /* ── ABOUT ── */
+  .about-text { font-size: 13px; color: #334155; line-height: 1.85; margin-bottom: 16px; }
+  .about-list-item { display: flex; gap: 8px; margin-bottom: 7px; font-size: 13px; color: #1E3A5F; }
+  .about-dot { color: #EF4444; flex-shrink: 0; }
+  .disclaimer {
+    background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+    border: 1px solid rgba(245,158,11,.30);
+    border-radius: 14px; padding: 16px 18px; margin-top: 12px;
+    box-shadow: 0 3px 12px rgba(245,158,11,.10);
+  }
+  .disclaimer-title { font-size: 11px; font-weight: 700; color: #B45309; letter-spacing: 2px; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; }
+  .disclaimer-text { font-size: 12px; color: #78350F; line-height: 1.75; }
+  .ref-text { font-size: 10px; color: #94A3B8; margin-top: 10px; font-family: 'JetBrains Mono', monospace; line-height: 1.75; }
 
-  /* CPD about table */
-  .cpd-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
-  .cpd-table th { text-align: left; color: #1565C0; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; padding: 6px 8px; border-bottom: 1px solid #c5d8f0; }
-  .cpd-table td { padding: 8px; border-bottom: 1px solid #e0ecfa; color: var(--text); font-family: 'JetBrains Mono', monospace; }
+  /* ── CPD TABLE ── */
+  .cpd-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; border-radius: 10px; overflow: hidden; }
+  .cpd-table th {
+    text-align: left; color: #2563EB; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 1px; padding: 8px 10px;
+    border-bottom: 1px solid rgba(37,99,235,.15);
+    background: rgba(37,99,235,.05);
+  }
+  .cpd-table td { padding: 9px 10px; border-bottom: 1px solid rgba(37,99,235,.07); color: var(--text); font-family: 'JetBrains Mono', monospace; }
   .cpd-table tr:last-child td { border-bottom: none; }
-  .cpd-table td:first-child { font-weight: 700; color: #1565C0; }
+  .cpd-table tr:hover td { background: rgba(37,99,235,.04); }
+  .cpd-table td:first-child { font-weight: 700; color: #2563EB; }
 
   @media (max-width: 480px) {
     .cpd-result-card { min-width: 120px; }
+    .nav-btn { padding: 7px 10px; font-size: 12px; gap: 4px; }
+    .nav-btn .nav-icon { font-size: 14px; }
   }
 
-  /* ── PWA INSTALL BANNER (iOS hint) ── */
+  /* ── PWA INSTALL BANNER ── */
   #ios-install-banner {
-    display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;
-    background:#1565C0;color:#fff;padding:14px 16px 14px;
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:9998;
+    background: linear-gradient(135deg, #1E40AF, #2563EB);
+    color:#fff; padding:14px 16px;
     padding-bottom:calc(14px + env(safe-area-inset-bottom));
-    font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;
-    box-shadow:0 -4px 20px rgba(0,0,0,.25);
-    animation:slideUp .3s ease;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:13px;
+    box-shadow: 0 -4px 24px rgba(30,64,175,.30);
+    animation:slideUp .3s cubic-bezier(.4,0,.2,1);
   }
   #ios-install-banner.show { display:block; }
   @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-  #ios-install-banner .ios-banner-inner {
-    max-width:740px;margin:0 auto;display:flex;align-items:center;gap:12px;
-  }
+  #ios-install-banner .ios-banner-inner { max-width:740px;margin:0 auto;display:flex;align-items:center;gap:12px; }
   #ios-install-banner .ios-banner-text { flex:1;line-height:1.5; }
   #ios-install-banner .ios-banner-close {
-    background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;
-    width:28px;height:28px;font-size:16px;cursor:pointer;flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.20); border:1px solid rgba(255,255,255,.30);
+    color:#fff; border-radius:50%; width:30px; height:30px; font-size:16px;
+    cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    transition: background .2s;
   }
+  #ios-install-banner .ios-banner-close:hover { background:rgba(255,255,255,.35); }
 
   /* ── ADMIN LOGIN MODAL ── */
   #admin-modal-overlay {
-    display:none;position:fixed;inset:0;background:rgba(10,20,40,.55);
-    backdrop-filter:blur(4px);z-index:9999;align-items:center;justify-content:center;
+    display:none; position:fixed; inset:0;
+    background:rgba(10,20,40,.60);
+    backdrop-filter:blur(8px); z-index:9999;
+    align-items:center; justify-content:center;
   }
   #admin-modal-overlay.show { display:flex; }
   #admin-modal {
-    background:#fff;border-radius:16px;padding:32px 28px 24px;width:90%;max-width:360px;
-    box-shadow:0 24px 60px rgba(10,20,40,.25);animation:modalPop .2s ease;
+    background:#fff; border-radius:20px; padding:32px 28px 24px; width:90%; max-width:360px;
+    box-shadow: 0 24px 60px rgba(10,20,40,.25), 0 4px 16px rgba(37,99,235,.15);
+    animation:modalPop .22s cubic-bezier(.4,0,.2,1);
+    border: 1px solid rgba(37,99,235,.12);
   }
-  @keyframes modalPop { from{transform:scale(.92);opacity:0} to{transform:scale(1);opacity:1} }
+  @keyframes modalPop { from{transform:scale(.90);opacity:0} to{transform:scale(1);opacity:1} }
   #admin-modal .modal-title {
-    font-size:16px;font-weight:800;color:#1a2e42;font-family:'Plus Jakarta Sans',sans-serif;
-    margin-bottom:4px;text-align:center;
+    font-size:17px; font-weight:800; color:#0F172A;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    margin-bottom:4px; text-align:center;
   }
   #admin-modal .modal-sub {
-    font-size:11px;color:#7a9dbf;font-family:'JetBrains Mono',monospace;
-    text-align:center;margin-bottom:20px;letter-spacing:.5px;
+    font-size:11px; color:#94A3B8; font-family:'JetBrains Mono',monospace;
+    text-align:center; margin-bottom:22px; letter-spacing:.5px;
   }
   #admin-modal .modal-field { margin-bottom:14px; }
   #admin-modal .modal-label {
-    font-size:11px;font-weight:700;color:#546e8a;font-family:'JetBrains Mono',monospace;
-    letter-spacing:.5px;margin-bottom:4px;display:block;
+    font-size:11px; font-weight:700; color:#64748B;
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:.5px; margin-bottom:5px; display:block;
   }
   #admin-modal input[type="text"],
   #admin-modal input[type="password"] {
-    width:100%;padding:10px 12px;border:1.5px solid #d0e4fa;border-radius:8px;
-    font-size:13px;font-family:'JetBrains Mono',monospace;color:#1a2e42;
-    box-sizing:border-box;outline:none;transition:border-color .2s;
+    width:100%; padding:11px 13px; border:1.5px solid #DBEAFE; border-radius:10px;
+    font-size:13px; font-family:'JetBrains Mono',monospace; color:#0F172A;
+    box-sizing:border-box; outline:none; transition:border-color .2s, box-shadow .2s;
+    background:#F8FAFF;
   }
-  #admin-modal input:focus { border-color:#1565C0; }
+  #admin-modal input:focus { border-color:#2563EB; box-shadow:0 0 0 4px rgba(37,99,235,.12); background:#fff; }
   #admin-modal .modal-error {
-    font-size:11.5px;color:#D32F2F;font-family:'JetBrains Mono',monospace;
-    text-align:center;margin-bottom:10px;display:none;
-    background:#fff0f0;padding:6px 10px;border-radius:6px;border:1px solid #ffcdd2;
+    font-size:11.5px; color:#DC2626; font-family:'JetBrains Mono',monospace;
+    text-align:center; margin-bottom:10px; display:none;
+    background:#FEF2F2; padding:8px 12px; border-radius:8px; border:1px solid #FECACA;
   }
-  #admin-modal .modal-btn-row { display:flex;gap:10px;margin-top:6px; }
+  #admin-modal .modal-btn-row { display:flex; gap:10px; margin-top:8px; }
   #admin-modal .modal-btn-cancel {
-    flex:1;padding:11px 0;border:1.5px solid #d0e4fa;background:#fff;border-radius:8px;
-    font-size:13px;font-weight:700;color:#546e8a;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;
-    transition:background .15s;
+    flex:1; padding:12px 0; border:1.5px solid #DBEAFE; background:#F8FAFF;
+    border-radius:10px; font-size:13px; font-weight:700; color:#64748B;
+    cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:all .15s;
   }
-  #admin-modal .modal-btn-cancel:hover { background:#f5f8ff; }
+  #admin-modal .modal-btn-cancel:hover { background:#EFF6FF; border-color:#2563EB; color:#2563EB; }
   #admin-modal .modal-btn-login {
-    flex:2;padding:11px 0;background:linear-gradient(135deg,#1565C0,#1976D2);border:none;
-    border-radius:8px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;
-    font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .15s;
+    flex:2; padding:12px 0;
+    background:linear-gradient(135deg, #2563EB, #3B82F6);
+    border:none; border-radius:10px; font-size:13px; font-weight:700; color:#fff;
+    cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif;
+    box-shadow:0 4px 16px rgba(37,99,235,.30); transition:all .2s;
   }
-  #admin-modal .modal-btn-login:hover { opacity:.9; }
-  #admin-modal .modal-btn-login:disabled { opacity:.5;cursor:not-allowed; }
+  #admin-modal .modal-btn-login:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(37,99,235,.40); }
+  #admin-modal .modal-btn-login:disabled { opacity:.5; cursor:not-allowed; transform:none; }
   .pw-wrap { position:relative; }
-  .pw-wrap input { padding-right:38px; }
+  .pw-wrap input { padding-right:40px; }
   .pw-toggle {
-    position:absolute;right:10px;top:50%;transform:translateY(-50%);
-    background:none;border:none;cursor:pointer;color:#7a9dbf;padding:2px;
+    position:absolute; right:11px; top:50%; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer; color:#94A3B8; padding:2px;
+    transition:color .2s;
+  }
+  .pw-toggle:hover { color:#2563EB; }
+
+  /* ══════════════════════════════════════════
+     TAB TRANSITION LOADER
+  ══════════════════════════════════════════ */
+  #tab-loader {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(6,14,36,.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    animation: tabLoaderFadeIn .15s ease;
+  }
+  #tab-loader.show { display: flex; }
+  #tab-loader.hiding { animation: tabLoaderFadeOut .25s ease forwards; }
+  @keyframes tabLoaderFadeIn  { from { opacity:0 } to { opacity:1 } }
+  @keyframes tabLoaderFadeOut { from { opacity:1 } to { opacity:0 } }
+
+  .tab-loader-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Beating heart */
+  .tl-heart {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tl-heart-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid rgba(239,68,68,.6);
+    animation: tlHeartRing 1s ease-out infinite;
+  }
+  .tl-heart-ring:nth-child(2) { animation-delay: .33s; border-color: rgba(239,68,68,.4); }
+  .tl-heart-ring:nth-child(3) { animation-delay: .66s; border-color: rgba(239,68,68,.2); }
+  @keyframes tlHeartRing {
+    0%   { transform: scale(1);   opacity: .8; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+  .tl-heart-icon {
+    font-size: 26px;
+    animation: tlHeartBeat .8s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 8px rgba(239,68,68,.7));
+  }
+  @keyframes tlHeartBeat {
+    0%,100% { transform: scale(1); }
+    14%     { transform: scale(1.25); }
+    28%     { transform: scale(1); }
+    42%     { transform: scale(1.18); }
+    56%     { transform: scale(1); }
+  }
+
+  /* ECG pulse line */
+  .tl-ecg-wrap {
+    width: 200px;
+    height: 28px;
+    overflow: hidden;
+    position: relative;
+  }
+  .tl-ecg-svg {
+    width: 200%;
+    height: 28px;
+    animation: tlEcgScan 1.2s linear infinite;
+  }
+  @keyframes tlEcgScan {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Dots */
+  .tl-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .tl-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.4);
+    animation: tlDotBounce .9s ease-in-out infinite;
+  }
+  .tl-dot:nth-child(2) { animation-delay: .15s; }
+  .tl-dot:nth-child(3) { animation-delay: .30s; }
+  @keyframes tlDotBounce {
+    0%,80%,100% { transform: scale(.7); opacity:.3; }
+    40%          { transform: scale(1.2); opacity:1; background: #3B82F6; }
+  }
+
+  /* ══════════════════════════════════════════
+     CALCULATION LOADER
+  ══════════════════════════════════════════ */
+  #calc-loader {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: linear-gradient(135deg, #060E24 0%, #0D1B3E 50%, #0A0F2E 100%);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    animation: calcLoaderIn .3s cubic-bezier(.4,0,.2,1);
+  }
+  #calc-loader.show { display: flex; }
+  #calc-loader.hiding {
+    animation: calcLoaderOut .4s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  @keyframes calcLoaderIn  { from { opacity:0; transform:scale(.97) } to { opacity:1; transform:none } }
+  @keyframes calcLoaderOut { from { opacity:1; transform:none } to { opacity:0; transform:scale(1.03) } }
+
+  /* BG effects */
+  #calc-loader .cl-bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    pointer-events: none;
+  }
+  #calc-loader .cl-bg-orb-1 { width:280px;height:280px;background:#1E40AF;opacity:.35;top:-60px;left:-60px;animation:clOrb 7s ease-in-out infinite; }
+  #calc-loader .cl-bg-orb-2 { width:220px;height:220px;background:#6D28D9;opacity:.25;bottom:-40px;right:-40px;animation:clOrb 9s ease-in-out infinite .5s; }
+  @keyframes clOrb { 0%,100%{transform:translate(0,0)} 50%{transform:translate(15px,-10px)} }
+
+  #calc-loader .cl-dot-grid {
+    position:absolute;inset:0;
+    background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px);
+    background-size:26px 26px;
+    pointer-events:none;
+  }
+
+  /* Central card */
+  .cl-card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: min(88vw, 320px);
+  }
+
+  /* Heart with rings */
+  .cl-heart-wrap {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .cl-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    animation: clRing 1.6s ease-out infinite;
+  }
+  .cl-ring-1 { border: 2px solid rgba(239,68,68,.55); }
+  .cl-ring-2 { border: 2px solid rgba(239,68,68,.35); animation-delay: .4s; }
+  .cl-ring-3 { border: 2px solid rgba(239,68,68,.18); animation-delay: .8s; }
+  @keyframes clRing {
+    0%   { transform: scale(1);   opacity: 1; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+  .cl-heart-icon {
+    font-size: 36px;
+    position: relative;
+    z-index: 2;
+    animation: clHeartBeat .75s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px rgba(239,68,68,.8)) drop-shadow(0 0 24px rgba(239,68,68,.4));
+  }
+  @keyframes clHeartBeat {
+    0%,100% { transform: scale(1); }
+    15%     { transform: scale(1.30); }
+    30%     { transform: scale(1); }
+    45%     { transform: scale(1.20); }
+    60%     { transform: scale(1); }
+  }
+
+  /* Big ECG */
+  .cl-ecg-wrap {
+    width: 100%;
+    height: 44px;
+    overflow: hidden;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .cl-ecg-wrap::before,
+  .cl-ecg-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 32px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .cl-ecg-wrap::before { left: 0;  background: linear-gradient(to right, #060E24, transparent); }
+  .cl-ecg-wrap::after  { right: 0; background: linear-gradient(to left,  #060E24, transparent); }
+  .cl-ecg-svg {
+    width: 200%;
+    height: 44px;
+    animation: clEcgScan 1.4s linear infinite;
+  }
+  @keyframes clEcgScan {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Title + Status */
+  .cl-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin-bottom: 6px;
+    text-align: center;
+    letter-spacing: -.2px;
+  }
+  .cl-status {
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: rgba(255,255,255,.45);
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+    text-align: center;
+    min-height: 18px;
+    transition: opacity .3s;
+  }
+
+  /* Progress bar */
+  .cl-progress-track {
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,.08);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .cl-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #EF4444, #8B5CF6, #2563EB);
+    background-size: 200% 100%;
+    animation: clProgress 1.8s cubic-bezier(.4,0,.2,1) infinite, clShimmer 1.2s linear infinite;
+  }
+  @keyframes clProgress {
+    0%   { width: 10%; }
+    50%  { width: 75%; }
+    100% { width: 10%; }
+  }
+  @keyframes clShimmer {
+    0%   { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+
+  /* Fun tip */
+  .cl-tip {
+    font-size: 11px;
+    color: rgba(255,255,255,.25);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    text-align: center;
+    line-height: 1.6;
+    padding: 0 8px;
+    transition: opacity .4s;
+    font-style: italic;
   }
 </style>
 </head>
@@ -354,8 +984,9 @@
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <button id="pwa-install-btn" onclick="triggerPWAInstall()" style="display:none;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:5px 13px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .2s;backdrop-filter:blur(4px)">
-        &#10515; Install App
+      <button id="pwa-install-btn" onclick="triggerPWAInstall()" style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:7px 14px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .25s;backdrop-filter:blur(8px);letter-spacing:.3px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span id="pwa-install-label">Install</span>
       </button>
       <button class="lang-btn" onclick="toggleLang()">🇬🇧 EN</button>
     </div>
@@ -365,10 +996,10 @@
 <!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
-    <button class="nav-btn active" onclick="showTab('calc',this)" data-t="navCalc">Kalkulator</button>
-    <button class="nav-btn" onclick="showTab('extra',this)" data-t="navExtra">Data Tambahan</button>
-    <button class="nav-btn" onclick="showTab('kultur',this)" data-t="navKultur">Hasil Kultur</button>
-    <button class="nav-btn" onclick="showTab('about',this)" data-t="navAbout">Tentang</button>
+    <button class="nav-btn active" onclick="showTab('calc',this)" data-t="navCalc"><span class="nav-icon">⚡</span><span data-t="navCalc">Kalkulator</span></button>
+    <button class="nav-btn" onclick="showTab('extra',this)" data-t="navExtra"><span class="nav-icon">📋</span><span data-t="navExtra">Data Tambahan</span></button>
+    <button class="nav-btn" onclick="showTab('kultur',this)" data-t="navKultur"><span class="nav-icon">🔬</span><span data-t="navKultur">Hasil Kultur</span></button>
+    <button class="nav-btn" onclick="showTab('about',this)" data-t="navAbout"><span class="nav-icon">ℹ️</span><span data-t="navAbout">Tentang</span></button>
   </div>
 </div>
 
@@ -444,16 +1075,16 @@
 
   <!-- CSV DOWNLOAD (visible after calculate) -->
   <div id="export-section" style="display:none;margin-top:0;margin-bottom:20px">
-    <div style="background:#f1f8e9;border:1px solid #a5d6a7;border-radius:12px;padding:14px 16px">
-      <button class="btn-export-sheets" onclick="downloadCSV()" style="width:100%;margin-bottom:8px">
+    <div style="background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(5,150,105,.05));border:1px solid rgba(16,185,129,.25);border-radius:16px;padding:16px 18px;box-shadow:0 4px 20px rgba(16,185,129,.10)">
+      <button class="btn-export-sheets" onclick="downloadCSV()" style="width:100%;margin-bottom:10px">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h5.66V9h3.84L12 2z" fill="white"/></svg>
         <span id="csv-btn-label">📥 Download Data CSV</span>
       </button>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
-        <div style="font-size:10px;color:#546e8a;font-family:'JetBrains Mono',monospace">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
+        <div style="font-size:10px;color:#059669;font-family:'JetBrains Mono',monospace;font-weight:600">
           📦 <span id="csv-count">0</span> <span id="csv-stored-label">data tersimpan di browser ini</span>
         </div>
-        <button onclick="clearCSVStore()" style="font-size:10px;color:#D32F2F;background:none;border:none;cursor:pointer;font-family:'JetBrains Mono',monospace;text-decoration:underline">
+        <button onclick="clearCSVStore()" style="font-size:10px;color:#EF4444;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.20);border-radius:999px;cursor:pointer;font-family:'JetBrains Mono',monospace;padding:3px 10px;transition:all .2s">
           Hapus semua data
         </button>
       </div>
@@ -465,8 +1096,8 @@
 <!-- ══════════ DATA TAMBAHAN TAB ══════════ -->
 <div id="tab-extra" style="display:none">
   <!-- LINK KEY: No. RM + Sample ID untuk penggabungan data -->
-  <div class="section" style="border:2px solid #1565C0;background:#f0f6ff;padding:14px 16px;margin-bottom:14px">
-    <div class="section-title" style="color:#1565C0;margin-bottom:8px">🔗 KUNCI PENGHUBUNG DATA</div>
+  <div class="section" style="border:2px solid rgba(37,99,235,.35);background:linear-gradient(135deg,rgba(239,246,255,.95),rgba(245,243,255,.90));margin-bottom:14px">
+    <div class="section-title" style="margin-bottom:12px">🔗 KUNCI PENGHUBUNG DATA</div>
     <div id="extra-rm-hint" style="font-size:12px;color:#3a5a7a;margin-bottom:10px">Masukkan No. RM dan Sample ID yang <b>sama persis</b> dengan yang diisi pada tab Kalkulator. Data akan otomatis digabungkan saat download CSV.</div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <div style="flex:1;min-width:130px">
@@ -780,8 +1411,8 @@
     <div style="font-size:13px;color:#546e8a;margin-bottom:14px" data-t="kulturIntro">Isi tab ini setelah hasil kultur darah tersedia dari laboratorium</div>
 
     <!-- LINK KEY -->
-    <div style="background:#f0f6ff;border:2px solid #1565C0;border-radius:10px;padding:12px 14px;margin-bottom:14px">
-      <div style="font-size:10px;font-weight:700;color:#1565C0;letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:6px">🔗 KUNCI PENGHUBUNG DATA</div>
+    <div style="background:linear-gradient(135deg,rgba(239,246,255,.95),rgba(245,243,255,.90));border:2px solid rgba(37,99,235,.30);border-radius:16px;padding:14px 16px;margin-bottom:14px;box-shadow:0 3px 12px rgba(37,99,235,.08)">
+      <div style="font-size:10px;font-weight:700;color:#2563EB;letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:6px;display:inline-flex;align-items:center;gap:6px;background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.15);border-radius:999px;padding:4px 12px">🔗 KUNCI PENGHUBUNG DATA</div>
       <div id="kultur-rm-hint" style="font-size:11px;color:#3a5a7a;margin-bottom:8px">Masukkan No. RM yang <b>sama persis</b> dengan tab Kalkulator agar data otomatis tergabung dalam CSV.</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <div style="flex:1;min-width:130px">
@@ -820,7 +1451,7 @@
 
         <!-- SET 1 -->
         <div id="set-panel-1" style="display:none;background:#f5f8ff;border:1px solid #d0e4fa;border-radius:10px;padding:12px 14px;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700;color:#1565C0;font-family:'JetBrains Mono',monospace;margin-bottom:10px;letter-spacing:1px">
+          <div style="font-size:12px;font-weight:700;color:#2563EB;font-family:'JetBrains Mono',monospace;margin-bottom:10px;letter-spacing:1px">
             SET 1 <span id="set1-result-badge" style="margin-left:8px"></span>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
@@ -852,7 +1483,7 @@
 
         <!-- SET 2 -->
         <div id="set-panel-2" style="display:none;background:#f5f8ff;border:1px solid #d0e4fa;border-radius:10px;padding:12px 14px;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700;color:#1565C0;font-family:'JetBrains Mono',monospace;margin-bottom:10px;letter-spacing:1px">
+          <div style="font-size:12px;font-weight:700;color:#2563EB;font-family:'JetBrains Mono',monospace;margin-bottom:10px;letter-spacing:1px">
             SET 2 <span id="set2-result-badge" style="margin-left:8px"></span>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
@@ -884,7 +1515,7 @@
 
         <!-- SET 3 -->
         <div id="set-panel-3" style="display:none;background:#f5f8ff;border:1px solid #d0e4fa;border-radius:10px;padding:12px 14px;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700;color:#1565C0;font-family:'JetBrains Mono',monospace;margin-bottom:10px;letter-spacing:1px">
+          <div style="font-size:12px;font-weight:700;color:#2563EB;font-family:'JetBrains Mono',monospace;margin-bottom:10px;letter-spacing:1px">
             SET 3 <span id="set3-result-badge" style="margin-left:8px"></span>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
@@ -916,7 +1547,7 @@
 
         <!-- SET 4 -->
         <div id="set-panel-4" style="display:none;background:#f5f8ff;border:1px solid #d0e4fa;border-radius:10px;padding:12px 14px;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700;color:#1565C0;font-family:'JetBrains Mono',monospace;margin-bottom:10px;letter-spacing:1px">
+          <div style="font-size:12px;font-weight:700;color:#2563EB;font-family:'JetBrains Mono',monospace;margin-bottom:10px;letter-spacing:1px">
             SET 4 <span id="set4-result-badge" style="margin-left:8px"></span>
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px">
@@ -963,7 +1594,7 @@
 
     <!-- Identify Button -->
     <div class="btn-row" style="margin-top:18px">
-      <button class="btn-calc" id="btn-identify-kultur" onclick="identifyKultur()" style="background:linear-gradient(135deg,#1565C0,#1976D2);margin-bottom:0" data-t="btnIdentifyKultur">&#128300; Identifikasi Bakteri</button>
+      <button class="btn-calc blue" id="btn-identify-kultur" onclick="identifyKultur()" style="margin-bottom:0" data-t="btnIdentifyKultur">🔬 Identifikasi Bakteri</button>
     </div>
 
     <!-- Result Area -->
@@ -983,81 +1614,92 @@
   <div style="padding:24px 0 8px 0">
 
     <!-- Hero tagline -->
-    <div style="background:linear-gradient(135deg,#1565C0 0%,#1976D2 60%,#42a5f5 100%);border-radius:14px;padding:28px 24px;margin-bottom:20px;text-align:center">
-      <div id="about-hero-tagline" style="font-size:22px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.3;margin-bottom:8px">
-        Solusi Skrining Sepsis Digital<br>yang Cepat dan Terukur
+    <div style="background:linear-gradient(135deg,#1E40AF 0%,#2563EB 50%,#7C3AED 100%);border-radius:20px;padding:32px 24px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(37,99,235,.30)">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(255,255,255,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(139,92,246,.25) 0%,transparent 50%);pointer-events:none"></div>
+      <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(255,255,255,.10);pointer-events:none"></div>
+      <div style="position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;border-radius:50%;border:1px solid rgba(255,255,255,.08);pointer-events:none"></div>
+      <div style="position:relative">
+        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 16px;margin-bottom:14px">
+          <span style="font-size:10px;font-weight:700;letter-spacing:2.5px;color:rgba(255,255,255,.90);font-family:'JetBrains Mono',monospace">⚡ SepsiGo</span>
+        </div>
+        <div id="about-hero-tagline" style="font-size:24px;font-weight:900;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.25;margin-bottom:10px;text-shadow:0 2px 8px rgba(0,0,0,.20)">
+          Solusi Skrining Sepsis Digital<br>yang Cepat dan Terukur
+        </div>
+        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.75);font-family:'Plus Jakarta Sans',sans-serif;font-style:italic;line-height:1.5">Satu langkah kecil untuk menurunkan<br>angka kejadian Sepsis</div>
       </div>
-      <div style="font-size:11px;font-weight:600;letter-spacing:3px;color:rgba(255,255,255,.7);font-family:'JetBrains Mono',monospace;margin-top:4px">SepsiGo &mdash; Sepsis Early Detection System</div>
     </div>
 
     <!-- Deskripsi aplikasi -->
-    <div style="background:#fff;border-radius:12px;padding:20px 20px;margin-bottom:16px;border:1px solid #e3edf7;box-shadow:0 2px 8px rgba(21,101,192,.07)">
-      <p id="about-desc" style="font-size:13.5px;line-height:1.8;color:#344a5e;font-family:'Plus Jakarta Sans',sans-serif;margin:0">
-        <strong>SepsiGo</strong> adalah platform berbasis web yang dirancang khusus untuk membantu tenaga medis dalam melakukan skrining sepsis secara sederhana, cepat, dan prediktif pada pasien yang sedang menjalani perawatan di rumah sakit. Melalui pendekatan berbasis data, aplikasi ini hadir sebagai alat bantu pengambilan keputusan klinis guna mendukung deteksi dini kondisi sepsis.
+    <div style="background:rgba(255,255,255,.92);border-radius:18px;padding:20px 22px;margin-bottom:14px;border:1px solid rgba(37,99,235,.10);box-shadow:0 4px 20px rgba(37,99,235,.07);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#2563EB,#8B5CF6,#06B6D4);border-radius:18px 18px 0 0"></div>
+      <p id="about-desc" style="font-size:13.5px;line-height:1.85;color:#1E3A5F;font-family:'Plus Jakarta Sans',sans-serif;margin:0">
+        <strong style="color:#1E40AF">SepsiGo</strong> adalah platform berbasis web yang dirancang khusus untuk membantu tenaga medis dalam melakukan skrining sepsis secara sederhana, cepat, dan prediktif pada pasien yang sedang menjalani perawatan di rumah sakit. Melalui pendekatan berbasis data, aplikasi ini hadir sebagai alat bantu pengambilan keputusan klinis guna mendukung deteksi dini kondisi sepsis.
       </p>
     </div>
 
     <!-- Landasan Ilmiah -->
-    <div style="background:#fff;border-radius:12px;padding:20px 20px;margin-bottom:16px;border:1px solid #e3edf7;box-shadow:0 2px 8px rgba(21,101,192,.07)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="width:4px;height:28px;background:linear-gradient(180deg,#1565C0,#42a5f5);border-radius:2px"></div>
-        <div id="about-science-heading" style="font-size:14px;font-weight:800;color:#1565C0;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.3px">Landasan Ilmiah dan Metodologi</div>
+    <div style="background:rgba(255,255,255,.92);border-radius:18px;padding:20px 22px;margin-bottom:14px;border:1px solid rgba(37,99,235,.10);box-shadow:0 4px 20px rgba(37,99,235,.07);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#2563EB,#8B5CF6);border-radius:18px 18px 0 0"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="width:36px;height:36px;background:linear-gradient(135deg,#2563EB,#3B82F6);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(37,99,235,.30);font-size:18px">🧬</div>
+        <div id="about-science-heading" style="font-size:15px;font-weight:800;color:#1E40AF;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.2px">Landasan Ilmiah dan Metodologi</div>
       </div>
-      <p id="about-science-body" style="font-size:13px;line-height:1.75;color:#344a5e;font-family:'Plus Jakarta Sans',sans-serif;margin:0 0 16px 0">
+      <p id="about-science-body" style="font-size:13px;line-height:1.80;color:#334155;font-family:'Plus Jakarta Sans',sans-serif;margin:0 0 16px 0">
         Akurasi dan keandalan SepsiGo didasarkan pada nilai <em>cut-off</em> yang dikembangkan melalui hasil penelitian mendalam. Pengembangan instrumen ini merupakan hasil kolaborasi tim peneliti yang beranggotakan:
       </p>
       <!-- Tim peneliti -->
       <div style="display:flex;flex-direction:column;gap:10px">
         <!-- Peneliti 1 -->
-        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:#f5f8ff;border-radius:10px;border:1px solid #d0e4fa">
-          <div style="width:36px;height:36px;background:linear-gradient(135deg,#1565C0,#1976D2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <span style="color:#fff;font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace">AR</span>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:linear-gradient(135deg,#EFF6FF,#F5F0FF);border-radius:14px;border:1px solid rgba(37,99,235,.15);transition:transform .2s">
+          <div style="width:42px;height:42px;background:linear-gradient(135deg,#1E40AF,#2563EB);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(37,99,235,.30)">
+            <span style="color:#fff;font-size:13px;font-weight:800;font-family:'JetBrains Mono',monospace">AR</span>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:700;color:#1a2e42;font-family:'Plus Jakarta Sans',sans-serif">Alifferdi Rahman Wiyono</div>
-            <div id="about-role-1" style="font-size:11.5px;color:#546e8a;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">PPDS Patologi Klinik, FK Universitas Airlangga</div>
+            <div style="font-size:13.5px;font-weight:700;color:#0F172A;font-family:'Plus Jakarta Sans',sans-serif">Alifferdi Rahman Wiyono</div>
+            <div id="about-role-1" style="font-size:11.5px;color:#64748B;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">PPDS Patologi Klinik, FK Universitas Airlangga</div>
           </div>
         </div>
         <!-- Peneliti 2 -->
-        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:#f5f8ff;border-radius:10px;border:1px solid #d0e4fa">
-          <div style="width:36px;height:36px;background:linear-gradient(135deg,#2e7d32,#43a047);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <span style="color:#fff;font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace">PW</span>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-radius:14px;border:1px solid rgba(16,185,129,.20);transition:transform .2s">
+          <div style="width:42px;height:42px;background:linear-gradient(135deg,#059669,#10B981);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(16,185,129,.30)">
+            <span style="color:#fff;font-size:13px;font-weight:800;font-family:'JetBrains Mono',monospace">PW</span>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:700;color:#1a2e42;font-family:'Plus Jakarta Sans',sans-serif">Puspa Wardhani</div>
-            <div id="about-role-2" style="font-size:11.5px;color:#546e8a;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">Staf Pengajar, Departemen Patologi Klinik</div>
+            <div style="font-size:13.5px;font-weight:700;color:#0F172A;font-family:'Plus Jakarta Sans',sans-serif">Puspa Wardhani</div>
+            <div id="about-role-2" style="font-size:11.5px;color:#64748B;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">Staf Pengajar, Departemen Patologi Klinik</div>
           </div>
         </div>
         <!-- Peneliti 3 -->
-        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:#f5f8ff;border-radius:10px;border:1px solid #d0e4fa">
-          <div style="width:36px;height:36px;background:linear-gradient(135deg,#6a1b9a,#8e24aa);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <span style="color:#fff;font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace">YN</span>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border-radius:14px;border:1px solid rgba(139,92,246,.20);transition:transform .2s">
+          <div style="width:42px;height:42px;background:linear-gradient(135deg,#6D28D9,#8B5CF6);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(139,92,246,.30)">
+            <span style="color:#fff;font-size:13px;font-weight:800;font-family:'JetBrains Mono',monospace">YN</span>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:700;color:#1a2e42;font-family:'Plus Jakarta Sans',sans-serif">Yulia Nadar Indrasari</div>
-            <div id="about-role-3" style="font-size:11.5px;color:#546e8a;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">Staf Pengajar, Departemen Patologi Klinik</div>
+            <div style="font-size:13.5px;font-weight:700;color:#0F172A;font-family:'Plus Jakarta Sans',sans-serif">Yulia Nadar Indrasari</div>
+            <div id="about-role-3" style="font-size:11.5px;color:#64748B;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">Staf Pengajar, Departemen Patologi Klinik</div>
           </div>
         </div>
         <!-- Peneliti 4 -->
-        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:#f5f8ff;border-radius:10px;border:1px solid #d0e4fa">
-          <div style="width:36px;height:36px;background:linear-gradient(135deg,#b71c1c,#e53935);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <span style="color:#fff;font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace">BP</span>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:linear-gradient(135deg,#FFF1F2,#FFE4E6);border-radius:14px;border:1px solid rgba(239,68,68,.20);transition:transform .2s">
+          <div style="width:42px;height:42px;background:linear-gradient(135deg,#B91C1C,#EF4444);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(239,68,68,.30)">
+            <span style="color:#fff;font-size:13px;font-weight:800;font-family:'JetBrains Mono',monospace">BP</span>
           </div>
           <div>
-            <div style="font-size:13px;font-weight:700;color:#1a2e42;font-family:'Plus Jakarta Sans',sans-serif">Bambang Pujo Semedi</div>
-            <div id="about-role-4" style="font-size:11.5px;color:#546e8a;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">Staf Pengajar, Departemen Anestesiologi dan Terapi Intensif</div>
+            <div style="font-size:13.5px;font-weight:700;color:#0F172A;font-family:'Plus Jakarta Sans',sans-serif">Bambang Pujo Semedi</div>
+            <div id="about-role-4" style="font-size:11.5px;color:#64748B;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">Staf Pengajar, Departemen Anestesiologi dan Terapi Intensif</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Komitmen dan Pengembangan -->
-    <div style="background:#fff;border-radius:12px;padding:20px 20px;margin-bottom:16px;border:1px solid #e3edf7;box-shadow:0 2px 8px rgba(21,101,192,.07)">
+    <div style="background:linear-gradient(135deg,rgba(255,251,235,.95),rgba(254,243,199,.90));border-radius:18px;padding:20px 22px;margin-bottom:14px;border:1px solid rgba(245,158,11,.25);box-shadow:0 4px 20px rgba(245,158,11,.10);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#F59E0B,#EF4444);border-radius:18px 18px 0 0"></div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="width:4px;height:28px;background:linear-gradient(180deg,#ff6b00,#ffb74d);border-radius:2px"></div>
-        <div id="about-commit-heading" style="font-size:14px;font-weight:800;color:#e65100;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.3px">Komitmen dan Pengembangan</div>
+        <div style="width:36px;height:36px;background:linear-gradient(135deg,#D97706,#F59E0B);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 10px rgba(245,158,11,.30);font-size:18px">🚀</div>
+        <div id="about-commit-heading" style="font-size:15px;font-weight:800;color:#B45309;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.2px">Komitmen dan Pengembangan</div>
       </div>
-      <p id="about-commit-body" style="font-size:13px;line-height:1.75;color:#344a5e;font-family:'Plus Jakarta Sans',sans-serif;margin:0">
+      <p id="about-commit-body" style="font-size:13px;line-height:1.80;color:#78350F;font-family:'Plus Jakarta Sans',sans-serif;margin:0">
         Saat ini, SepsiGo berada dalam tahap pengembangan berkelanjutan. Kami berkomitmen untuk terus menyempurnakan sistem ini agar dapat menjadi solusi mutakhir bagi para klinisi dalam mengoptimalkan penanganan sepsis. Fokus utama kami adalah membantu meningkatkan efektivitas pelayanan medis dan memberikan kontribusi positif terhadap luaran klinis (<em>patient outcome</em>) bagi pasien di seluruh fasilitas kesehatan.
       </p>
     </div>
@@ -1068,9 +1710,81 @@
 
 </div><!-- end main -->
 
+<!-- ══ TAB TRANSITION LOADER ══ -->
+<div id="tab-loader">
+  <div class="tab-loader-inner">
+    <div class="tl-heart">
+      <div class="tl-heart-ring"></div>
+      <div class="tl-heart-ring"></div>
+      <div class="tl-heart-ring"></div>
+      <div class="tl-heart-icon">❤️</div>
+    </div>
+    <div class="tl-ecg-wrap">
+      <svg class="tl-ecg-svg" viewBox="0 0 400 28" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 14 L55 14 L65 14 L70 5 L76 23 L80 1 L86 27 L91 14 L105 14 L160 14 L170 14 L175 5 L181 23 L185 1 L191 27 L196 14 L210 14 L265 14 L275 14 L280 5 L286 23 L290 1 L296 27 L301 14 L315 14 L370 14 L380 14 L385 5 L391 23 L395 1 L400 14"
+          stroke="url(#tlGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="tlGrad" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#EF4444" stop-opacity="0"/>
+            <stop offset="25%"  stop-color="#EF4444"/>
+            <stop offset="55%"  stop-color="#8B5CF6"/>
+            <stop offset="80%"  stop-color="#2563EB"/>
+            <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="tl-dots">
+      <div class="tl-dot"></div>
+      <div class="tl-dot"></div>
+      <div class="tl-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CALCULATION LOADER ══ -->
+<div id="calc-loader">
+  <div class="cl-bg-orb cl-bg-orb-1"></div>
+  <div class="cl-bg-orb cl-bg-orb-2"></div>
+  <div class="cl-dot-grid"></div>
+  <div class="cl-card">
+    <div class="cl-heart-wrap">
+      <div class="cl-ring cl-ring-1"></div>
+      <div class="cl-ring cl-ring-2"></div>
+      <div class="cl-ring cl-ring-3"></div>
+      <div class="cl-heart-icon">❤️</div>
+    </div>
+    <div class="cl-ecg-wrap">
+      <svg class="cl-ecg-svg" viewBox="0 0 500 44" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 22 L70 22 L85 22 L92 8 L100 36 L106 2 L114 42 L120 22 L140 22 L210 22 L225 22 L232 8 L240 36 L246 2 L254 42 L260 22 L280 22 L350 22 L365 22 L372 8 L380 36 L386 2 L394 42 L400 22 L420 22 L490 22 L500 22"
+          stroke="url(#clGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="clGrad" x1="0" y1="0" x2="500" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%"   stop-color="#EF4444" stop-opacity="0"/>
+            <stop offset="15%"  stop-color="#EF4444"/>
+            <stop offset="40%"  stop-color="#F59E0B"/>
+            <stop offset="65%"  stop-color="#8B5CF6"/>
+            <stop offset="85%"  stop-color="#2563EB"/>
+            <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <div class="cl-title">Sedang Memproses</div>
+    <div class="cl-status" id="cl-status-text">Menganalisis parameter CPD<span id="cl-dots">...</span></div>
+    <div class="cl-progress-track">
+      <div class="cl-progress-fill"></div>
+    </div>
+    <div class="cl-tip" id="cl-tip-text"></div>
+  </div>
+</div>
+
 <!-- ── FOOTER ── -->
-<div id="app-footer" style="text-align:center;padding:16px 0 20px 0;font-size:11px;color:#7a9dbf;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;border-top:1px solid #e3edf7;margin-top:4px">
-  Versi Pengembangan 0.1.0 &nbsp;|&nbsp; &copy; 2026 SepsiGo Research Team
+<div id="app-footer" style="text-align:center;padding:20px 16px 28px;font-size:11px;color:#94A3B8;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;border-top:1px solid rgba(37,99,235,.10);margin-top:4px;background:linear-gradient(180deg,transparent,rgba(37,99,235,.04))">
+  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.7);border:1px solid rgba(37,99,235,.12);border-radius:999px;padding:6px 18px;backdrop-filter:blur(8px)">
+    <span style="width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#2563EB,#8B5CF6);display:inline-block"></span>
+    Versi Pengembangan 0.1.0 &nbsp;|&nbsp; &copy; 2026 SepsiGo Research Team
+  </div>
 </div>
 
 <script>
@@ -2136,11 +2850,78 @@ function switchToCalcAndCalculate() {
   saveExtraData(true);   // simpan data tambahan secara diam-diam
   const calcBtn = document.querySelector('.nav-btn');
   showTab('calc', calcBtn);
-  setTimeout(() => calculate(), 100);
+  // Wait for tab loader to finish (~460ms) before triggering calculate
+  setTimeout(() => calculate(), 580);
+}
+
+// ─── CALC LOADER ──────────────────────────────────────────────────────────
+const _clMessages = [
+  'Menganalisis parameter CPD',
+  'Menghitung skor SOFA-2',
+  'Memproses data NEWS-2',
+  'Mengevaluasi risiko sepsis',
+  'Menyusun rekomendasi klinis',
+  'Hampir selesai'
+];
+const _clTips = [
+  '"Deteksi dini sepsis dapat menurunkan angka mortalitas hingga 20%"',
+  '"Skor SOFA ≥2 menandai disfungsi organ pada pasien sepsis"',
+  '"NE-WY adalah parameter CPD paling sensitif untuk skrining sepsis"',
+  '"Kultur darah sebaiknya diambil sebelum pemberian antibiotik"',
+  '"Setiap jam keterlambatan terapi meningkatkan risiko kematian 7%"',
+  '"NEWS-2 ≥5 memerlukan evaluasi klinis segera"'
+];
+let _clMsgIdx = 0, _clTipIdx = 0, _clMsgTimer = null, _clDotTimer = null;
+
+function _showCalcLoader() {
+  const el = document.getElementById('calc-loader');
+  if (!el) return;
+  _clMsgIdx = 0; _clTipIdx = Math.floor(Math.random() * _clTips.length);
+  document.getElementById('cl-status-text').innerHTML = _clMessages[0] + '<span id="cl-dots">...</span>';
+  document.getElementById('cl-tip-text').textContent = _clTips[_clTipIdx];
+  el.classList.remove('hiding');
+  el.classList.add('show');
+
+  // Cycle status messages
+  _clMsgTimer = setInterval(() => {
+    _clMsgIdx = (_clMsgIdx + 1) % _clMessages.length;
+    const sEl = document.getElementById('cl-status-text');
+    if (sEl) {
+      sEl.style.opacity = '0';
+      setTimeout(() => {
+        if (sEl) sEl.innerHTML = _clMessages[_clMsgIdx] + '<span id="cl-dots">...</span>';
+        if (sEl) sEl.style.opacity = '1';
+      }, 300);
+    }
+    // Cycle tip every 2 messages
+    if (_clMsgIdx % 2 === 0) {
+      _clTipIdx = (_clTipIdx + 1) % _clTips.length;
+      const tEl = document.getElementById('cl-tip-text');
+      if (tEl) { tEl.style.opacity='0'; setTimeout(()=>{ tEl.textContent=_clTips[_clTipIdx]; tEl.style.opacity='1'; },300); }
+    }
+  }, 600);
+}
+
+function _hideCalcLoader() {
+  if (_clMsgTimer) { clearInterval(_clMsgTimer); _clMsgTimer = null; }
+  const el = document.getElementById('calc-loader');
+  if (!el) return;
+  // Final message
+  const sEl = document.getElementById('cl-status-text');
+  if (sEl) sEl.innerHTML = 'Selesai <span style="color:#10B981">✓</span>';
+  setTimeout(() => {
+    el.classList.add('hiding');
+    setTimeout(() => el.classList.remove('show','hiding'), 420);
+  }, 300);
 }
 
 // ─── CALCULATE ────────────────────────────────────────────────────────────
 function calculate() {
+  _showCalcLoader();
+  setTimeout(_runCalculate, 80);
+}
+
+function _runCalculate() {
   const t = LANG[lang];
   const { scores, total } = calcSofa();
   const sofaSepsis = total >= 2;
@@ -2328,7 +3109,8 @@ function calculate() {
   const urlInput = document.getElementById('sheets-url');
   if (urlInput && !urlInput.value) urlInput.value = savedUrl;
 
-  setTimeout(() => rs.scrollIntoView({ behavior:'smooth', block:'start' }), 100);
+  _hideCalcLoader();
+  setTimeout(() => rs.scrollIntoView({ behavior:'smooth', block:'start' }), 420);
 }
 
 // ─── RESET ────────────────────────────────────────────────────────────────
@@ -2453,17 +3235,40 @@ function renderAbout() {
   if (disc) disc.textContent = t.disclaimerText;
 }
 
+// ─── TAB LOADER ───────────────────────────────────────────────────────────
+let _tabLoaderTimer = null;
+let _tabLoaderEnabled = false;
+// Enable loader only after page is fully loaded (skip init showTab calls)
+window.addEventListener('load', () => { setTimeout(() => { _tabLoaderEnabled = true; }, 600); });
+
+function _showTabLoader(callback) {
+  const el = document.getElementById('tab-loader');
+  if (!el || !_tabLoaderEnabled) { callback(); return; }
+  el.classList.remove('hiding');
+  el.classList.add('show');
+  if (_tabLoaderTimer) clearTimeout(_tabLoaderTimer);
+  _tabLoaderTimer = setTimeout(() => {
+    callback();
+    el.classList.add('hiding');
+    setTimeout(() => { el.classList.remove('show','hiding'); }, 260);
+  }, 460);
+}
+
 // ─── TAB ──────────────────────────────────────────────────────────────────
 function showTab(name, btn) {
-  ['calc','extra','kultur','about'].forEach(t => {
-    document.getElementById('tab-'+t).style.display = t===name ? '' : 'none';
-  });
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  // Refresh link previews when switching to linked tabs
-  if (name === 'extra')   setTimeout(previewExtraLink,  50);
-  if (name === 'kultur')  setTimeout(previewKulturLink, 50);
-  if (name === 'calc')    setTimeout(updateCSVCounter,  50);
+  // Hide all tabs first
+  ['calc','extra','kultur','about'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = 'none';
+  });
+  _showTabLoader(() => {
+    document.getElementById('tab-'+name).style.display = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (name === 'extra')   setTimeout(previewExtraLink,  50);
+    if (name === 'kultur')  setTimeout(previewKulturLink, 50);
+    if (name === 'calc')    setTimeout(updateCSVCounter,  50);
+  });
 }
 
 // ─── LANGUAGE ─────────────────────────────────────────────────────────────
@@ -2486,7 +3291,11 @@ function applyLang() {
     ? ['Calculator','Additional Data','Culture Results','About']
     : ['Kalkulator','Data Tambahan','Hasil Kultur','Tentang'];
   document.querySelectorAll('.nav-btn').forEach((btn, i) => {
-    if (navLabels[i]) btn.textContent = navLabels[i];
+    if (navLabels[i]) {
+      const textSpan = btn.querySelector('span[data-t]') || btn.querySelector('span:not(.nav-icon)');
+      if (textSpan) textSpan.textContent = navLabels[i];
+      else btn.textContent = navLabels[i];
+    }
   });
 
   // ── Update tombol per-set (hardcoded) ──
@@ -3296,34 +4105,91 @@ setTotalSets(2);
 // ─── PWA: INSTALL PROMPT HANDLER ────────────────────────────────────────────
 var _deferredInstallPrompt = null;
 
-// Android Chrome: tangkap event beforeinstallprompt
+// Android / Chrome Desktop: tangkap event beforeinstallprompt
 window.addEventListener('beforeinstallprompt', function(e) {
-  e.preventDefault();                         // cegah banner default browser
-  _deferredInstallPrompt = e;                 // simpan event
-  // Tampilkan tombol Install di header
-  var btn = document.getElementById('pwa-install-btn');
-  if (btn) btn.style.display = '';
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+  // Update tombol agar terlihat siap install
+  var lbl = document.getElementById('pwa-install-label');
+  if (lbl) lbl.textContent = 'Install';
 });
 
-// Setelah install berhasil, sembunyikan tombol
+// Setelah install berhasil → update button jadi "Terpasang"
 window.addEventListener('appinstalled', function() {
   _deferredInstallPrompt = null;
+  var lbl = document.getElementById('pwa-install-label');
+  if (lbl) lbl.textContent = '✓ Terpasang';
   var btn = document.getElementById('pwa-install-btn');
-  if (btn) btn.style.display = 'none';
+  if (btn) {
+    btn.style.background = 'rgba(16,185,129,.25)';
+    btn.style.borderColor = 'rgba(16,185,129,.6)';
+    btn.style.cursor = 'default';
+    btn.onclick = null;
+  }
   var iosBanner = document.getElementById('ios-install-banner');
   if (iosBanner) iosBanner.classList.remove('show');
 });
 
 function triggerPWAInstall() {
-  if (!_deferredInstallPrompt) return;
-  _deferredInstallPrompt.prompt();
-  _deferredInstallPrompt.userChoice.then(function(result) {
-    _deferredInstallPrompt = null;
-    if (result.outcome === 'accepted') {
-      var btn = document.getElementById('pwa-install-btn');
-      if (btn) btn.style.display = 'none';
-    }
-  });
+  // Jika sudah standalone (sudah terinstall)
+  if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+    _showInstallModal('installed');
+    return;
+  }
+  // Android / Chrome Desktop: gunakan prompt native
+  if (_deferredInstallPrompt) {
+    _deferredInstallPrompt.prompt();
+    _deferredInstallPrompt.userChoice.then(function(result) {
+      _deferredInstallPrompt = null;
+      if (result.outcome === 'accepted') {
+        var lbl = document.getElementById('pwa-install-label');
+        if (lbl) lbl.textContent = '✓ Terpasang';
+      }
+    });
+    return;
+  }
+  // iOS Safari atau browser lain: tampilkan modal panduan
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  _showInstallModal(isIOS ? 'ios' : 'other');
+}
+
+// Modal panduan install
+function _showInstallModal(type) {
+  var existing = document.getElementById('install-guide-modal');
+  if (existing) existing.remove();
+
+  var isEN = (typeof lang !== 'undefined') && lang === 'en';
+  var contentMap = {
+    ios: {
+      title: isEN ? '📲 Install on iPhone / iPad' : '📲 Install di iPhone / iPad',
+      body: isEN
+        ? '<ol style="padding-left:20px;line-height:2.2"><li>Tap the <strong>Share</strong> button <span style="font-size:16px">⎋</span> at the bottom of Safari</li><li>Scroll down and tap <strong>"Add to Home Screen"</strong></li><li>Tap <strong>"Add"</strong> — done!</li></ol>'
+        : '<ol style="padding-left:20px;line-height:2.2"><li>Tap tombol <strong>Share</strong> <span style="font-size:16px">⎋</span> di bawah Safari</li><li>Gulir ke bawah, tap <strong>"Add to Home Screen"</strong></li><li>Tap <strong>"Add"</strong> — selesai!</li></ol>',
+    },
+    other: {
+      title: isEN ? '📲 Install SepsiGo' : '📲 Install SepsiGo',
+      body: isEN
+        ? '<p style="line-height:1.8">Open this page in <strong>Chrome</strong> or <strong>Edge</strong> on Android or desktop, then look for the <strong>Install</strong> prompt in the address bar or browser menu.</p>'
+        : '<p style="line-height:1.8">Buka halaman ini di <strong>Chrome</strong> atau <strong>Edge</strong> di Android / desktop, lalu cari tombol <strong>Install</strong> di address bar atau menu browser.</p>',
+    },
+    installed: {
+      title: isEN ? '✅ Already Installed' : '✅ Sudah Terpasang',
+      body: isEN
+        ? '<p style="line-height:1.8">SepsiGo is already installed on this device. Open it from your home screen or app launcher.</p>'
+        : '<p style="line-height:1.8">SepsiGo sudah terpasang di perangkat ini. Buka dari layar utama atau launcher aplikasi Anda.</p>',
+    },
+  };
+  var c = contentMap[type] || contentMap.other;
+  var overlay = document.createElement('div');
+  overlay.id = 'install-guide-modal';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,20,40,.6);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;animation:modalFadeIn .2s ease';
+  overlay.innerHTML = '<div style="background:#fff;border-radius:20px;padding:28px 24px;width:90%;max-width:360px;box-shadow:0 24px 60px rgba(10,20,40,.25),0 4px 16px rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.12);animation:modalPop .22s cubic-bezier(.4,0,.2,1);font-family:Plus Jakarta Sans,sans-serif">'
+    + '<div style="font-size:17px;font-weight:800;color:#0F172A;margin-bottom:14px;text-align:center">' + c.title + '</div>'
+    + '<div style="font-size:13px;color:#334155;margin-bottom:22px">' + c.body + '</div>'
+    + '<button onclick="document.getElementById(\'install-guide-modal\').remove()" style="width:100%;padding:12px 0;background:linear-gradient(135deg,#2563EB,#3B82F6);border:none;border-radius:10px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:Plus Jakarta Sans,sans-serif;box-shadow:0 4px 16px rgba(37,99,235,.30)">OK</button>'
+    + '</div>';
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
 }
 
 // iOS Safari: deteksi dan tampilkan banner panduan

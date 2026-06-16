@@ -2,47 +2,374 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>SepsiGo — Sepsis Early Detection System</title>
-  <meta http-equiv="refresh" content="0; url=./SepsiGo.html">
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#1565C0">
+  <meta name="theme-color" content="#1E40AF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      margin: 0;
       min-height: 100vh;
+      min-height: 100dvh;
+      background: #060E24;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #1565C0;
-      font-family: sans-serif;
-      color: #fff;
     }
-    .loading {
-      text-align: center;
-      opacity: 0.85;
+
+    /* ── BACKGROUND GRADIENT ── */
+    .bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(37,99,235,.40) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, rgba(139,92,246,.30) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, rgba(30,64,175,.20) 0%, transparent 70%),
+        linear-gradient(135deg, #060E24 0%, #0D1B3E 50%, #0A0F2E 100%);
+      z-index: 0;
     }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-top-color: #fff;
+
+    /* ── FLOATING ORBS ── */
+    .orb {
+      position: fixed;
       border-radius: 50%;
-      margin: 0 auto 16px;
-      animation: spin .8s linear infinite;
+      filter: blur(60px);
+      opacity: 0;
+      animation: orbFloat 8s ease-in-out infinite;
+      z-index: 0;
+      pointer-events: none;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    p { font-size: 13px; margin: 0; opacity: .7; }
+    .orb-1 { width: 300px; height: 300px; background: #2563EB; top: -80px; left: -80px; animation-delay: 0s; animation-duration: 9s; }
+    .orb-2 { width: 250px; height: 250px; background: #7C3AED; bottom: -60px; right: -60px; animation-delay: 1.5s; animation-duration: 11s; }
+    .orb-3 { width: 200px; height: 200px; background: #0891B2; top: 40%; left: 70%; animation-delay: 3s; animation-duration: 10s; }
+    .orb-4 { width: 180px; height: 180px; background: #DC2626; bottom: 20%; left: -40px; animation-delay: 2s; animation-duration: 12s; }
+
+    @keyframes orbFloat {
+      0%, 100% { opacity: .18; transform: translate(0,0) scale(1); }
+      33%       { opacity: .30; transform: translate(20px,-15px) scale(1.05); }
+      66%       { opacity: .22; transform: translate(-10px,20px) scale(0.95); }
+    }
+
+    /* ── PARTICLES ── */
+    .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: particleDrift linear infinite;
+    }
+    @keyframes particleDrift {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: .6; }
+      100% { transform: translateY(-20px) scale(1); opacity: 0; }
+    }
+
+    /* ── MAIN CARD ── */
+    .card {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(90vw, 360px);
+      animation: cardIn .8s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: scale(.80) translateY(30px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ── LOGO CONTAINER ── */
+    .logo-wrap {
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    /* Pulsing rings */
+    .ring {
+      position: absolute;
+      inset: -20px;
+      border-radius: 28px;
+      border: 1.5px solid rgba(37,99,235,.5);
+      animation: ringPulse 2.4s ease-out infinite;
+    }
+    .ring:nth-child(2) { inset: -36px; border-radius: 36px; animation-delay: .6s; border-color: rgba(139,92,246,.35); }
+    .ring:nth-child(3) { inset: -54px; border-radius: 44px; animation-delay: 1.2s; border-color: rgba(6,182,212,.25); }
+    @keyframes ringPulse {
+      0%   { opacity: .8; transform: scale(1); }
+      100% { opacity: 0;  transform: scale(1.15); }
+    }
+
+    /* Logo card itself */
+    .logo-card {
+      position: relative;
+      z-index: 2;
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px 32px;
+      box-shadow:
+        0 0 0 1px rgba(37,99,235,.15),
+        0 8px 32px rgba(37,99,235,.25),
+        0 32px 80px rgba(0,0,0,.40),
+        0 0 80px rgba(37,99,235,.15);
+      animation: logoGlow 3s ease-in-out infinite;
+    }
+    @keyframes logoGlow {
+      0%, 100% { box-shadow: 0 0 0 1px rgba(37,99,235,.15), 0 8px 32px rgba(37,99,235,.25), 0 32px 80px rgba(0,0,0,.40), 0 0 80px rgba(37,99,235,.15); }
+      50%       { box-shadow: 0 0 0 1px rgba(37,99,235,.25), 0 8px 40px rgba(37,99,235,.40), 0 32px 80px rgba(0,0,0,.45), 0 0 100px rgba(37,99,235,.25); }
+    }
+
+    .logo-card img {
+      width: 240px;
+      height: auto;
+      display: block;
+      animation: logoFloat 4s ease-in-out infinite;
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-4px); }
+    }
+
+    /* ── TAGLINE ── */
+    .tagline {
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(255,255,255,.50);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+      animation: fadeSlideUp .8s .4s cubic-bezier(.4,0,.2,1) both;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── PULSE LINE (ECG) ── */
+    .pulse-wrap {
+      width: 100%;
+      margin-bottom: 24px;
+      animation: fadeSlideUp .8s .6s cubic-bezier(.4,0,.2,1) both;
+      position: relative;
+      height: 36px;
+      overflow: hidden;
+    }
+    .pulse-svg {
+      width: 200%;
+      height: 36px;
+      animation: pulseScan 2s linear infinite;
+    }
+    @keyframes pulseScan {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      width: 100%;
+      margin-bottom: 20px;
+      animation: fadeSlideUp .8s .7s cubic-bezier(.4,0,.2,1) both;
+    }
+    .progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,.10);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #2563EB, #8B5CF6, #06B6D4);
+      background-size: 200% 100%;
+      animation: progressGrow 2.6s cubic-bezier(.4,0,.2,1) forwards, shimmer 1.5s linear infinite;
+      width: 0%;
+    }
+    @keyframes progressGrow {
+      0%   { width: 0%; }
+      40%  { width: 60%; }
+      70%  { width: 80%; }
+      90%  { width: 92%; }
+      100% { width: 100%; }
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+
+    /* ── STATUS TEXT ── */
+    .status {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(255,255,255,.40);
+      letter-spacing: 1px;
+      height: 16px;
+      animation: fadeSlideUp .8s .8s cubic-bezier(.4,0,.2,1) both;
+      transition: opacity .3s;
+    }
+    .status span { animation: statusBlink .8s ease-in-out infinite; }
+    @keyframes statusBlink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .3; }
+    }
+
+    /* ── VERSION BADGE ── */
+    .version {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(255,255,255,.20);
+      letter-spacing: 1.5px;
+      z-index: 10;
+      animation: fadeSlideUp 1s 1s both;
+      white-space: nowrap;
+    }
+
+    /* ── FADE OUT ── */
+    body.fade-out {
+      animation: bodyFade .5s ease forwards;
+    }
+    @keyframes bodyFade {
+      to { opacity: 0; }
+    }
+
+    /* DOTS ── */
+    .dot-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
   </style>
 </head>
 <body>
-  <div class="loading">
-    <div class="spinner"></div>
-    <strong>SepsiGo</strong>
-    <p>Memuat aplikasi…</p>
+
+  <!-- BG layers -->
+  <div class="bg"></div>
+  <div class="dot-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+  <div class="particles" id="particles"></div>
+
+  <!-- Main -->
+  <div class="card">
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="logo-card">
+        <img src="../Logo.png" alt="SepsiGo" onerror="this.src='./icons/icon-192.png';this.style.width='96px';this.style.padding='8px'">
+      </div>
+    </div>
+
+    <!-- Tagline -->
+    <div class="tagline">Sepsis Early Detection System</div>
+
+    <!-- ECG pulse line -->
+    <div class="pulse-wrap">
+      <svg class="pulse-svg" viewBox="0 0 400 36" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 18 L60 18 L75 18 L80 6 L87 30 L92 2 L100 34 L107 18 L120 18 L180 18 L195 18 L200 6 L207 30 L212 2 L220 34 L227 18 L240 18 L300 18 L315 18 L320 6 L327 30 L332 2 L340 34 L347 18 L360 18 L400 18"
+          stroke="url(#ecgGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="ecgGrad" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#2563EB" stop-opacity="0"/>
+            <stop offset="30%" stop-color="#2563EB"/>
+            <stop offset="60%" stop-color="#8B5CF6"/>
+            <stop offset="80%" stop-color="#06B6D4"/>
+            <stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-track">
+        <div class="progress-fill" id="pf"></div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="status" id="status">
+      Memuat sistem<span>...</span>
+    </div>
+
   </div>
+
+  <!-- Version -->
+  <div class="version">v0.1.0 &nbsp;·&nbsp; SEPSIS EARLY DETECTION</div>
+
   <script>
-    // Redirect segera ke aplikasi utama
-    window.location.replace('./SepsiGo.html');
+    // ── Particles
+    const container = document.getElementById('particles');
+    const colors = ['#2563EB','#8B5CF6','#06B6D4','#3B82F6','#A78BFA'];
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 4 + 1.5;
+      const delay = Math.random() * 8;
+      const dur   = Math.random() * 10 + 8;
+      const left  = Math.random() * 100;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      p.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${left}%;
+        background:${color};
+        opacity:${Math.random()*.6+.2};
+        animation-duration:${dur}s;
+        animation-delay:${delay}s;
+      `;
+      container.appendChild(p);
+    }
+
+    // ── Status messages
+    const messages = [
+      'Memuat sistem',
+      'Menginisialisasi algoritma',
+      'Menyiapkan parameter CPD',
+      'Mengkonfigurasi SOFA-2',
+      'Siap digunakan'
+    ];
+    let mi = 0;
+    const statusEl = document.getElementById('status');
+    const ticker = setInterval(() => {
+      mi++;
+      if (mi >= messages.length) {
+        clearInterval(ticker);
+        statusEl.innerHTML = messages[messages.length - 1] + ' <span style="color:#10B981">✓</span>';
+        return;
+      }
+      statusEl.style.opacity = '0';
+      setTimeout(() => {
+        statusEl.innerHTML = messages[mi] + (mi < messages.length - 1 ? '<span>...</span>' : '');
+        statusEl.style.opacity = '1';
+      }, 300);
+    }, 520);
+
+    // ── Redirect after animation completes
+    setTimeout(() => {
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        window.location.replace('./SepsiGo.html');
+      }, 500);
+    }, 3000);
   </script>
 </body>
 </html>
