@@ -660,17 +660,17 @@
   #tab-loader {
     display: none;
     position: fixed;
-    inset: 0;
+    top: 0; right: 0; bottom: 0; left: 0;
     z-index: 200;
-    background: rgba(6,14,36,.65);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: rgba(6,14,36,.72);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
-    animation: tabLoaderFadeIn .15s ease;
+    animation: tabLoaderFadeIn .18s ease;
   }
   #tab-loader.show { display: flex; }
-  #tab-loader.hiding { animation: tabLoaderFadeOut .25s ease forwards; }
+  #tab-loader.hiding { animation: tabLoaderFadeOut .30s ease forwards; }
   @keyframes tabLoaderFadeIn  { from { opacity:0 } to { opacity:1 } }
   @keyframes tabLoaderFadeOut { from { opacity:1 } to { opacity:0 } }
 
@@ -3248,8 +3248,8 @@ function _showTabLoader(callback) {
   _tabLoaderTimer = setTimeout(() => {
     callback();
     el.classList.add('hiding');
-    setTimeout(() => { el.classList.remove('show','hiding'); }, 260);
-  }, 460);
+    setTimeout(() => { el.classList.remove('show','hiding'); }, 300);
+  }, 750);
 }
 
 // ─── TAB ──────────────────────────────────────────────────────────────────

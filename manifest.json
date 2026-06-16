@@ -3,7 +3,7 @@
   "name": "SepsiGo — Sepsis Early Detection System",
   "short_name": "SepsiGo",
   "description": "Alat bantu skrining sepsis berbasis Cell Population Data (CPD) Sysmex XN-Series",
-  "start_url": "./SepsiGo.html",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
