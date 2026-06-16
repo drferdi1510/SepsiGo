@@ -3237,9 +3237,7 @@ function renderAbout() {
 
 // ─── TAB LOADER ───────────────────────────────────────────────────────────
 let _tabLoaderTimer = null;
-let _tabLoaderEnabled = false;
-// Enable loader only after page is fully loaded (skip init showTab calls)
-window.addEventListener('load', () => { setTimeout(() => { _tabLoaderEnabled = true; }, 600); });
+let _tabLoaderEnabled = true;
 
 function _showTabLoader(callback) {
   const el = document.getElementById('tab-loader');
