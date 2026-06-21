@@ -1420,6 +1420,13 @@
   }
 
   .tab-loader-inner {
+    position: fixed;
+    top: 50vh;
+    top: 50dvh;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 99991;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1551,8 +1558,13 @@
 
   /* Central card */
   .cl-card {
-    position: relative;
-    z-index: 1;
+    position: fixed;
+    top: 50vh;
+    top: 50dvh;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 99996;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1698,11 +1710,19 @@
     transition: opacity .5s ease;
   }
   #app-splash .sp-center {
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
+    position: fixed;
+    top: 50vh;
+    top: 50dvh;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 100000;
     display: -webkit-flex;
     display: flex;
-    z-index: 2;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-align-items: center;
+    align-items: center;
   }
   #app-splash.hiding { opacity: 0; pointer-events: none; }
   #app-splash .sp-bg {
@@ -2457,8 +2477,8 @@
     <div style="margin-bottom:10px">
       <div class="organ-input-label-sm" data-t="cultureStatusLabel">Status Kultur</div>
       <select id="culture-status" onchange="onCultureStatusChange()" style="width:100%;margin-top:4px">
-        <option value="pending" data-t="cPending">Menunggu hasil</option>
         <option value="notdone" data-t="cNotDone">Tidak dilakukan</option>
+        <option value="pending" data-t="cPending">Menunggu hasil</option>
       </select>
     </div>
 
