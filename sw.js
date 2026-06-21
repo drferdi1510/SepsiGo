@@ -1,14 +1,12 @@
 // ─── SepsiGo Service Worker ──────────────────────────────────────────────────
-const CACHE_NAME = 'sepsigo-v12';
+const CACHE_NAME = 'sepsigo-v13';
 
-// Aset statis yang aman di-cache lama (icons, logo — jarang berubah)
 const STATIC_ASSETS = [
   './Logo.png',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
 
-// ── INSTALL: cache hanya aset statis ─────────────────────────────────────────
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -17,7 +15,6 @@ self.addEventListener('install', event => {
   );
 });
 
-// ── ACTIVATE: hapus semua cache versi lama ───────────────────────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
@@ -28,11 +25,6 @@ self.addEventListener('activate', event => {
   );
 });
 
-// ── FETCH ─────────────────────────────────────────────────────────────────────
-// HTML (index.html, SepsiGo.html)  → Network-First: selalu ambil versi terbaru,
-//                                    fallback ke cache jika offline.
-// Aset statis (icons, Logo, fonts) → Cache-First: cepat, jarang berubah.
-// Lainnya                          → Network only.
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
@@ -52,26 +44,13 @@ self.addEventListener('fetch', event => {
     url.pathname.endsWith('Logo.png') ||
     url.pathname.endsWith('manifest.json');
 
+  // HTML → Network only, tidak pernah cache
   if (isHTML) {
-    // Network-First untuk HTML — update selalu terlihat
-    event.respondWith(
-      fetch(request)
-        .then(response => {
-          if (response && response.status === 200) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then(c => c.put(request, clone));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request)
-          .then(cached => cached || caches.match('./SepsiGo.html'))
-        )
-    );
+    event.respondWith(fetch(request));
     return;
   }
 
   if (isStaticAsset) {
-    // Cache-First untuk aset statis
     event.respondWith(
       caches.match(request).then(cached => {
         if (cached) return cached;
@@ -86,11 +65,8 @@ self.addEventListener('fetch', event => {
     );
     return;
   }
-
-  // Semua request lain: network langsung (API, dll.)
 });
 
-// ── MESSAGE ───────────────────────────────────────────────────────────────────
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
