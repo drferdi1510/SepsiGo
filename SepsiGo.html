@@ -1111,6 +1111,141 @@
   @-webkit-keyframes spBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
   @keyframes spBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
 </style>
+<style>
+/* ── AST STANDARD TOGGLE ── */
+.ast-std-wrap { display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.ast-std-label { font-size:11px; font-weight:700; color:#1E40AF; font-family:'JetBrains Mono',monospace; letter-spacing:.5px; }
+.ast-std-btn {
+  background:rgba(248,250,255,.9); border:1.5px solid #DBEAFE;
+  border-radius:8px; color:#64748B; padding:5px 14px;
+  font-size:11px; font-weight:700; cursor:pointer;
+  font-family:'JetBrains Mono',monospace; transition:all .2s; letter-spacing:.3px;
+}
+.ast-std-btn.active {
+  background:linear-gradient(135deg,#2563EB,#3B82F6);
+  border-color:transparent; color:#fff;
+  box-shadow:0 2px 8px rgba(37,99,235,.30);
+}
+.ast-std-btn:hover:not(.active) { border-color:#2563EB; color:#2563EB; }
+
+/* ── AST COLLAPSIBLE SECTION per set ── */
+.ast-toggle-btn {
+  display:flex; align-items:center; gap:6px;
+  background:rgba(37,99,235,.06); border:1px dashed rgba(37,99,235,.30);
+  border-radius:8px; padding:7px 12px; cursor:pointer;
+  font-size:11px; font-weight:700; color:#2563EB;
+  font-family:'JetBrains Mono',monospace; letter-spacing:.5px;
+  transition:all .2s; width:100%; margin-top:8px;
+}
+.ast-toggle-btn:hover { background:rgba(37,99,235,.12); border-color:rgba(37,99,235,.50); }
+.ast-toggle-btn .ast-chevron { font-size:9px; transition:transform .2s; margin-left:auto; }
+.ast-toggle-btn.open .ast-chevron { transform:rotate(180deg); }
+
+.ast-body {
+  display:none; padding:10px 12px 12px;
+  background:linear-gradient(135deg,rgba(240,247,255,.8),rgba(245,240,255,.6));
+  border:1px solid rgba(37,99,235,.15); border-radius:0 0 10px 10px;
+  border-top:none; animation:fadeUp .2s ease;
+}
+.ast-body.open { display:block; }
+
+.ast-cols { display:flex; gap:10px; margin-top:8px; }
+.ast-col { flex:1; min-width:130px; }
+.ast-col-header {
+  font-size:10px; font-weight:800; letter-spacing:1.5px;
+  padding:5px 10px; border-radius:6px 6px 0 0; text-align:center;
+  font-family:'JetBrains Mono',monospace;
+}
+.ast-col-s .ast-col-header { background:linear-gradient(135deg,#059669,#10B981); color:#fff; }
+.ast-col-r .ast-col-header { background:linear-gradient(135deg,#DC2626,#EF4444); color:#fff; }
+
+.ast-tag-wrap {
+  min-height:36px; padding:6px 8px; display:flex; flex-wrap:wrap; gap:4px;
+  background:#fff; border:1px solid #E2E8F0; border-top:none;
+  border-radius:0 0 6px 6px;
+}
+.ast-tag {
+  display:inline-flex; align-items:center; gap:4px;
+  border-radius:999px; padding:3px 8px 3px 10px;
+  font-size:10px; font-weight:700; font-family:'JetBrains Mono',monospace;
+  cursor:default; transition:opacity .15s;
+}
+.ast-tag-s { background:rgba(16,185,129,.12); color:#059669; border:1px solid rgba(16,185,129,.30); }
+.ast-tag-r { background:rgba(239,68,68,.12); color:#DC2626; border:1px solid rgba(239,68,68,.30); }
+.ast-tag-del {
+  cursor:pointer; font-size:11px; line-height:1; opacity:.55; border:none;
+  background:transparent; color:inherit; padding:0;
+}
+.ast-tag-del:hover { opacity:1; }
+.ast-input-row { display:flex; gap:5px; margin-top:6px; }
+.ast-input-row input {
+  flex:1; padding:5px 8px; font-size:11px;
+  font-family:'JetBrains Mono',monospace;
+  border:1.5px solid #DBEAFE; border-radius:6px;
+  background:#F8FAFF; color:#0F172A; min-width:0;
+}
+.ast-input-row input:focus { outline:none; border-color:#2563EB; background:#fff; }
+.ast-add-btn {
+  padding:5px 10px; border-radius:6px; border:none; cursor:pointer;
+  font-size:10px; font-weight:700; font-family:'JetBrains Mono',monospace;
+  transition:all .2s;
+}
+.ast-add-s { background:#059669; color:#fff; }
+.ast-add-r { background:#DC2626; color:#fff; }
+.ast-add-s:hover { background:#047857; }
+.ast-add-r:hover { background:#B91C1C; }
+
+/* ── WILDTYPE RESULT ── */
+.wt-card {
+  border-radius:10px; padding:12px 14px; margin-top:10px;
+  border:1.5px solid; font-family:'JetBrains Mono',monospace;
+}
+.wt-card.wt { background:rgba(16,185,129,.06); border-color:rgba(16,185,129,.35); }
+.wt-card.nwt { background:rgba(239,68,68,.05); border-color:rgba(239,68,68,.35); }
+.wt-card.unknown { background:rgba(100,116,139,.05); border-color:rgba(100,116,139,.25); }
+.wt-label { font-size:10px; font-weight:800; letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+.wt-card.wt .wt-label { color:#059669; }
+.wt-card.nwt .wt-label { color:#DC2626; }
+.wt-card.unknown .wt-label { color:#64748B; }
+.wt-phenotype {
+  display:inline-block; font-size:11px; font-weight:800;
+  padding:3px 10px; border-radius:999px; margin-bottom:6px;
+}
+.wt-phenotype.nwt { background:rgba(239,68,68,.15); color:#DC2626; border:1px solid rgba(239,68,68,.30); }
+.wt-phenotype.wt { background:rgba(16,185,129,.12); color:#059669; border:1px solid rgba(16,185,129,.25); }
+.wt-desc { font-size:10px; color:#334155; line-height:1.6; }
+
+/* ── WARD RECOMMENDATION CARDS ── */
+.ward-rec-wrap { margin-top:12px; }
+.ward-rec-title { font-size:10px; font-weight:800; letter-spacing:2px; color:#1E40AF; font-family:'JetBrains Mono',monospace; text-transform:uppercase; margin-bottom:8px; }
+.ward-tabs { display:flex; gap:4px; margin-bottom:0; }
+.ward-tab {
+  padding:5px 12px; border-radius:8px 8px 0 0; border:1px solid #DBEAFE; border-bottom:none;
+  font-size:10px; font-weight:700; cursor:pointer; font-family:'JetBrains Mono',monospace;
+  background:#F0F7FF; color:#64748B; letter-spacing:.3px; transition:all .2s;
+}
+.ward-tab.active { background:#1E40AF; color:#fff; border-color:#1E40AF; }
+.ward-tab:hover:not(.active) { background:#DBEAFE; color:#1E40AF; }
+.ward-panel {
+  display:none; border:1px solid #DBEAFE; border-radius:0 8px 8px 8px;
+  padding:12px 14px; background:#F8FAFF;
+}
+.ward-panel.active { display:block; }
+.ward-route-label {
+  font-size:9px; font-weight:800; letter-spacing:2px; text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace; padding:3px 8px; border-radius:4px; display:inline-block; margin-bottom:6px;
+}
+.ward-route-iv { background:rgba(37,99,235,.12); color:#1D4ED8; }
+.ward-route-po { background:rgba(16,185,129,.12); color:#059669; }
+.ward-drug-item { margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid rgba(37,99,235,.08); }
+.ward-drug-item:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.ward-drug-name { font-size:12px; font-weight:800; color:#1E40AF; font-family:'JetBrains Mono',monospace; }
+.ward-drug-dose { font-size:11px; color:#0F172A; margin:2px 0; font-family:'JetBrains Mono',monospace; }
+.ward-drug-note { font-size:10px; color:#64748B; line-height:1.5; }
+.ward-no-po { font-size:10px; color:#94A3B8; font-style:italic; font-family:'JetBrains Mono',monospace; padding:4px 0; }
+.ast-ref-note { font-size:9px; color:#94A3B8; margin-top:10px; font-family:'JetBrains Mono',monospace; line-height:1.6; }
+.ast-nodata { font-size:11px; color:#64748B; font-style:italic; padding:6px 0; font-family:'JetBrains Mono',monospace; }
+</style>
 
 <!-- ── ADMIN LOGIN MODAL ── -->
 <div id="admin-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
@@ -1587,8 +1722,16 @@
 <div id="tab-kultur" style="display:none">
 
   <div class="section">
-    <div class="section-title" data-t="secKulturDetail">Hasil Kultur Darah — Detail Identifikasi</div>
-    <div style="font-size:13px;color:#546e8a;margin-bottom:14px" data-t="kulturIntro">Isi tab ini setelah hasil kultur darah tersedia dari laboratorium</div>
+    <div class="section-title" data-t="secKulturDetail">Identifikasi Hasil Kultur Darah</div>
+    <div style="font-size:13px;color:#546e8a;margin-bottom:12px" data-t="kulturIntro">Isi tab ini setelah hasil kultur darah tersedia dari laboratorium</div>
+
+    <!-- EUCAST / CLSI Toggle -->
+    <div class="ast-std-wrap">
+      <span class="ast-std-label">🔬 STANDAR:</span>
+      <button class="ast-std-btn active" id="ast-btn-eucast" onclick="setASTStandard('eucast')">EUCAST v15</button>
+      <button class="ast-std-btn" id="ast-btn-clsi" onclick="setASTStandard('clsi')">CLSI 2026</button>
+      <span id="ast-std-note" style="font-size:10px;color:#64748B;font-family:'JetBrains Mono',monospace">Breakpoint MIC / Zona Hambat — European Committee</span>
+    </div>
 
     <!-- LINK KEY -->
     <div style="background:linear-gradient(135deg,rgba(239,246,255,.95),rgba(245,243,255,.90));border:2px solid rgba(37,99,235,.30);border-radius:16px;padding:14px 16px;margin-bottom:14px;box-shadow:0 3px 12px rgba(37,99,235,.08)">
@@ -1658,6 +1801,33 @@
                 style="width:100%;margin-top:4px;font-size:12px" oninput="onSetOrganismChange(1)">
             </div>
             <div id="set1-preview" style="margin-top:6px;font-size:11px;font-family:'JetBrains Mono',monospace"></div>
+            <!-- AST Section Set 1 -->
+            <div id="ast-section-1" style="display:none">
+              <button class="ast-toggle-btn" id="ast-toggle-1" onclick="toggleASTSection(1)">
+                🔬 <span data-ast-label="1">Uji Kepekaan Antibiotik (AST) — Klik untuk mengisi</span>
+                <span class="ast-chevron">▼</span>
+              </button>
+              <div class="ast-body" id="ast-body-1">
+                <div class="ast-cols">
+                  <div class="ast-col ast-col-s">
+                    <div class="ast-col-header">✓ SENSITIF (S)</div>
+                    <div class="ast-tag-wrap" id="ast-tags-s-1"></div>
+                    <div class="ast-input-row">
+                      <input type="text" id="ast-input-s-1" list="abx-list" placeholder="Nama antibiotik..." onkeydown="if(event.key==='Enter')addASTTag(1,'s',this.value)">
+                      <button class="ast-add-btn ast-add-s" onclick="addASTTag(1,'s',document.getElementById('ast-input-s-1').value)">+S</button>
+                    </div>
+                  </div>
+                  <div class="ast-col ast-col-r">
+                    <div class="ast-col-header">✗ RESISTEN (R)</div>
+                    <div class="ast-tag-wrap" id="ast-tags-r-1"></div>
+                    <div class="ast-input-row">
+                      <input type="text" id="ast-input-r-1" list="abx-list" placeholder="Nama antibiotik..." onkeydown="if(event.key==='Enter')addASTTag(1,'r',this.value)">
+                      <button class="ast-add-btn ast-add-r" onclick="addASTTag(1,'r',document.getElementById('ast-input-r-1').value)">+R</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1690,6 +1860,32 @@
                 style="width:100%;margin-top:4px;font-size:12px" oninput="onSetOrganismChange(2)">
             </div>
             <div id="set2-preview" style="margin-top:6px;font-size:11px;font-family:'JetBrains Mono',monospace"></div>
+            <div id="ast-section-2" style="display:none">
+              <button class="ast-toggle-btn" id="ast-toggle-2" onclick="toggleASTSection(2)">
+                🔬 <span>Uji Kepekaan Antibiotik (AST) — Klik untuk mengisi</span>
+                <span class="ast-chevron">▼</span>
+              </button>
+              <div class="ast-body" id="ast-body-2">
+                <div class="ast-cols">
+                  <div class="ast-col ast-col-s">
+                    <div class="ast-col-header">✓ SENSITIF (S)</div>
+                    <div class="ast-tag-wrap" id="ast-tags-s-2"></div>
+                    <div class="ast-input-row">
+                      <input type="text" id="ast-input-s-2" list="abx-list" placeholder="Nama antibiotik..." onkeydown="if(event.key==='Enter')addASTTag(2,'s',this.value)">
+                      <button class="ast-add-btn ast-add-s" onclick="addASTTag(2,'s',document.getElementById('ast-input-s-2').value)">+S</button>
+                    </div>
+                  </div>
+                  <div class="ast-col ast-col-r">
+                    <div class="ast-col-header">✗ RESISTEN (R)</div>
+                    <div class="ast-tag-wrap" id="ast-tags-r-2"></div>
+                    <div class="ast-input-row">
+                      <input type="text" id="ast-input-r-2" list="abx-list" placeholder="Nama antibiotik..." onkeydown="if(event.key==='Enter')addASTTag(2,'r',this.value)">
+                      <button class="ast-add-btn ast-add-r" onclick="addASTTag(2,'r',document.getElementById('ast-input-r-2').value)">+R</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1722,6 +1918,32 @@
                 style="width:100%;margin-top:4px;font-size:12px" oninput="onSetOrganismChange(3)">
             </div>
             <div id="set3-preview" style="margin-top:6px;font-size:11px;font-family:'JetBrains Mono',monospace"></div>
+            <div id="ast-section-3" style="display:none">
+              <button class="ast-toggle-btn" id="ast-toggle-3" onclick="toggleASTSection(3)">
+                🔬 <span>Uji Kepekaan Antibiotik (AST) — Klik untuk mengisi</span>
+                <span class="ast-chevron">▼</span>
+              </button>
+              <div class="ast-body" id="ast-body-3">
+                <div class="ast-cols">
+                  <div class="ast-col ast-col-s">
+                    <div class="ast-col-header">✓ SENSITIF (S)</div>
+                    <div class="ast-tag-wrap" id="ast-tags-s-3"></div>
+                    <div class="ast-input-row">
+                      <input type="text" id="ast-input-s-3" list="abx-list" placeholder="Nama antibiotik..." onkeydown="if(event.key==='Enter')addASTTag(3,'s',this.value)">
+                      <button class="ast-add-btn ast-add-s" onclick="addASTTag(3,'s',document.getElementById('ast-input-s-3').value)">+S</button>
+                    </div>
+                  </div>
+                  <div class="ast-col ast-col-r">
+                    <div class="ast-col-header">✗ RESISTEN (R)</div>
+                    <div class="ast-tag-wrap" id="ast-tags-r-3"></div>
+                    <div class="ast-input-row">
+                      <input type="text" id="ast-input-r-3" list="abx-list" placeholder="Nama antibiotik..." onkeydown="if(event.key==='Enter')addASTTag(3,'r',this.value)">
+                      <button class="ast-add-btn ast-add-r" onclick="addASTTag(3,'r',document.getElementById('ast-input-r-3').value)">+R</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1754,6 +1976,32 @@
                 style="width:100%;margin-top:4px;font-size:12px" oninput="onSetOrganismChange(4)">
             </div>
             <div id="set4-preview" style="margin-top:6px;font-size:11px;font-family:'JetBrains Mono',monospace"></div>
+            <div id="ast-section-4" style="display:none">
+              <button class="ast-toggle-btn" id="ast-toggle-4" onclick="toggleASTSection(4)">
+                🔬 <span>Uji Kepekaan Antibiotik (AST) — Klik untuk mengisi</span>
+                <span class="ast-chevron">▼</span>
+              </button>
+              <div class="ast-body" id="ast-body-4">
+                <div class="ast-cols">
+                  <div class="ast-col ast-col-s">
+                    <div class="ast-col-header">✓ SENSITIF (S)</div>
+                    <div class="ast-tag-wrap" id="ast-tags-s-4"></div>
+                    <div class="ast-input-row">
+                      <input type="text" id="ast-input-s-4" list="abx-list" placeholder="Nama antibiotik..." onkeydown="if(event.key==='Enter')addASTTag(4,'s',this.value)">
+                      <button class="ast-add-btn ast-add-s" onclick="addASTTag(4,'s',document.getElementById('ast-input-s-4').value)">+S</button>
+                    </div>
+                  </div>
+                  <div class="ast-col ast-col-r">
+                    <div class="ast-col-header">✗ RESISTEN (R)</div>
+                    <div class="ast-tag-wrap" id="ast-tags-r-4"></div>
+                    <div class="ast-input-row">
+                      <input type="text" id="ast-input-r-4" list="abx-list" placeholder="Nama antibiotik..." onkeydown="if(event.key==='Enter')addASTTag(4,'r',this.value)">
+                      <button class="ast-add-btn ast-add-r" onclick="addASTTag(4,'r',document.getElementById('ast-input-r-4').value)">+R</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1772,9 +2020,35 @@
       <input type="text" id="kultur-organism-manual">
     </div>
 
+    <!-- Antibiotic autocomplete datalist -->
+    <datalist id="abx-list">
+      <option value="Ampicillin"><option value="Ampicillin-sulbactam"><option value="Amoxicillin">
+      <option value="Amoxicillin-clavulanate"><option value="Piperacillin-tazobactam">
+      <option value="Oxacillin"><option value="Cloxacillin"><option value="Dicloxacillin">
+      <option value="Cefazolin"><option value="Cefuroxime"><option value="Cefoxitin">
+      <option value="Ceftriaxone"><option value="Cefotaxime"><option value="Ceftazidime">
+      <option value="Cefepime"><option value="Cefixime"><option value="Cefpodoxime">
+      <option value="Ceftaroline"><option value="Ceftazidime-avibactam"><option value="Ceftolozane-tazobactam">
+      <option value="Cefiderocol"><option value="Aztreonam"><option value="Aztreonam-avibactam">
+      <option value="Imipenem"><option value="Meropenem"><option value="Ertapenem"><option value="Doripenem">
+      <option value="Imipenem-relebactam"><option value="Meropenem-vaborbactam">
+      <option value="Gentamicin"><option value="Amikacin"><option value="Tobramycin"><option value="Plazomicin">
+      <option value="Ciprofloxacin"><option value="Levofloxacin"><option value="Moxifloxacin">
+      <option value="Vancomycin"><option value="Teicoplanin">
+      <option value="Linezolid"><option value="Tedizolid">
+      <option value="Daptomycin"><option value="Colistin"><option value="Polymyxin B">
+      <option value="Trimethoprim-sulfamethoxazole"><option value="TMP-SMX">
+      <option value="Clindamycin"><option value="Erythromycin"><option value="Azithromycin">
+      <option value="Chloramphenicol"><option value="Tetracycline"><option value="Doxycycline">
+      <option value="Minocycline"><option value="Tigecycline"><option value="Rifampicin">
+      <option value="Fosfomycin"><option value="Metronidazole">
+      <option value="Fluconazole"><option value="Caspofungin"><option value="Micafungin">
+      <option value="Anidulafungin"><option value="Voriconazole"><option value="Amphotericin B">
+    </datalist>
+
     <!-- Identify Button -->
     <div class="btn-row" style="margin-top:18px">
-      <button class="btn-calc blue" id="btn-identify-kultur" onclick="identifyKultur()" style="margin-bottom:0" data-t="btnIdentifyKultur">🔬 Identifikasi Bakteri</button>
+      <button class="btn-calc blue" id="btn-identify-kultur" onclick="identifyKultur()" style="margin-bottom:0" data-t="btnIdentifyKultur">🔬 Analisa & Identifikasi</button>
     </div>
 
     <!-- Result Area -->
@@ -1972,7 +2246,7 @@
 const LANG = {
   id: {
     logoSub:"Alat bantu skrining dengan menggunakan parameter CPD (Cell Population Density) Sysmex XN-Series.",
-    navCalc:"Kalkulator", navExtra:"Data Tambahan", navKultur:"Hasil Kultur", navAbout:"Tentang",
+    navCalc:"Kalkulator", navExtra:"Data Tambahan", navKultur:"Identifikasi Kultur", navAbout:"Tentang",
     secPatient:"Data Pasien", secSofa:"SOFA-2 (Updated Sepsis-3, 2025)", secNews2:"NEWS-2 (National Early Warning Score 2)",
     secCPD:"Cell Population Data — Sysmex XN",
     secCulture:"Hasil Kultur",
@@ -2124,7 +2398,7 @@ const LANG = {
   },
   en: {
     logoSub:"Sepsis screening tool using CPD (Cell Population Density) parameters from Sysmex XN-Series.",
-    navCalc:"Calculator", navExtra:"Additional Data", navKultur:"Culture Results", navAbout:"About",
+    navCalc:"Calculator", navExtra:"Additional Data", navKultur:"Culture ID", navAbout:"About",
     secPatient:"Patient Info", secSofa:"SOFA-2 (Updated Sepsis-3, 2025)", secNews2:"NEWS-2 (National Early Warning Score 2)",
     secCPD:"Cell Population Data — Sysmex XN",
     secCulture:"Culture Results",
@@ -2749,6 +3023,7 @@ function setSetResult(setNum, result) {
     if (badge) badge.innerHTML = '<span class="cult-badge" style="background:rgba(0,229,160,.1);color:var(--green);border:1px solid rgba(0,229,160,.3)">NEGATIF</span>';
   }
   recalcAllSets();
+  updateASTVisibility(setNum);
 }
 
 function onSetOrganismChange(setNum) {
@@ -2763,6 +3038,7 @@ function onSetOrganismChange(setNum) {
     setOrganisms[setNum] = sel.value;
   }
   recalcAllSets();
+  updateASTVisibility(setNum);
 }
 
 function getSetOrganism(setNum) {
@@ -2947,6 +3223,806 @@ function getAllKulturOrganisms() {
   return orgs;
 }
 
+// ─── AST STATE ────────────────────────────────────────────────────────────────
+let astStandard = 'eucast'; // 'eucast' | 'clsi'
+// astData[setNum] = { s:[], r:[] }
+const astData = {1:{s:[],r:[]},2:{s:[],r:[]},3:{s:[],r:[]},4:{s:[],r:[]}};
+
+function setASTStandard(std) {
+  astStandard = std;
+  document.getElementById('ast-btn-eucast').classList.toggle('active', std==='eucast');
+  document.getElementById('ast-btn-clsi').classList.toggle('active', std==='clsi');
+  const noteEl = document.getElementById('ast-std-note');
+  if (noteEl) noteEl.textContent = std==='eucast'
+    ? 'Breakpoint MIC / Zona Hambat — European Committee (EUCAST v15.0, 2025)'
+    : 'Breakpoint MIC / Zona Hambat — Clinical & Laboratory Standards Institute (CLSI M100, Ed36, 2026)';
+}
+
+function toggleASTSection(n) {
+  const body = document.getElementById('ast-body-'+n);
+  const btn  = document.getElementById('ast-toggle-'+n);
+  if (!body || !btn) return;
+  const open = body.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+
+function addASTTag(n, type, val) {
+  if (!val || !val.trim()) return;
+  const name = val.trim();
+  const inp = document.getElementById('ast-input-'+type+'-'+n);
+  if (inp) inp.value = '';
+  // Avoid duplicates across S and R
+  const other = type==='s' ? 'r' : 's';
+  astData[n][other] = astData[n][other].filter(x => x.toLowerCase()!==name.toLowerCase());
+  if (!astData[n][type].some(x=>x.toLowerCase()===name.toLowerCase())) {
+    astData[n][type].push(name);
+  }
+  renderASTTags(n);
+}
+
+function removeASTTag(n, type, idx) {
+  astData[n][type].splice(idx, 1);
+  renderASTTags(n);
+}
+
+function renderASTTags(n) {
+  ['s','r'].forEach(type => {
+    const wrap = document.getElementById('ast-tags-'+type+'-'+n);
+    if (!wrap) return;
+    wrap.innerHTML = astData[n][type].map((abx, i) =>
+      `<span class="ast-tag ast-tag-${type}">${abx}<button class="ast-tag-del" onclick="removeASTTag(${n},'${type}',${i})" title="Hapus">×</button></span>`
+    ).join('');
+  });
+}
+
+// Show/hide AST section when organism is selected
+function updateASTVisibility(n) {
+  const org = getSetOrganism(n);
+  const sec = document.getElementById('ast-section-'+n);
+  if (sec) sec.style.display = (org && setResults[n]==='pos') ? '' : 'none';
+}
+
+// ─── ORGANISM → AST GROUP MAPPING ─────────────────────────────────────────────
+const ORG_GROUP = {
+  'Escherichia coli':'enterobacterales','Klebsiella pneumoniae':'enterobacterales',
+  'Klebsiella oxytoca':'enterobacterales','Klebsiella aerogenes':'enterobacterales',
+  'Enterobacter cloacae':'enterobacterales','Enterobacter cloacae complex':'enterobacterales',
+  'Enterobacter asburiae':'enterobacterales','Enterobacter hormaechei':'enterobacterales',
+  'Serratia marcescens':'enterobacterales','Serratia liquefaciens':'enterobacterales',
+  'Proteus mirabilis':'enterobacterales','Proteus vulgaris':'enterobacterales',
+  'Morganella morganii':'enterobacterales','Citrobacter freundii':'enterobacterales',
+  'Citrobacter koseri':'enterobacterales','Citrobacter freundii complex':'enterobacterales',
+  'Providencia stuartii':'enterobacterales','Providencia rettgeri':'enterobacterales',
+  'Salmonella spp.':'enterobacterales','Cronobacter sakazakii':'enterobacterales',
+  'Pseudomonas aeruginosa':'pseudomonas','Pseudomonas putida':'pseudomonas',
+  'Acinetobacter baumannii':'acinetobacter','Acinetobacter baumannii complex':'acinetobacter',
+  'Acinetobacter lwoffii':'acinetobacter',
+  'Stenotrophomonas maltophilia':'stenotrophomonas',
+  'Burkholderia cepacia':'burkholderia','Burkholderia cepacia complex':'burkholderia',
+  'Haemophilus influenzae':'haemophilus','Haemophilus parainfluenzae':'haemophilus',
+  'Neisseria meningitidis':'neisseria','Neisseria gonorrhoeae':'neisseria',
+  'Staphylococcus aureus':'staph_aureus',
+  'Staphylococcus epidermidis':'cons','Staphylococcus haemolyticus':'cons',
+  'Staphylococcus hominis':'cons','Staphylococcus capitis':'cons',
+  'Staphylococcus warneri':'cons','Staphylococcus simulans':'cons',
+  'Staphylococcus lugdunensis':'cons','Coagulase-negative Staphylococcus':'cons','CoNS':'cons',
+  'Streptococcus pneumoniae':'strep_pneumoniae',
+  'Streptococcus pyogenes':'strep_beta','Streptococcus agalactiae':'strep_beta',
+  'Streptococcus dysgalactiae':'strep_beta',
+  'Streptococcus viridans group':'strep_viridans','Streptococcus mitis':'strep_viridans',
+  'Streptococcus oralis':'strep_viridans','Streptococcus sanguinis':'strep_viridans',
+  'Streptococcus salivarius':'strep_viridans','Streptococcus parasanguinis':'strep_viridans',
+  'Streptococcus gordonii':'strep_viridans',
+  'Enterococcus faecalis':'enterococcus','Enterococcus faecium':'enterococcus',
+  'Candida albicans':'candida','Candida tropicalis':'candida','Candida glabrata':'candida',
+  'Candida parapsilosis':'candida','Candida krusei':'candida','Candida auris':'candida',
+  'Candida guilliermondii':'candida','Candida lusitaniae':'candida',
+  'Nakaseomyces glabrata':'candida','Pichia kudriavzevii':'candida',
+};
+
+// ─── WILDTYPE PATTERNS ────────────────────────────────────────────────────────
+// Each pattern: { id, label, check(rList, sList) → bool, desc, severity }
+const WT_PATTERNS = {
+  enterobacterales: [
+    { id:'CRE', label:'CRE (Carbapenem-Resistant Enterobacterales)',
+      check: r => r.some(a=>/meropenem|imipenem|ertapenem|doripenem/i.test(a)),
+      desc:'Resistensi terhadap karbapenem — organisme definitif non-wild-type. Wajib uji konfirmasi carbapenemase (KPC, NDM, OXA-48, VIM, IMP).',
+      severity:'critical' },
+    { id:'ESBL', label:'Probable ESBL Producer',
+      check: r => r.some(a=>/ceftriaxone|cefotaxime|ceftazidime|cefepime|aztreonam/i.test(a)),
+      desc:'Resistensi terhadap sefalosporin gen 3/4 atau aztreonam menunjukkan kemungkinan ESBL (Extended-Spectrum β-Lactamase). Organisme non-wild-type.',
+      severity:'high' },
+    { id:'AmpC', label:'Probable AmpC Hyperproducer',
+      check: r => r.some(a=>/cefoxitin|cefotetan/i.test(a)) && r.some(a=>/ceftazidime|cefepime/i.test(a)),
+      desc:'Pola resistensi menunjukkan AmpC β-lactamase — non-wild-type. Sering pada Enterobacter, Citrobacter, Serratia, Morganella.',
+      severity:'medium' },
+    { id:'SUSCEPTIBLE', label:'Wild-Type (Susceptible)',
+      check: (r,s) => r.length===0 || !r.some(a=>/ceftriaxone|cefotaxime|ceftazidime|cefepime|meropenem|imipenem|ertapenem/i.test(a)),
+      desc:'Tidak ada pola resistensi signifikan terdeteksi. Isolat kemungkinan wild-type.',
+      severity:'low', isWT:true },
+  ],
+  pseudomonas: [
+    { id:'PDR-PA', label:'PDR P. aeruginosa (Pandrug-Resistant)',
+      check: r => {
+        const cls=['pip','ceftazidime','cefepime','meropenem|imipenem','ciprofloxacin|levofloxacin','gentamicin|amikacin|tobramycin','colistin|polymyxin'];
+        return cls.filter(c=>r.some(a=>new RegExp(c,'i').test(a))).length>=5;
+      }, desc:'Resisten terhadap hampir semua kelas antibiotik. Pandrug-Resistant P. aeruginosa.', severity:'critical' },
+    { id:'CRPA', label:'CRPA (Carbapenem-Resistant P. aeruginosa)',
+      check: r => r.some(a=>/meropenem|imipenem|doripenem/i.test(a)),
+      desc:'Resistensi karbapenem pada P. aeruginosa. Pilihan terapi sangat terbatas.', severity:'critical' },
+    { id:'MDR-PA', label:'MDR P. aeruginosa',
+      check: r => {
+        const cls=[/piperacillin/i,/ceftazidime|cefepime/i,/meropenem|imipenem/i,/ciprofloxacin|levofloxacin/i,/gentamicin|amikacin|tobramycin/i];
+        return cls.filter(c=>r.some(a=>c.test(a))).length>=3;
+      }, desc:'Resisten terhadap ≥3 kelas antibiotik anti-pseudomonal — Multi-Drug Resistant.', severity:'high' },
+    { id:'SUSCEPTIBLE', label:'Wild-Type (Susceptible)',
+      check: r => !r.some(a=>/meropenem|imipenem|ceftazidime|cefepime|piperacillin/i.test(a)),
+      desc:'Tidak ada resistensi kelas utama terdeteksi.', severity:'low', isWT:true },
+  ],
+  acinetobacter: [
+    { id:'CRAB', label:'CRAB (Carbapenem-Resistant A. baumannii)',
+      check: r => r.some(a=>/meropenem|imipenem/i.test(a)),
+      desc:'CRAB — organisme non-wild-type dengan mekanisme resistensi dominan OXA-type carbapenemase.', severity:'critical' },
+    { id:'MDR-AB', label:'MDR A. baumannii',
+      check: r => {
+        const cls=[/ampicillin-sulbactam/i,/cefepime|ceftazidime/i,/ciprofloxacin|levofloxacin/i,/gentamicin|amikacin/i,/tmp-smx|trimethoprim/i];
+        return cls.filter(c=>r.some(a=>c.test(a))).length>=3;
+      }, desc:'Multi-Drug Resistant Acinetobacter.', severity:'high' },
+    { id:'SUSCEPTIBLE', label:'Wild-Type (Susceptible)',
+      check: r => !r.some(a=>/meropenem|imipenem/i.test(a)),
+      desc:'Tidak ada resistensi karbapenem terdeteksi.', severity:'low', isWT:true },
+  ],
+  staph_aureus: [
+    { id:'VRSA', label:'VRSA (Vancomycin-Resistant S. aureus)',
+      check: r => r.some(a=>/vancomycin/i.test(a)),
+      desc:'VRSA — sangat langka, laporkan ke otoritas kesehatan setempat. Resistensi vancomycin pada S. aureus.', severity:'critical' },
+    { id:'MRSA', label:'MRSA (Methicillin-Resistant S. aureus)',
+      check: r => r.some(a=>/oxacillin|cefoxitin|methicillin/i.test(a)),
+      desc:'MRSA — resistensi dimediasi mecA/mecC gene. Semua beta-laktam (kecuali ceftaroline) tidak aktif.', severity:'high' },
+    { id:'MSSA', label:'MSSA (Methicillin-Susceptible)',
+      check: (r,s) => s.some(a=>/oxacillin|cefoxitin/i.test(a)) || (!r.some(a=>/oxacillin|cefoxitin/i.test(a)) && r.length>=0),
+      desc:'MSSA — anti-staph penicillin (cloxacillin/cefazolin) adalah pilihan terapi terbaik.', severity:'low', isWT:true },
+  ],
+  cons: [
+    { id:'MR-CoNS', label:'MR-CoNS (Methicillin-Resistant CoNS)',
+      check: r => r.some(a=>/oxacillin|cefoxitin/i.test(a)),
+      desc:'CoNS methicillin-resisten. Vancomycin adalah pilihan utama.', severity:'medium' },
+    { id:'SUSCEPTIBLE', label:'MS-CoNS (Methicillin-Susceptible CoNS)',
+      check: r => !r.some(a=>/oxacillin|cefoxitin/i.test(a)),
+      desc:'CoNS methicillin-sensitif.', severity:'low', isWT:true },
+  ],
+  enterococcus: [
+    { id:'VRE', label:'VRE (Vancomycin-Resistant Enterococcus)',
+      check: r => r.some(a=>/vancomycin/i.test(a)),
+      desc:'VRE — resistensi vancomycin, biasanya mediasi vanA (E. faecium) atau vanB (E. faecalis). Non-wild-type.', severity:'critical' },
+    { id:'HLAR', label:'HLAR (High-Level Aminoglycoside Resistance)',
+      check: r => r.some(a=>/gentamicin|streptomycin/i.test(a)),
+      desc:'High-Level Aminoglycoside Resistance — kombinasi ampicillin+aminoglycoside tidak efektif.', severity:'medium' },
+    { id:'SUSCEPTIBLE', label:'Susceptible Enterococcus',
+      check: r => !r.some(a=>/vancomycin|ampicillin/i.test(a)),
+      desc:'Tidak ada resistensi obat-obat utama terdeteksi.', severity:'low', isWT:true },
+  ],
+  strep_pneumoniae: [
+    { id:'PRSP', label:'PRSP (Penicillin-Resistant S. pneumoniae)',
+      check: r => r.some(a=>/penicillin|ampicillin|amoxicillin/i.test(a)),
+      desc:'Pneumococcus resisten penicillin. Ceftriaxone/cefotaxime dosis tinggi masih aktif untuk sebagian besar.', severity:'medium' },
+    { id:'SUSCEPTIBLE', label:'Penicillin-Susceptible S. pneumoniae',
+      check: r => !r.some(a=>/penicillin|ceftriaxone/i.test(a)),
+      desc:'Susceptible, penicillin/ampicillin masih aktif.', severity:'low', isWT:true },
+  ],
+  strep_beta: [
+    { id:'SUSCEPTIBLE', label:'Wild-Type Streptococcus',
+      check: () => true,
+      desc:'Streptococcus β-hemolytic umumnya sensitif terhadap penicillin/ampicillin.', severity:'low', isWT:true },
+  ],
+  strep_viridans: [
+    { id:'SUSCEPTIBLE', label:'Viridans Streptococcus',
+      check: () => true,
+      desc:'Streptococcus viridans — evaluasi MIC penicillin untuk panduan terapi (terutama endokarditis).', severity:'low', isWT:true },
+  ],
+  candida: [
+    { id:'FLUCONAZOLE-R', label:'Fluconazole-Resistant Candida',
+      check: (r,s,org) => r.some(a=>/fluconazole/i.test(a)) ||
+        /candida krusei|pichia kudriavzevii|candida auris/i.test(org||''),
+      desc:'Resistensi fluconazole atau intrinsik resisten (C. krusei, C. auris). Gunakan echinocandin atau Amphotericin B.', severity:'high' },
+    { id:'ECHINOCANDIN-R', label:'Echinocandin-Resistant Candida',
+      check: r => r.some(a=>/caspofungin|micafungin|anidulafungin/i.test(a)),
+      desc:'Resistensi echinocandin — pertimbangkan Amphotericin B liposomal.', severity:'critical' },
+    { id:'SUSCEPTIBLE', label:'Susceptible Candida',
+      check: r => !r.some(a=>/fluconazole|caspofungin|micafungin/i.test(a)),
+      desc:'Tidak ada resistensi antifungal utama terdeteksi.', severity:'low', isWT:true },
+  ],
+  haemophilus: [
+    { id:'BLNAR', label:'BLNAR (β-Lactamase-Negative Ampicillin-Resistant)',
+      check: r => r.some(a=>/ampicillin/i.test(a)) && !r.some(a=>/amoxicillin-clavulanate/i.test(a)),
+      desc:'Resistensi ampicillin tanpa produksi beta-laktamase — mekanisme PBP.', severity:'medium' },
+    { id:'BLPAR', label:'β-Lactamase Producer',
+      check: r => r.some(a=>/ampicillin/i.test(a)),
+      desc:'Resisten ampicillin, kemungkinan produksi beta-laktamase. Gunakan amoxicillin-clavulanate atau sefalosporin gen 3.', severity:'medium' },
+    { id:'SUSCEPTIBLE', label:'Susceptible H. influenzae',
+      check: r => !r.some(a=>/ampicillin|ceftriaxone/i.test(a)),
+      desc:'Susceptible, ampicillin masih aktif.', severity:'low', isWT:true },
+  ],
+  neisseria:    [{ id:'SUSCEPTIBLE', label:'Neisseria spp.', check:()=>true, desc:'Evaluasi MIC lebih lanjut disarankan untuk panduan terapi.', severity:'low', isWT:true }],
+  stenotrophomonas:[{ id:'SUSCEPTIBLE', label:'S. maltophilia',
+    check: r => !r.some(a=>/tmp-smx|trimethoprim/i.test(a)),
+    desc:'TMP-SMX adalah first-line untuk Stenotrophomonas. Intrinsik resisten terhadap carbapenem.', severity:'low', isWT:true }],
+  burkholderia:  [{ id:'SUSCEPTIBLE', label:'Burkholderia spp.', check:()=>true, desc:'Sensitivitas bervariasi; TMP-SMX dan meropenem sering digunakan. Intrinsik resisten banyak agen.', severity:'low', isWT:true }],
+};
+
+// ─── ANTIBIOTIC RECOMMENDATION DATABASE ────────────────────────────────────────
+const ABIO_REC = {
+  enterobacterales_SUSCEPTIBLE: {
+    notes:'Enterobacterales susceptible — terapi lini pertama dapat diberikan berdasarkan hasil AST.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ceftriaxone',dose:'2 g q24h IV',n:'First-line untuk bacteremia non-Pseudomonas'},
+        {d:'Cefepime',dose:'2 g q8h IV',n:'Alternatif, spectrum lebih luas'},
+        {d:'Piperacillin-tazobactam',dose:'4.5 g q6h IV',n:'Jika polimikroba atau sepsis berat'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Ceftriaxone',dose:'1–2 g q24h IV',n:'Pilihan utama'},
+        {d:'Ampicillin-sulbactam',dose:'3 g q6h IV',n:'Alternatif jika susceptible'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Ceftriaxone',dose:'1 g q24h IV',n:'Parenteral first-line'}],
+        po:[
+          {d:'Ciprofloxacin',dose:'500 mg q12h PO',n:'Jika susceptible (cek hasil AST)'},
+          {d:'Amoxicillin-clavulanate',dose:'875/125 mg q12h PO',n:'Jika susceptible, step-down'},
+          {d:'TMP-SMX',dose:'960 mg q12h PO',n:'Jika susceptible, alternatif oral'},
+        ]
+      }
+    }
+  },
+  enterobacterales_ESBL: {
+    notes:'ESBL Producer — karbapenem adalah pilihan utama. Hindari sefalosporin gen 3/4.',
+    wards:{
+      ICU:{iv:[
+        {d:'Meropenem',dose:'1–2 g q8h IV',n:'GOLD STANDARD untuk sepsis berat ESBL'},
+        {d:'Imipenem',dose:'500 mg q6h IV',n:'Alternatif'},
+        {d:'Ertapenem',dose:'1 g q24h IV',n:'Bila pasien stabil; tidak untuk Pseudomonas'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Ertapenem',dose:'1 g q24h IV',n:'Pilihan utama rawat inap non-ICU'},
+        {d:'Meropenem',dose:'1 g q8h IV',n:'Jika kondisi memburuk atau sumber infeksi berat'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Ertapenem',dose:'1 g q24h IV',n:'Satu-satunya carbapenem yang praktis untuk non-ICU'}],
+      }
+    }
+  },
+  enterobacterales_AmpC: {
+    notes:'AmpC Hyperproducer — hindari sefalosporin gen 3; gunakan cefepime atau karbapenem.',
+    wards:{
+      ICU:{iv:[
+        {d:'Meropenem',dose:'1–2 g q8h IV',n:'Pilihan utama'},
+        {d:'Cefepime',dose:'2 g q8h IV',n:'Aktif terhadap AmpC jika MIC susceptible'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Cefepime',dose:'1–2 g q8–12h IV',n:'Jika MIC susceptible'},
+        {d:'Meropenem',dose:'1 g q8h IV',n:'Alternatif lebih aman'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Cefepime',dose:'1–2 g q12h IV',n:'Atau Ertapenem 1g q24h IV'}],
+        po:[{d:'Ciprofloxacin',dose:'500 mg q12h PO',n:'Jika susceptible; step-down'}],
+      }
+    }
+  },
+  enterobacterales_CRE: {
+    notes:'CRE — resistensi karbapenem, pilihan sangat terbatas. Konsultasi SpPD/SpMK sangat dianjurkan.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ceftazidime-avibactam',dose:'2.5 g q8h IV (6-jam infus)',n:'Untuk KPC, OXA-48; TIDAK untuk metallo-BL (NDM, VIM)'},
+        {d:'Cefiderocol',dose:'2 g q8h IV',n:'Aktif terhadap SEMUA carbapenemase termasuk NDM'},
+        {d:'Colistin + Meropenem',dose:'Colistin 9 MU loading → 4.5 MU q12h IV + Meropenem 2 g q8h (extended)',n:'Jika MIC meropenem ≤8 mg/L; pantau nefrotoksisitas'},
+        {d:'Fosfomycin IV (kombinasi)',dose:'8 g q8h IV (infus 3 jam)',n:'Dalam kombinasi dengan agen aktif lain'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Ceftazidime-avibactam',dose:'2.5 g q8h IV',n:'Jika terkonfirmasi KPC/OXA-48'},
+        {d:'Colistin',dose:'9 MU loading → 4.5 MU q12h IV',n:'Kombinasi; pantau fungsi ginjal ketat'},
+      ]},
+      'Low Care':{iv:[{d:'⚠️ Transfer ke ICU/HCU sangat dianjurkan',dose:'',n:'CRE bacteremia memerlukan monitoring intensif'}]}
+    }
+  },
+  pseudomonas_SUSCEPTIBLE: {
+    notes:'P. aeruginosa susceptible — gunakan agen anti-pseudomonal aktif.',
+    wards:{
+      ICU:{iv:[
+        {d:'Piperacillin-tazobactam',dose:'4.5 g q6h IV (infus extended 4 jam)',n:'Pilihan utama'},
+        {d:'Cefepime',dose:'2 g q8h IV',n:'Alternatif'},
+        {d:'Meropenem',dose:'1–2 g q8h IV',n:'Lebih stabil terhadap AmpC derepression'},
+        {d:'Ceftazidime',dose:'2 g q8h IV',n:'Alternatif cost-effective'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Piperacillin-tazobactam',dose:'4.5 g q8h IV',n:'Pilihan utama'},
+        {d:'Ceftazidime',dose:'2 g q8h IV',n:'Alternatif'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Ceftazidime',dose:'2 g q8–12h IV',n:'Atau Cefepime 1–2 g q12h IV'}],
+        po:[{d:'Ciprofloxacin',dose:'750 mg q12h PO',n:'Satu-satunya opsi oral aktif anti-pseudomonal (cek susceptibility)'}],
+      }
+    }
+  },
+  pseudomonas_CRPA: {
+    notes:'CRPA — pilihan sangat terbatas. Konsultasi SpPD/SpMK wajib.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ceftolozane-tazobactam',dose:'3 g q8h IV',n:'Jika bukan MBL-type (NDM/VIM); cek susceptibility'},
+        {d:'Ceftazidime-avibactam',dose:'2.5 g q8h IV',n:'Aktif terhadap serine-carbapenemase'},
+        {d:'Cefiderocol',dose:'2 g q8h IV',n:'Aktif terhadap semua mekanisme resistensi termasuk MBL'},
+        {d:'Colistin/Polymyxin B (kombinasi)',dose:'Lihat protokol lokal',n:'Monoterapi tidak disarankan; selalu kombinasi'},
+      ]},
+      'General Ward':{iv:[{d:'Konsultasi SpPD / SpMK',dose:'',n:'CRPA memerlukan panduan ahli'}]},
+      'Low Care':{iv:[{d:'Transfer ke unit perawatan lebih intensif',dose:'',n:''}]}
+    }
+  },
+  pseudomonas_MDR_PA: {
+    notes:'MDR P. aeruginosa — resisten ≥3 kelas. Pilihan terbatas, panduan ahli diperlukan.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ceftolozane-tazobactam',dose:'3 g q8h IV',n:'Cek susceptibility dahulu'},
+        {d:'Ceftazidime-avibactam',dose:'2.5 g q8h IV',n:'Cek susceptibility'},
+        {d:'Cefiderocol',dose:'2 g q8h IV',n:'Pilihan broad-spectrum'},
+      ]},
+      'General Ward':{iv:[{d:'Berdasarkan hasil AST lengkap + konsultasi SpMK',dose:'',n:''}]},
+      'Low Care':{iv:[{d:'Transfer dan konsultasi SpPD',dose:'',n:''}]}
+    }
+  },
+  acinetobacter_SUSCEPTIBLE: {
+    notes:'Acinetobacter spp. susceptible — sulbactam memiliki aktivitas intrinsik.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ampicillin-sulbactam',dose:'3 g q4h IV',n:'Sulbactam aktif intrinsik terhadap Acinetobacter'},
+        {d:'Meropenem',dose:'1–2 g q8h IV',n:'Alternatif jika susceptible'},
+        {d:'Cefepime',dose:'2 g q8h IV',n:'Alternatif'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Ampicillin-sulbactam',dose:'3 g q6h IV',n:'Pilihan utama'},
+        {d:'Meropenem',dose:'1 g q8h IV',n:'Alternatif'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Ampicillin-sulbactam',dose:'3 g q8h IV',n:''}],
+        po:[{d:'TMP-SMX',dose:'960 mg q12h PO',n:'Jika susceptible; step-down'}],
+      }
+    }
+  },
+  acinetobacter_CRAB: {
+    notes:'CRAB — resistensi karbapenem pada Acinetobacter. Pilihan terbatas.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ampicillin-sulbactam dosis tinggi',dose:'9–12 g/hari IV (q4h atau infus kontinyu)',n:'Sulbactam tetap aktif meski carbapenem resisten'},
+        {d:'Cefiderocol',dose:'2 g q8h IV',n:'Aktif terhadap CRAB'},
+        {d:'Colistin/Polymyxin B + Meropenem',dose:'Colistin 9 MU loading → 4.5 MU q12h + Meropenem 2g q8h',n:'Kombinasi sinergis; pantau fungsi ginjal'},
+        {d:'Minocycline',dose:'200 mg loading → 100 mg q12h IV/PO',n:'Komponen tambahan dalam kombinasi'},
+        {d:'Tigecycline (dalam kombinasi)',dose:'100 mg loading → 50 mg q12h IV',n:'Bukan monoterapi; dalam kombinasi'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Ampicillin-sulbactam dosis tinggi',dose:'9 g/hari IV (q4–6h)',n:'Jika susceptible sulbactam'},
+        {d:'Konsultasi SpPD / SpMK',dose:'',n:'CRAB memerlukan panduan ahli'},
+      ]},
+      'Low Care':{iv:[{d:'⚠️ Transfer ke ICU/HCU sangat dianjurkan',dose:'',n:'CRAB bacteremia butuh monitoring intensif'}]}
+    }
+  },
+  acinetobacter_MDR_AB: {
+    notes:'MDR A. baumannii — resisten ≥3 kelas. Panduan ahli diperlukan.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ampicillin-sulbactam + Carbapenem',dose:'Kombinasi; lihat protokol lokal',n:''},
+        {d:'Cefiderocol',dose:'2 g q8h IV',n:'Jika tersedia'},
+      ]},
+      'General Ward':{iv:[{d:'Berdasarkan AST + konsultasi SpMK',dose:'',n:''}]},
+      'Low Care':{iv:[{d:'Rujuk/Transfer',dose:'',n:''}]}
+    }
+  },
+  staph_aureus_MRSA: {
+    notes:'MRSA — semua beta-laktam tidak aktif (kecuali ceftaroline). Gunakan vancomycin atau alternatif.',
+    wards:{
+      ICU:{iv:[
+        {d:'Vancomycin',dose:'15–20 mg/kg q8–12h IV',n:'Target AUC24/MIC 400–600; pantau kadar trough dan fungsi ginjal'},
+        {d:'Daptomycin',dose:'8–10 mg/kg q24h IV',n:'Alternatif; TIDAK untuk pneumonia (inaktivasi surfaktan)'},
+        {d:'Linezolid',dose:'600 mg q12h IV',n:'Alternatif; tersedia juga oral'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Vancomycin',dose:'15 mg/kg q8–12h IV (min 1g q12h)',n:'First-line; monitor fungsi ginjal'},
+        {d:'Linezolid',dose:'600 mg q12h IV',n:'Alternatif'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Vancomycin',dose:'1 g q12h IV (sesuaikan BB)',n:'Pantau kadar residual; target trough 15–20 mg/L'}],
+        po:[{d:'Linezolid',dose:'600 mg q12h PO',n:'Bioavailabilitas oral ~100%; step-down setelah klinis stabil'}],
+      }
+    }
+  },
+  staph_aureus_MSSA: {
+    notes:'MSSA — anti-staph penicillin adalah pilihan terbaik, lebih superior dari vancomycin.',
+    wards:{
+      ICU:{iv:[
+        {d:'Cloxacillin / Oxacillin',dose:'2 g q4h IV',n:'GOLD STANDARD untuk MSSA bacteremia'},
+        {d:'Cefazolin',dose:'2 g q8h IV',n:'Setara dengan oxacillin, lebih mudah pemberian'},
+        {d:'Ampicillin-sulbactam',dose:'3 g q6h IV',n:'Alternatif'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Cefazolin',dose:'1–2 g q8h IV',n:'First-line; lebih praktis daripada oxacillin'},
+        {d:'Cloxacillin',dose:'1–2 g q4–6h IV',n:'Alternatif'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Cefazolin',dose:'1 g q8h IV',n:'Parenteral di rawat inap low care'}],
+        po:[
+          {d:'Dicloxacillin',dose:'500 mg q6h PO',n:'Step-down therapy; optimal untuk MSSA'},
+          {d:'Cephalexin',dose:'500 mg q6h PO',n:'Alternatif oral'},
+          {d:'Amoxicillin-clavulanate',dose:'875/125 mg q12h PO',n:'Alternatif jika opsi lain tidak tersedia'},
+        ]
+      }
+    }
+  },
+  staph_aureus_VRSA: {
+    notes:'VRSA — sangat langka. Laporkan ke dinas kesehatan. Konsultasi segera.',
+    wards:{
+      ICU:{iv:[
+        {d:'Linezolid',dose:'600 mg q12h IV',n:'Aktif terhadap VRSA'},
+        {d:'Daptomycin',dose:'10 mg/kg q24h IV',n:'Aktif; gunakan dosis tinggi'},
+        {d:'Konsultasi SpMK / Referral Center',dose:'',n:'VRSA sangat langka — protokol khusus diperlukan'},
+      ]},
+      'General Ward':{iv:[{d:'Transfer ke ICU dan konsultasi segera',dose:'',n:''}]},
+      'Low Care':{iv:[{d:'Transfer segera ke level perawatan tertinggi',dose:'',n:''}]}
+    }
+  },
+  cons_MR_CoNS: {
+    notes:'MR-CoNS — Methicillin-Resistant CoNS. Vancomycin pilihan utama.',
+    wards:{
+      ICU:{iv:[
+        {d:'Vancomycin',dose:'15 mg/kg q8–12h IV',n:'First-line; confirmed true bacteremia (device-related)'},
+        {d:'Linezolid',dose:'600 mg q12h IV',n:'Alternatif'},
+      ]},
+      'General Ward':{iv:[{d:'Vancomycin',dose:'15 mg/kg q12h IV',n:''}]},
+      'Low Care':{
+        iv:[{d:'Vancomycin',dose:'1 g q12h IV',n:'Jika confirmed true bacteremia'}],
+        po:[{d:'Linezolid',dose:'600 mg q12h PO',n:'Step-down; cek susceptibility terlebih dahulu'}],
+      }
+    }
+  },
+  cons_SUSCEPTIBLE: {
+    notes:'MS-CoNS — Verifikasi true bacteremia vs. kontaminasi sebelum terapi.',
+    wards:{
+      ICU:{iv:[
+        {d:'Cefazolin',dose:'1–2 g q8h IV',n:'Jika confirmed true bacteremia dan methicillin-susceptible'},
+        {d:'Vancomycin',dose:'15 mg/kg q12h IV',n:'Empirik sampai sensitivitas final diketahui'},
+      ]},
+      'General Ward':{iv:[{d:'Vancomycin',dose:'15 mg/kg q12h IV',n:'Empirik; de-escalate ke beta-laktam jika susceptible'}]},
+      'Low Care':{
+        iv:[{d:'Cefazolin',dose:'1 g q8h IV',n:'Jika confirmed susceptible'}],
+        po:[{d:'Cephalexin',dose:'500 mg q6–8h PO',n:'Step-down jika susceptible dan klinis stabil'}],
+      }
+    }
+  },
+  enterococcus_VRE: {
+    notes:'VRE — terapi terbatas; linezolid atau daptomycin.',
+    wards:{
+      ICU:{iv:[
+        {d:'Linezolid',dose:'600 mg q12h IV',n:'Aktif terhadap VRE faecalis dan faecium'},
+        {d:'Daptomycin',dose:'6–8 mg/kg q24h IV',n:'Aktif; gunakan dosis tinggi untuk bacteremia'},
+      ]},
+      'General Ward':{iv:[{d:'Linezolid',dose:'600 mg q12h IV',n:''}]},
+      'Low Care':{
+        iv:[{d:'Linezolid',dose:'600 mg q12h IV',n:''}],
+        po:[{d:'Linezolid',dose:'600 mg q12h PO',n:'Bioavailabilitas oral ~100%'}],
+      }
+    }
+  },
+  enterococcus_HLAR: {
+    notes:'HLAR — kombinasi ampicillin+aminoglycoside tidak efektif untuk sinergi. Gunakan ampicillin monoterapi dosis tinggi.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ampicillin',dose:'2 g q4h IV (dosis tinggi)',n:'Monoterapi ampicillin — sinergi aminoglycoside tidak bekerja pada HLAR'},
+        {d:'Ampicillin + Ceftriaxone',dose:'Ampicillin 2g q4h + Ceftriaxone 2g q12h IV',n:'Kombinasi double-beta-laktam; aktif untuk E. faecalis HLAR'},
+      ]},
+      'General Ward':{iv:[{d:'Ampicillin',dose:'1–2 g q4–6h IV',n:'Atau ampicillin + ceftriaxone'}]},
+      'Low Care':{
+        iv:[{d:'Ampicillin',dose:'1 g q6h IV',n:''}],
+        po:[{d:'Amoxicillin',dose:'875 mg q8h PO',n:'Step-down untuk E. faecalis'}],
+      }
+    }
+  },
+  enterococcus_SUSCEPTIBLE: {
+    notes:'Enterococcus susceptible — ampicillin first-line (E. faecalis); vancomycin untuk E. faecium.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ampicillin',dose:'2 g q4h IV',n:'First-line untuk E. faecalis'},
+        {d:'Ampicillin + Gentamicin',dose:'Ampicillin 2g q4h + Gentamicin 1mg/kg q8h IV',n:'Kombinasi sinergis untuk endocarditis (jika non-HLAR)'},
+        {d:'Vancomycin',dose:'15–20 mg/kg q8–12h IV',n:'Untuk E. faecium atau PCN-allergic'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Ampicillin',dose:'1–2 g q4–6h IV',n:'First-line'},
+        {d:'Vancomycin',dose:'15 mg/kg q12h IV',n:'Alternatif atau untuk E. faecium'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Ampicillin',dose:'1 g q6h IV',n:''}],
+        po:[{d:'Amoxicillin',dose:'500–875 mg q8h PO',n:'Step-down untuk E. faecalis susceptible'}],
+      }
+    }
+  },
+  strep_pneumoniae_SUSCEPTIBLE: {
+    notes:'S. pneumoniae susceptible — pilihan terapi sangat baik.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ceftriaxone',dose:'2 g q24h IV (meningitis: 2 g q12h)',n:'First-line untuk bacteremia/CAP berat/meningitis'},
+        {d:'Benzylpenicillin',dose:'4 MU q4h IV',n:'Jika MIC penicillin ≤0.06 mg/L (EUCAST susceptible)'},
+        {d:'Vancomycin + Ceftriaxone',dose:'Vancomycin 15mg/kg q8–12h + Ceftriaxone 2g q12h IV',n:'Untuk meningitis sampai sensitivitas final diketahui'},
+      ]},
+      'General Ward':{iv:[{d:'Ceftriaxone',dose:'1–2 g q24h IV',n:''}]},
+      'Low Care':{
+        iv:[{d:'Ceftriaxone',dose:'1 g q24h IV',n:''}],
+        po:[
+          {d:'Amoxicillin',dose:'875 mg q12h atau 500 mg q8h PO',n:'Jika susceptible penicillin'},
+          {d:'Levofloxacin',dose:'750 mg q24h PO',n:'Alternatif atau jika PCN-allergic'},
+        ]
+      }
+    }
+  },
+  strep_pneumoniae_PRSP: {
+    notes:'PRSP — sefalosporin gen 3 dosis tinggi masih aktif untuk sebagian besar infeksi.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ceftriaxone',dose:'2 g q12h IV',n:'Dosis tinggi; aktif untuk sebagian besar PRSP'},
+        {d:'Vancomycin + Ceftriaxone',dose:'Vancomycin 15mg/kg q8–12h + Ceftriaxone 2g q12h IV',n:'Untuk meningitis atau resistensi tingkat tinggi'},
+        {d:'Meropenem',dose:'2 g q8h IV',n:'Untuk meningitis dengan ceftriaxone MIC ≥2 mg/L'},
+      ]},
+      'General Ward':{iv:[{d:'Ceftriaxone',dose:'2 g q24h IV',n:'Dosis tinggi'}]},
+      'Low Care':{
+        iv:[{d:'Ceftriaxone',dose:'2 g q24h IV',n:''}],
+        po:[{d:'Levofloxacin',dose:'750 mg q24h PO',n:'Fluoroquinolon respirasi — aktif terhadap PRSP'}],
+      }
+    }
+  },
+  strep_beta_SUSCEPTIBLE: {
+    notes:'Streptococcus β-hemolytic — sensitif terhadap penicillin (intrinsik).',
+    wards:{
+      ICU:{iv:[
+        {d:'Benzylpenicillin / Ampicillin',dose:'Ampicillin 2 g q4h IV atau Benzylpenicillin 4 MU q4h IV',n:'First-line — Streptococcus selalu susceptible penicillin'},
+        {d:'Ceftriaxone',dose:'2 g q24h IV',n:'Alternatif, lebih mudah pemberian'},
+      ]},
+      'General Ward':{iv:[{d:'Ceftriaxone',dose:'1–2 g q24h IV',n:'Pilihan utama'}]},
+      'Low Care':{
+        iv:[{d:'Ceftriaxone',dose:'1 g q24h IV',n:''}],
+        po:[
+          {d:'Amoxicillin',dose:'500 mg q8h PO',n:'Step-down; Streptococcus selalu susceptible'},
+          {d:'Phenoxymethylpenicillin (Pen V)',dose:'500 mg q6h PO',n:'Alternatif oral'},
+        ]
+      }
+    }
+  },
+  strep_viridans_SUSCEPTIBLE: {
+    notes:'Viridans Streptococcus — evaluasi lebih lanjut untuk panduan terapi, terutama endokarditis.',
+    wards:{
+      ICU:{iv:[
+        {d:'Benzylpenicillin',dose:'4 MU q4h IV',n:'First-line jika MIC penicillin ≤0.125 mg/L'},
+        {d:'Ceftriaxone',dose:'2 g q24h IV',n:'Alternatif, lebih mudah'},
+        {d:'Penicillin + Gentamicin',dose:'Penicillin 4 MU q4h + Gentamicin 3 mg/kg q24h IV',n:'Untuk endocarditis — terapi kombinasi 2 minggu'},
+      ]},
+      'General Ward':{iv:[{d:'Ceftriaxone',dose:'2 g q24h IV',n:''}]},
+      'Low Care':{
+        iv:[{d:'Ceftriaxone',dose:'1–2 g q24h IV',n:''}],
+        po:[{d:'Amoxicillin',dose:'500–875 mg q8h PO',n:'Step-down jika susceptible dan klinis stabil'}],
+      }
+    }
+  },
+  candida_SUSCEPTIBLE: {
+    notes:'Candidemia — echinocandin first-line. Fluconazole hanya untuk non-ICU, spesies tertentu.',
+    wards:{
+      ICU:{iv:[
+        {d:'Caspofungin',dose:'70 mg loading → 50 mg q24h IV',n:'FIRST-LINE candidemia ICU (IDSA/ESCMID guideline)'},
+        {d:'Micafungin',dose:'100 mg q24h IV',n:'Alternatif echinocandin setara'},
+        {d:'Anidulafungin',dose:'200 mg loading → 100 mg q24h IV',n:'Alternatif echinocandin'},
+      ]},
+      'General Ward':{iv:[
+        {d:'Caspofungin',dose:'70 mg loading → 50 mg q24h IV',n:'First-line'},
+        {d:'Fluconazole',dose:'800 mg loading → 400 mg q24h IV',n:'Alternatif jika C. albicans/tropicalis susceptible, pasien stabil'},
+      ]},
+      'Low Care':{
+        iv:[{d:'Fluconazole',dose:'800 mg loading → 400 mg q24h IV/PO',n:'Hanya untuk C. albicans/tropicalis/parapsilosis susceptible'}],
+        po:[{d:'Fluconazole',dose:'400 mg q24h PO',n:'Step-down setelah 5–7 hari IV, klinis stabil. TIDAK untuk C. krusei (intrinsik resisten) atau dosis tinggi untuk C. glabrata'}],
+      }
+    }
+  },
+  candida_FLUCONAZOLE_R: {
+    notes:'Candida resisten fluconazole atau intrinsik resisten (C. krusei, C. auris) — gunakan echinocandin.',
+    wards:{
+      ICU:{iv:[
+        {d:'Caspofungin',dose:'70 mg loading → 50 mg q24h IV',n:'First-line'},
+        {d:'Micafungin',dose:'100 mg q24h IV',n:'Alternatif'},
+        {d:'Amphotericin B liposomal',dose:'3–5 mg/kg q24h IV',n:'Untuk C. auris atau resistensi echinocandin; pantau fungsi ginjal'},
+      ]},
+      'General Ward':{iv:[{d:'Caspofungin',dose:'70 mg loading → 50 mg q24h IV',n:'First-line'}]},
+      'Low Care':{iv:[{d:'Echinocandin — rujuk ke level perawatan lebih tinggi jika perlu',dose:'',n:''}]}
+    }
+  },
+  candida_ECHINOCANDIN_R: {
+    notes:'Resistensi echinocandin — sangat langka. Konsultasi SpPD/SpMK segera.',
+    wards:{
+      ICU:{iv:[
+        {d:'Amphotericin B liposomal',dose:'3–5 mg/kg q24h IV',n:'First-line jika echinocandin resisten'},
+        {d:'Voriconazole',dose:'6 mg/kg q12h loading × 2 dosis → 4 mg/kg q12h IV',n:'Jika susceptible secara in vitro'},
+      ]},
+      'General Ward':{iv:[{d:'Konsultasi SpPD + uji susceptibility antifungal lengkap',dose:'',n:''}]},
+      'Low Care':{iv:[{d:'Transfer ke level perawatan lebih tinggi',dose:'',n:''}]}
+    }
+  },
+  stenotrophomonas_SUSCEPTIBLE: {
+    notes:'Stenotrophomonas maltophilia — TMP-SMX first-line. Intrinsik resisten carbapenem (produksi L1/L2 BL).',
+    wards:{
+      ICU:{iv:[
+        {d:'TMP-SMX',dose:'5 mg/kg TMP q8h IV (based on TMP component)',n:'FIRST-LINE; infus selama ≥60 menit'},
+        {d:'Levofloxacin',dose:'750 mg q24h IV',n:'Alternatif jika TMP-SMX tidak tersedia atau toksik'},
+        {d:'Minocycline',dose:'200 mg loading → 100 mg q12h IV/PO',n:'Alternatif dalam kombinasi'},
+        {d:'Ceftazidime-avibactam',dose:'2.5 g q8h IV',n:'Jika susceptible; opsi tambahan'},
+      ]},
+      'General Ward':{iv:[{d:'TMP-SMX',dose:'5 mg/kg TMP q8h IV/PO',n:'First-line'}]},
+      'Low Care':{
+        iv:[{d:'TMP-SMX',dose:'5 mg/kg TMP q8h IV',n:''}],
+        po:[
+          {d:'TMP-SMX',dose:'960 mg q12h PO (2 tab DS)',n:'Step-down atau primary oral therapy'},
+          {d:'Levofloxacin',dose:'750 mg q24h PO',n:'Alternatif oral'},
+        ]
+      }
+    }
+  },
+  haemophilus_BLPAR: {
+    notes:'H. influenzae produksi beta-laktamase — resisten ampicillin.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ceftriaxone',dose:'2 g q24h IV',n:'First-line (meningitis: 2 g q12h)'},
+        {d:'Amoxicillin-clavulanate',dose:'1.2 g q8h IV',n:'Alternatif'},
+        {d:'Levofloxacin',dose:'500 mg q24h IV',n:'Alternatif untuk PCN-allergic'},
+      ]},
+      'General Ward':{iv:[{d:'Ceftriaxone',dose:'1–2 g q24h IV',n:''}]},
+      'Low Care':{
+        iv:[{d:'Ceftriaxone',dose:'1 g q24h IV',n:''}],
+        po:[{d:'Amoxicillin-clavulanate',dose:'875/125 mg q12h PO',n:'Step-down jika klinis stabil'}],
+      }
+    }
+  },
+  haemophilus_SUSCEPTIBLE: {
+    notes:'H. influenzae susceptible ampicillin.',
+    wards:{
+      ICU:{iv:[
+        {d:'Ampicillin',dose:'1–2 g q6h IV',n:'First-line jika beta-laktamase negatif'},
+        {d:'Ceftriaxone',dose:'2 g q24h IV',n:'Pilihan alternatif yang lebih praktis'},
+      ]},
+      'General Ward':{iv:[{d:'Ampicillin',dose:'1 g q6h IV',n:'Atau ceftriaxone 1–2g q24h IV'}]},
+      'Low Care':{
+        iv:[{d:'Ampicillin',dose:'1 g q6h IV',n:''}],
+        po:[{d:'Amoxicillin',dose:'500 mg q8h PO',n:'Step-down oral'}],
+      }
+    }
+  },
+};
+
+// ─── ANALYZE WILDTYPE ─────────────────────────────────────────────────────────
+function analyzeWildtype(organism, rList, sList) {
+  const group = ORG_GROUP[organism];
+  if (!group || !WT_PATTERNS[group]) return null;
+  const patterns = WT_PATTERNS[group];
+  // Find first matching non-wild-type pattern (check in order: critical first)
+  const ordered = [...patterns].sort((a,b)=>{
+    const sev={critical:0,high:1,medium:2,low:3};
+    return (sev[a.severity]??3)-(sev[b.severity]??3);
+  });
+  for (const p of ordered) {
+    if (p.isWT) continue;
+    if (p.check(rList, sList, organism)) return { isWT:false, pattern:p };
+  }
+  // Wild-type
+  const wtP = patterns.find(p=>p.isWT);
+  return { isWT:true, pattern: wtP||{id:'SUSCEPTIBLE',label:'Wild-Type',desc:'Tidak ada resistensi signifikan terdeteksi.',severity:'low'} };
+}
+
+// ─── GET RECOMMENDATION KEY ───────────────────────────────────────────────────
+function getRecKey(organism, patternId) {
+  const group = ORG_GROUP[organism];
+  if (!group) return null;
+  const key = group + '_' + patternId;
+  if (ABIO_REC[key]) return key;
+  // Fallback: try susceptible
+  const fallback = group + '_SUSCEPTIBLE';
+  return ABIO_REC[fallback] ? fallback : null;
+}
+
+// ─── RENDER AST RESULT HTML ───────────────────────────────────────────────────
+function renderASTResult(organism, setNum) {
+  const rList = astData[setNum].r;
+  const sList = astData[setNum].s;
+  if (rList.length === 0 && sList.length === 0) return '';
+
+  const wt = analyzeWildtype(organism, rList, sList);
+  const group = ORG_GROUP[organism];
+
+  // EUCAST or CLSI reference text
+  const stdRef = astStandard === 'eucast'
+    ? 'EUCAST Clinical Breakpoint Tables v15.0 (2025)'
+    : 'CLSI M100 Performance Standards Ed36 (2026)';
+  const stdNote = astStandard === 'eucast'
+    ? 'Wild-type berdasarkan ECOFF EUCAST. Non-wild-type = isolat dengan mekanisme resistensi yang diperoleh (acquired resistance mechanism).'
+    : 'Wild-type berdasarkan ECV (Epidemiological Cutoff Values) CLSI Appendix F. Non-wild-type = isolat di luar distribusi MIC wild-type.';
+
+  // WT Card
+  let wtHTML = '';
+  if (wt) {
+    const cls = wt.isWT ? 'wt' : 'nwt';
+    const icon = wt.isWT ? '🟢' : '🔴';
+    const labelMain = wt.isWT ? 'WILD-TYPE' : 'NON-WILD-TYPE';
+    wtHTML = `
+      <div class="wt-card ${cls}" style="margin-bottom:10px">
+        <div class="wt-label">${icon} STATUS: ${labelMain}</div>
+        <div><span class="wt-phenotype ${cls}">${wt.pattern.label}</span></div>
+        <div class="wt-desc">${wt.pattern.desc}</div>
+        <div style="margin-top:6px;font-size:9px;color:#94A3B8;font-family:'JetBrains Mono',monospace">${stdNote}</div>
+      </div>`;
+  } else if (group) {
+    wtHTML = `<div class="wt-card unknown"><div class="wt-label">⚪ STATUS TIDAK DAPAT DITENTUKAN</div><div class="wt-desc">Organisme ini tidak memiliki pola wild-type yang terdefinisi dalam database. Evaluasi klinis diperlukan.</div></div>`;
+  }
+
+  // Recommendation
+  let recHTML = '';
+  if (wt) {
+    const recKey = getRecKey(organism, wt.pattern.id);
+    if (recKey && ABIO_REC[recKey]) {
+      const rec = ABIO_REC[recKey];
+      const wards = ['ICU','General Ward','Low Care'];
+      const wardLabels = ['🏥 ICU', '🏨 Rawat Inap Umum', '🛏️ Rawat Inap Low Care'];
+      recHTML = `
+        <div class="ward-rec-wrap">
+          <div class="ward-rec-title">💊 REKOMENDASI ANTIBIOTIK</div>
+          <div style="font-size:10px;color:#546e8a;margin-bottom:8px;font-family:'JetBrains Mono',monospace">${rec.notes}</div>
+          <div class="ward-tabs">
+            ${wards.map((w,i)=>`<button class="ward-tab${i===0?' active':''}" onclick="switchWardTab(this,'ward-panel-s${setNum}-${i}')">${wardLabels[i]}</button>`).join('')}
+          </div>
+          ${wards.map((w,i)=>{
+            const wdata = rec.wards[w];
+            if (!wdata) return `<div class="ward-panel${i===0?' active':''}" id="ward-panel-s${setNum}-${i}"><div class="ast-nodata">Tidak ada rekomendasi spesifik untuk level perawatan ini.</div></div>`;
+            const ivItems = (wdata.iv||[]).map(item=>
+              `<div class="ward-drug-item">
+                <div class="ward-drug-name">${item.d||''}</div>
+                ${item.dose?`<div class="ward-drug-dose">📌 ${item.dose}</div>`:''}
+                ${item.n?`<div class="ward-drug-note">💡 ${item.n}</div>`:''}
+              </div>`
+            ).join('');
+            const poItems = (wdata.po||[]).map(item=>
+              `<div class="ward-drug-item">
+                <div class="ward-drug-name">${item.d||''}</div>
+                ${item.dose?`<div class="ward-drug-dose">📌 ${item.dose}</div>`:''}
+                ${item.n?`<div class="ward-drug-note">💡 ${item.n}</div>`:''}
+              </div>`
+            ).join('');
+            return `
+              <div class="ward-panel${i===0?' active':''}" id="ward-panel-s${setNum}-${i}">
+                ${ivItems?`<div class="ward-route-label ward-route-iv">💉 PER INTRAVENOUS (IV)</div>${ivItems}`:''}
+                ${w==='Low Care'?(poItems?`<div class="ward-route-label ward-route-po" style="margin-top:10px">💊 PER ORAL (PO) — hanya Low Care</div>${poItems}`:`<div class="ward-no-po">Tidak ada rekomendasi oral tersedia untuk profil resistensi ini.</div>`):''}
+              </div>`;
+          }).join('')}
+        </div>
+        <div class="ast-ref-note">
+          Referensi: ${stdRef} · Surviving Sepsis Campaign 2021 · IDSA Bacteremia Guidelines 2023 ·
+          Saran ini bersifat panduan klinis; keputusan terapi tetap berdasarkan penilaian klinis menyeluruh.
+        </div>`;
+    }
+  }
+
+  return `
+    <div style="background:linear-gradient(135deg,rgba(240,247,255,.9),rgba(245,240,255,.8));border:1px solid rgba(37,99,235,.20);border-radius:12px;padding:14px 16px;margin-top:10px">
+      <div style="font-size:10px;font-weight:800;letter-spacing:2px;color:#1E40AF;font-family:'JetBrains Mono',monospace;margin-bottom:10px">🔬 ANALISIS KEPEKAAN ANTIBIOTIK — SET ${setNum} (${astStandard.toUpperCase()})</div>
+      ${wtHTML}
+      ${recHTML}
+    </div>`;
+}
+
+function switchWardTab(btn, panelId) {
+  const wrap = btn.closest('.ward-rec-wrap');
+  wrap.querySelectorAll('.ward-tab').forEach(b=>b.classList.remove('active'));
+  wrap.querySelectorAll('.ward-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+}
+
 function identifyKultur() {
   const resArea = document.getElementById('kultur-result-area');
 
@@ -3019,6 +4095,23 @@ function identifyKultur() {
   fullHTML += 'Referensi: CDC NHSN BSI Chapter 4 — LCBI Criteria (2024) · ';
   fullHTML += '<a href="https://cdcnhsn.clinicalarchitecture.com/SymedicalCDCNHSNViewpoint/#/search" target="_blank" style="color:#1565C0">Organism Database</a>';
   fullHTML += '</div>';
+
+  // ── AST ANALYSIS per positive set ──────────────────────────────────────────
+  let hasAnyAST = false;
+  for (let i = 1; i <= totalSetsSelected; i++) {
+    if (setResults[i] === 'pos') {
+      const org = getSetOrganism(i);
+      if (org && (astData[i].s.length > 0 || astData[i].r.length > 0)) {
+        hasAnyAST = true;
+        fullHTML += renderASTResult(org, i);
+      }
+    }
+  }
+  if (!hasAnyAST) {
+    fullHTML += `<div style="margin-top:12px;padding:12px 14px;background:rgba(37,99,235,.04);border:1px dashed rgba(37,99,235,.25);border-radius:10px;font-size:11px;color:#64748B;font-family:'JetBrains Mono',monospace">
+      💡 Belum ada data kepekaan antibiotik (AST). Buka kolom <b>🔬 Uji Kepekaan Antibiotik</b> di setiap set positif untuk mendapatkan analisis wild-type dan rekomendasi terapi antibiotik.
+    </div>`;
+  }
 
   resArea.innerHTML = fullHTML;
 
