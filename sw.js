@@ -1,7 +1,7 @@
 // ─── SepsiGo Service Worker ──────────────────────────────────────────────────
 // Versi cache — naikkan angka ini setiap kali ada update file agar cache lama
 // otomatis dihapus dan diganti yang baru.
-const CACHE_NAME = 'sepsigo-v5';
+const CACHE_NAME = 'sepsigo-v6';
 
 // File-file yang di-cache saat install (App Shell)
 const APP_SHELL = [
