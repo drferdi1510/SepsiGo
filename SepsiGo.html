@@ -1884,6 +1884,42 @@
 <style>
   @-webkit-keyframes spBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
   @keyframes spBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  /* ── HASIL AKHIR PDF PRINT ── */
+  #print-report { display:none; }
+  @media print {
+    body > *:not(#print-report) { display:none !important; }
+    #print-report {
+      display:block !important;
+      font-family:'Plus Jakarta Sans',sans-serif;
+      color:#0F172A;
+      background:#fff;
+      padding:24px;
+      font-size:12px;
+      line-height:1.6;
+    }
+    .pr-header { border-bottom:3px solid #2563EB;padding-bottom:12px;margin-bottom:16px; }
+    .pr-logo { font-size:22px;font-weight:800;color:#2563EB;letter-spacing:-0.5px; }
+    .pr-logo span { color:#7C3AED; }
+    .pr-sub { font-size:10px;color:#64748B;margin-top:2px; }
+    .pr-title { font-size:16px;font-weight:700;color:#0F172A;margin-top:6px; }
+    .pr-meta { display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;background:#F1F5F9;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px; }
+    .pr-meta-label { color:#64748B;font-weight:600; }
+    .pr-meta-val { color:#0F172A;font-weight:500; }
+    .pr-section { margin-bottom:14px;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden; }
+    .pr-sec-header { background:#1E3A5F;color:#fff;padding:7px 12px;font-size:11px;font-weight:700;letter-spacing:.5px; }
+    .pr-sec-body { padding:10px 12px; }
+    .pr-row { display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #F1F5F9; }
+    .pr-row:last-child { border-bottom:none; }
+    .pr-row-label { color:#475569;font-size:11px; }
+    .pr-row-val { font-weight:700;font-size:12px;color:#0F172A; }
+    .pr-verdict { font-size:14px;font-weight:800;padding:8px 12px;border-radius:6px;margin-bottom:8px;text-align:center; }
+    .pr-verdict.sepsis { background:#FEE2E2;color:#B91C1C; }
+    .pr-verdict.ok { background:#DCFCE7;color:#166534; }
+    .pr-verdict.nd { background:#F1F5F9;color:#64748B; }
+    .pr-disclaimer { margin-top:16px;padding:8px 12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;font-size:10px;color:#92400E;line-height:1.5; }
+    .pr-footer { margin-top:14px;text-align:center;font-size:10px;color:#94A3B8;border-top:1px solid #E2E8F0;padding-top:8px; }
+  }
 </style>
 <style>
 /* ── AST STANDARD TOGGLE ── */
@@ -2097,6 +2133,10 @@
     <button class="nav-btn" onclick="showTab('kultur',this)" data-t="navKultur" aria-label="Identifikasi Kultur">
       <span class="nav-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>
       <span data-t="navKultur">Identifikasi Kultur</span>
+    </button>
+    <button class="nav-btn" onclick="showTab('hasil',this)" data-t="navHasil" aria-label="Hasil Akhir" id="nav-hasil-btn">
+      <span class="nav-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+      <span data-t="navHasil">Hasil Akhir</span>
     </button>
     <button class="nav-btn" onclick="showTab('about',this)" data-t="navAbout" aria-label="Tentang">
       <span class="nav-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
@@ -2952,6 +2992,50 @@
 
 </div><!-- end tab-about -->
 
+<!-- ══════════ HASIL AKHIR ══════════ -->
+<div id="tab-hasil" style="display:none">
+  <div class="section" style="margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,#2563EB,#7C3AED);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--text)" data-t="hasilTitle">Laporan Hasil Skrining Sepsis</div>
+        <div style="font-size:11px;color:var(--muted)" data-t="hasilSubtitle">Ringkasan analisis dari semua tab</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF Language Selector -->
+  <div class="section" style="margin-bottom:14px">
+    <div class="section-title" data-t="hasilPdfLang">Bahasa Laporan PDF</div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button id="pdf-lang-id" onclick="setPdfLang('id')" class="btn-pdf-lang active" style="flex:1;padding:10px;border-radius:10px;border:2px solid #2563EB;background:rgba(37,99,235,.12);color:#2563EB;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;min-height:44px" aria-pressed="true">
+        🇮🇩 Indonesia
+      </button>
+      <button id="pdf-lang-en" onclick="setPdfLang('en')" class="btn-pdf-lang" style="flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);background:var(--surface);color:var(--muted);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;min-height:44px" aria-pressed="false">
+        🇬🇧 English
+      </button>
+    </div>
+  </div>
+
+  <!-- Result Summary Cards -->
+  <div id="hasil-content">
+    <div style="text-align:center;padding:40px 16px;color:var(--muted)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3;margin-bottom:12px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <div style="font-size:13px" data-t="hasilEmpty">Belum ada analisis. Lakukan Deteksi Cepat terlebih dahulu.</div>
+    </div>
+  </div>
+
+  <!-- Download Button -->
+  <div style="margin-top:14px;margin-bottom:8px">
+    <button id="btn-download-pdf" onclick="downloadPDF()" style="width:100%;min-height:52px;border-radius:14px;border:none;background:linear-gradient(135deg,#2563EB,#7C3AED);color:#fff;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s;touch-action:manipulation" aria-label="Download PDF">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span data-t="hasilDownload">Unduh Laporan PDF</span>
+    </button>
+  </div>
+</div><!-- end tab-hasil -->
+
 
 </div><!-- end main -->
 
@@ -3034,7 +3118,27 @@
 const LANG = {
   id: {
     logoSub:"Detect Fast, Save Lives.",
-    navCalc:"Deteksi Cepat", navExtra:"Skor Sepsis", navKultur:"Identifikasi Kultur", navAbout:"Tentang",
+    navCalc:"Deteksi Cepat", navExtra:"Skor Sepsis", navKultur:"Identifikasi Kultur", navAbout:"Tentang", navHasil:"Hasil Akhir",
+    hasilTitle:"Laporan Hasil Skrining Sepsis",
+    hasilSubtitle:"Ringkasan analisis dari semua tab",
+    hasilSec1:"DETEKSI CEPAT (CPD — NE-WY)",
+    hasilSec2:"SKOR SEPSIS (SOFA-2 & NEWS-2)",
+    hasilSec3:"IDENTIFIKASI KULTUR DARAH",
+    hasilNotDone:"Tidak dilakukan analisis",
+    hasilPdfLang:"Bahasa Laporan PDF",
+    hasilDownload:"Unduh Laporan PDF",
+    hasilEmpty:"Belum ada analisis. Lakukan Deteksi Cepat terlebih dahulu.",
+    hasilPatient:"Data Pasien",
+    hasilDate:"Tanggal/Waktu",
+    hasilRM:"No. RM", hasilSID:"Sample ID",
+    hasilAge:"Usia", hasilSex:"Jenis Kelamin", hasilSetting:"Setting",
+    hasilNewy:"NE-WY", hasilCutoff:"Cut-off",
+    hasilSofaTotal:"Skor SOFA-2 Total",
+    hasilNewsTotal:"Skor NEWS-2 Total",
+    hasilKulturStatus:"Status Kultur",
+    hasilKulturOrg:"Organisme",
+    hasilKesimpulan:"Kesimpulan",
+    hasilDisclaimer:"Laporan ini merupakan alat bantu skrining klinis berbasis CPD Sysmex XN. Bukan pengganti diagnosis dokter.",
     secPatient:"Data Pasien", secSofa:"SOFA-2 (Updated Sepsis-3, 2025)", secNews2:"NEWS-2 (National Early Warning Score 2)",
     secCPD:"Cell Population Data — Sysmex XN",
     secCulture:"Hasil Kultur",
@@ -3186,7 +3290,27 @@ const LANG = {
   },
   en: {
     logoSub:"Detect Fast, Save Lives.",
-    navCalc:"Quick Detection", navExtra:"Sepsis Score", navKultur:"Culture ID", navAbout:"About",
+    navCalc:"Quick Detection", navExtra:"Sepsis Score", navKultur:"Culture ID", navAbout:"About", navHasil:"Final Report",
+    hasilTitle:"Sepsis Screening Report",
+    hasilSubtitle:"Summary of all analysis results",
+    hasilSec1:"RAPID DETECTION (CPD — NE-WY)",
+    hasilSec2:"SEPSIS SCORE (SOFA-2 & NEWS-2)",
+    hasilSec3:"BLOOD CULTURE IDENTIFICATION",
+    hasilNotDone:"Analysis not performed",
+    hasilPdfLang:"PDF Report Language",
+    hasilDownload:"Download PDF Report",
+    hasilEmpty:"No analysis yet. Please perform Rapid Detection first.",
+    hasilPatient:"Patient Data",
+    hasilDate:"Date/Time",
+    hasilRM:"Medical Record No.", hasilSID:"Sample ID",
+    hasilAge:"Age", hasilSex:"Sex", hasilSetting:"Setting",
+    hasilNewy:"NE-WY", hasilCutoff:"Cut-off",
+    hasilSofaTotal:"SOFA-2 Total Score",
+    hasilNewsTotal:"NEWS-2 Total Score",
+    hasilKulturStatus:"Culture Status",
+    hasilKulturOrg:"Organism",
+    hasilKesimpulan:"Conclusion",
+    hasilDisclaimer:"This report is a clinical screening tool based on Sysmex XN CPD. Not a substitute for physician diagnosis.",
     secPatient:"Patient Info", secSofa:"SOFA-2 (Updated Sepsis-3, 2025)", secNews2:"NEWS-2 (National Early Warning Score 2)",
     secCPD:"Cell Population Data — Sysmex XN",
     secCulture:"Culture Results",
@@ -3338,6 +3462,7 @@ const LANG = {
 };
 
 let lang = 'id';
+let _cpdDone = false;
 
 // ─── FIXED CUT-OFFS ────────────────────────────────────────────────────────
 const CUTOFFS = { ne_wy: 736.00 };
@@ -4990,6 +5115,7 @@ function calculate() {
 }
 
 function _runCalculate() {
+  _cpdDone = true;
   const t = LANG[lang];
   const { scores, total } = calcSofa();
   const sofaSepsis = total >= 2;
@@ -5325,7 +5451,7 @@ function showTab(name, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   // Hide all tabs first
-  ['calc','extra','kultur','about'].forEach(t => {
+  ['calc','extra','kultur','about','hasil'].forEach(t => {
     document.getElementById('tab-'+t).style.display = 'none';
   });
   _showTabLoader(() => {
@@ -5340,6 +5466,7 @@ function showTab(name, btn) {
     if (name === 'kultur')  setTimeout(previewKulturLink, 50);
     if (name === 'calc')    setTimeout(updateCSVCounter,  50);
     if (name === 'about')   setTimeout(renderAbout,       50);
+    if (name === 'hasil')   setTimeout(renderHasil,       50);
   });
 }
 
@@ -5504,6 +5631,9 @@ function applyLang() {
     if (v) updateCPDFlag(k, v, CUTOFFS[k]);
   });
   calcSofa();
+  // Refresh hasil tab jika sedang aktif
+  var hasilTab = document.getElementById('tab-hasil');
+  if (hasilTab && hasilTab.style.display !== 'none') renderHasil();
 }
 function toggleLang() { lang = lang === 'id' ? 'en' : 'id'; applyLang(); }
 
@@ -6443,6 +6573,215 @@ function showUpdateBanner(newWorker) {
     }, 520);
   }, 3000);
 })();
+</script>
+
+<!-- ── PRINT REPORT (hidden, only visible during window.print()) ── -->
+<div id="print-report"></div>
+
+<script>
+// ─── HASIL AKHIR ──────────────────────────────────────────────────────────────
+let _pdfLang = 'id';
+
+function setPdfLang(l) {
+  _pdfLang = l;
+  document.getElementById('pdf-lang-id').style.background = l === 'id' ? 'rgba(37,99,235,.12)' : 'var(--surface)';
+  document.getElementById('pdf-lang-id').style.borderColor = l === 'id' ? '#2563EB' : 'var(--border)';
+  document.getElementById('pdf-lang-id').style.color = l === 'id' ? '#2563EB' : 'var(--muted)';
+  document.getElementById('pdf-lang-id').style.fontWeight = l === 'id' ? '700' : '600';
+  document.getElementById('pdf-lang-en').style.background = l === 'en' ? 'rgba(37,99,235,.12)' : 'var(--surface)';
+  document.getElementById('pdf-lang-en').style.borderColor = l === 'en' ? '#2563EB' : 'var(--border)';
+  document.getElementById('pdf-lang-en').style.color = l === 'en' ? '#2563EB' : 'var(--muted)';
+  document.getElementById('pdf-lang-en').style.fontWeight = l === 'en' ? '700' : '600';
+}
+
+function _getHasilData() {
+  // Patient info
+  const rm      = (document.getElementById('no_rm') ? document.getElementById('no_rm').value : '') || '—';
+  const sid     = document.getElementById('sid').value || '—';
+  const ageVal  = document.getElementById('age').value || '—';
+  const sexEl   = document.getElementById('sex');
+  const setSel  = document.getElementById('setting');
+
+  // CPD
+  const newyEl  = document.getElementById('ne_wy');
+  const newyVal = newyEl ? newyEl.value : '';
+  const newyNum = parseFloat(newyVal);
+  const newyFlag = getCPDFlag('ne_wy');
+
+  // SOFA / NEWS
+  const { scores: sofaScores, total: sofaTotal } = calcSofa ? calcSofa() : { scores:{}, total:0 };
+  const { scores: newsScores, total: newsTotal } = calcNews2 ? calcNews2() : { scores:{}, total:0 };
+  const hasSofa = sofaTotal > 0 || newsTotal > 0;
+
+  // Kultur
+  const kulturResultArea = document.getElementById('kultur-result-area');
+  const hasKultur = kulturResultArea && kulturResultArea.innerHTML.trim() !== '';
+  const kulturStatus = document.getElementById('culture-status') ? document.getElementById('culture-status').value : 'notdone';
+
+  return { rm, sid, ageVal, sexEl, setSel, newyVal, newyNum, newyFlag, sofaTotal, newsTotal, hasSofa, hasKultur, kulturStatus, kulturResultArea };
+}
+
+function renderHasil() {
+  const t = LANG[lang];
+  const el = document.getElementById('hasil-content');
+  if (!el) return;
+
+  if (!_cpdDone) {
+    el.innerHTML = `<div style="text-align:center;padding:40px 16px;color:var(--muted)">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3;margin-bottom:12px;display:block;margin:0 auto 12px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <div style="font-size:13px">${t.hasilEmpty}</div>
+    </div>`;
+    document.getElementById('btn-download-pdf').disabled = true;
+    document.getElementById('btn-download-pdf').style.opacity = '0.45';
+    return;
+  }
+
+  document.getElementById('btn-download-pdf').disabled = false;
+  document.getElementById('btn-download-pdf').style.opacity = '1';
+
+  const d = _getHasilData();
+  const isEN = lang === 'en';
+  const sexLabel = d.sexEl ? (d.sexEl.value === 'm' ? (isEN ? 'Male' : 'Laki-laki') : (isEN ? 'Female' : 'Perempuan')) : '—';
+  const settingLabel = d.setSel ? d.setSel.value : '—';
+  const newyColor = d.newyFlag === 'high' ? '#EF4444' : '#10B981';
+  const newyLabel = d.newyFlag === 'high' ? (isEN ? 'HIGH ↑' : 'TINGGI ↑') : (isEN ? 'NORMAL' : 'NORMAL');
+  const cpdSepsis = d.newyFlag === 'high';
+
+  // CPD verdict
+  const verdictCPD = cpdSepsis
+    ? `<div style="background:rgba(239,68,68,.12);border:1.5px solid rgba(239,68,68,.35);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-weight:700;color:#EF4444;font-size:13px">${isEN ? '⚠ SEPSIS SUSPECTED' : '⚠ SEPSIS DICURIGAI'}</div>`
+    : `<div style="background:rgba(16,185,129,.10);border:1.5px solid rgba(16,185,129,.30);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-weight:700;color:#10B981;font-size:13px">${isEN ? '✓ LOW SEPSIS RISK' : '✓ RISIKO SEPSIS RENDAH'}</div>`;
+
+  const newyRow = d.newyVal
+    ? `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--muted)">NE-WY</span><span style="font-weight:700;color:${newyColor}">${parseFloat(d.newyVal).toFixed(2)} — ${newyLabel}</span></div>
+       <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:12px;color:var(--muted)">${isEN ? 'Cut-off' : 'Cut-off'}</span><span style="font-size:12px;color:var(--text)">736.00</span></div>`
+    : `<div style="font-size:12px;color:var(--muted);padding:6px 0">${isEN ? 'NE-WY value not entered' : 'Nilai NE-WY belum diisi'}</div>`;
+
+  // SOFA/NEWS section
+  const sofaColor = d.sofaTotal >= 2 ? '#EF4444' : '#10B981';
+  const newsColor = d.newsTotal >= 5 ? '#F97316' : d.newsTotal >= 3 ? '#FBBF24' : '#10B981';
+  const sofaVerdictText = d.sofaTotal >= 2 ? (isEN ? 'Organ dysfunction (SOFA ≥2)' : 'Disfungsi organ (SOFA ≥2)') : (isEN ? 'No significant dysfunction' : 'Tidak ada disfungsi signifikan');
+  const sofaVerdictDiv = d.sofaTotal >= 2
+    ? `<div style="background:rgba(239,68,68,.12);border:1.5px solid rgba(239,68,68,.35);border-radius:10px;padding:8px 12px;margin-bottom:8px;font-weight:700;color:#EF4444;font-size:13px">${isEN ? '⚠ ORGAN DYSFUNCTION' : '⚠ DISFUNGSI ORGAN'}</div>`
+    : `<div style="background:rgba(16,185,129,.10);border:1.5px solid rgba(16,185,129,.30);border-radius:10px;padding:8px 12px;margin-bottom:8px;font-weight:700;color:#10B981;font-size:13px">${isEN ? '✓ NO SIGNIFICANT DYSFUNCTION' : '✓ TIDAK ADA DISFUNGSI SIGNIFIKAN'}</div>`;
+  const sec2 = d.hasSofa
+    ? `${sofaVerdictDiv}
+       <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--muted)">${t.hasilSofaTotal}</span><span style="font-weight:700;color:${sofaColor}">${d.sofaTotal} / 24</span></div>
+       <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:12px;color:var(--muted)">${t.hasilNewsTotal}</span><span style="font-weight:700;color:${newsColor}">${d.newsTotal} / 20</span></div>`
+    : `<div style="font-size:12px;color:var(--muted);padding:6px 0;font-style:italic">${t.hasilNotDone}</div>`;
+
+  // Kultur section
+  const kulturStatusMap = { notdone: isEN ? 'Not performed' : 'Tidak dilakukan', pending: isEN ? 'Pending' : 'Menunggu hasil', neg: isEN ? 'Negative' : 'Negatif', pos: isEN ? 'Positive' : 'Positif' };
+  const kulturStatusText = kulturStatusMap[d.kulturStatus] || (isEN ? 'Not performed' : 'Tidak dilakukan');
+  const sec3 = (d.hasKultur && d.kulturStatus !== 'notdone')
+    ? `<div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:12px;color:var(--muted)">${t.hasilKulturStatus}</span><span style="font-weight:700;color:var(--text)">${kulturStatusText}</span></div>`
+    : `<div style="font-size:12px;color:var(--muted);padding:6px 0;font-style:italic">${t.hasilNotDone}</div>`;
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString(isEN ? 'en-GB' : 'id-ID', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  el.innerHTML = `
+    <div class="section" style="margin-bottom:10px">
+      <div class="section-title" style="margin-bottom:8px">${t.hasilPatient}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:12px">
+        <div style="color:var(--muted)">${t.hasilRM}</div><div style="font-weight:600;color:var(--text)">${d.rm}</div>
+        <div style="color:var(--muted)">${t.hasilSID}</div><div style="font-weight:600;color:var(--text)">${d.sid}</div>
+        <div style="color:var(--muted)">${t.hasilAge}</div><div style="font-weight:600;color:var(--text)">${d.ageVal}</div>
+        <div style="color:var(--muted)">${t.hasilSex}</div><div style="font-weight:600;color:var(--text)">${sexLabel}</div>
+        <div style="color:var(--muted)">${t.hasilSetting}</div><div style="font-weight:600;color:var(--text)">${settingLabel}</div>
+        <div style="color:var(--muted)">${t.hasilDate}</div><div style="font-weight:600;color:var(--text);font-size:11px">${dateStr}</div>
+      </div>
+    </div>
+    <div class="section" style="margin-bottom:10px">
+      <div class="section-title" style="margin-bottom:8px">${t.hasilSec1}</div>
+      ${verdictCPD}${newyRow}
+    </div>
+    <div class="section" style="margin-bottom:10px">
+      <div class="section-title" style="margin-bottom:8px">${t.hasilSec2}</div>
+      ${sec2}
+    </div>
+    <div class="section" style="margin-bottom:10px">
+      <div class="section-title" style="margin-bottom:8px">${t.hasilSec3}</div>
+      ${sec3}
+    </div>
+    <div style="font-size:10px;color:var(--muted);padding:8px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);line-height:1.6">
+      ⚠ ${t.hasilDisclaimer}
+    </div>`;
+}
+
+function downloadPDF() {
+  if (!_cpdDone) return;
+  const pl = _pdfLang;
+  const T = LANG[pl];
+  const d = _getHasilData();
+  const isEN = pl === 'en';
+
+  const sexLabel = d.sexEl ? (d.sexEl.value === 'm' ? (isEN ? 'Male' : 'Laki-laki') : (isEN ? 'Female' : 'Perempuan')) : '—';
+  const settingLabel = d.setSel ? d.setSel.value : '—';
+  const newyFlag = d.newyFlag;
+  const cpdSepsis = newyFlag === 'high';
+  const newyLabel = newyFlag === 'high' ? (isEN ? 'HIGH ↑' : 'TINGGI ↑') : (isEN ? 'NORMAL' : 'NORMAL');
+  const newyColor = cpdSepsis ? '#B91C1C' : '#166534';
+
+  const verdictCls = cpdSepsis ? 'sepsis' : 'ok';
+  const verdictTxt = cpdSepsis ? (isEN ? '⚠ SEPSIS SUSPECTED' : '⚠ SEPSIS DICURIGAI') : (isEN ? '✓ LOW SEPSIS RISK' : '✓ RISIKO SEPSIS RENDAH');
+
+  const sofaColor = d.sofaTotal >= 2 ? '#B91C1C' : '#166534';
+  const newsColor = d.newsTotal >= 5 ? '#9A3412' : d.newsTotal >= 3 ? '#92400E' : '#166534';
+  const sofaVerdict = d.sofaTotal >= 2 ? (isEN ? 'Organ dysfunction (≥2)' : 'Disfungsi organ (≥2)') : (isEN ? 'No dysfunction' : 'Tidak ada disfungsi');
+
+  const kulturStatusMap = { notdone: isEN ? 'Not performed' : 'Tidak dilakukan', pending: isEN ? 'Pending (awaiting result)' : 'Menunggu hasil', neg: isEN ? 'Negative' : 'Negatif', pos: isEN ? 'Positive' : 'Positif' };
+  const kulturStatusTxt = kulturStatusMap[d.kulturStatus] || (isEN ? 'Not performed' : 'Tidak dilakukan');
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString(isEN ? 'en-GB' : 'id-ID', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  const sec2HTML = d.hasSofa
+    ? `<div class="pr-row"><span class="pr-row-label">${T.hasilSofaTotal}</span><span class="pr-row-val" style="color:${sofaColor}">${d.sofaTotal} / 24 — ${sofaVerdict}</span></div>
+       <div class="pr-row"><span class="pr-row-label">${T.hasilNewsTotal}</span><span class="pr-row-val" style="color:${newsColor}">${d.newsTotal} / 20</span></div>`
+    : `<div style="color:#64748B;font-size:11px;padding:4px 0;font-style:italic">${T.hasilNotDone}</div>`;
+
+  const sec3HTML = (d.hasKultur && d.kulturStatus !== 'notdone')
+    ? `<div class="pr-row"><span class="pr-row-label">${T.hasilKulturStatus}</span><span class="pr-row-val">${kulturStatusTxt}</span></div>`
+    : `<div style="color:#64748B;font-size:11px;padding:4px 0;font-style:italic">${T.hasilNotDone}</div>`;
+
+  const html = `
+    <div class="pr-header">
+      <div class="pr-logo">Sepsi<span>Go</span></div>
+      <div class="pr-sub">Sepsis Early Detection System — sepsi-go.vercel.app</div>
+      <div class="pr-title">${T.hasilTitle}</div>
+    </div>
+    <div class="pr-meta">
+      <span class="pr-meta-label">${T.hasilRM}</span><span class="pr-meta-val">${d.rm}</span>
+      <span class="pr-meta-label">${T.hasilSID}</span><span class="pr-meta-val">${d.sid}</span>
+      <span class="pr-meta-label">${T.hasilAge}</span><span class="pr-meta-val">${d.ageVal}</span>
+      <span class="pr-meta-label">${T.hasilSex}</span><span class="pr-meta-val">${sexLabel}</span>
+      <span class="pr-meta-label">${T.hasilSetting}</span><span class="pr-meta-val">${settingLabel}</span>
+      <span class="pr-meta-label">${T.hasilDate}</span><span class="pr-meta-val">${dateStr}</span>
+    </div>
+    <div class="pr-section">
+      <div class="pr-sec-header">${T.hasilSec1}</div>
+      <div class="pr-sec-body">
+        <div class="pr-verdict ${verdictCls}">${verdictTxt}</div>
+        ${d.newyVal ? `<div class="pr-row"><span class="pr-row-label">NE-WY</span><span class="pr-row-val" style="color:${newyColor}">${parseFloat(d.newyVal).toFixed(2)} — ${newyLabel}</span></div>
+        <div class="pr-row"><span class="pr-row-label">${T.hasilCutoff}</span><span class="pr-row-val">736.00</span></div>`
+        : `<div style="color:#64748B;font-size:11px;padding:4px 0;font-style:italic">${isEN ? 'NE-WY value not entered' : 'Nilai NE-WY belum diisi'}</div>`}
+      </div>
+    </div>
+    <div class="pr-section">
+      <div class="pr-sec-header">${T.hasilSec2}</div>
+      <div class="pr-sec-body">${sec2HTML}</div>
+    </div>
+    <div class="pr-section">
+      <div class="pr-sec-header">${T.hasilSec3}</div>
+      <div class="pr-sec-body">${sec3HTML}</div>
+    </div>
+    <div class="pr-disclaimer">⚠ ${T.hasilDisclaimer}</div>
+    <div class="pr-footer">SepsiGo • ${isEN ? 'Generated' : 'Dicetak'} ${dateStr} • sepsi-go.vercel.app</div>`;
+
+  document.getElementById('print-report').innerHTML = html;
+  window.print();
+}
 </script>
 </body>
 </html>
