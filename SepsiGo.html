@@ -24,7 +24,7 @@
 
 <!-- ── Splash screen safe-area untuk notch/punch-hole ── -->
 <style>
-  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+  body { padding-bottom: env(safe-area-inset-bottom); }
 </style>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -109,10 +109,93 @@
   [data-theme="dark"] .wt-card.nwt { background: rgba(239,68,68,.08) !important; }
   [data-theme="dark"] .btn-reset { background: rgba(30,41,59,.9) !important; border-color: var(--border) !important; color: var(--muted) !important; }
 
+  /* ── DARK MODE — text contrast fixes ── */
+  /* Semua teks #64748B terlalu gelap di dark mode — override ke muted token */
+  [data-theme="dark"] .sofa-interpret,
+  [data-theme="dark"] .sofa-hint,
+  [data-theme="dark"] .organ-input-label,
+  [data-theme="dark"] .organ-input-label-sm,
+  [data-theme="dark"] .patient-label,
+  [data-theme="dark"] .cpd-input-label,
+  [data-theme="dark"] .cpd-result-cutoff,
+  [data-theme="dark"] .result-label,
+  [data-theme="dark"] .sofa-chip-label,
+  [data-theme="dark"] .cult-note,
+  [data-theme="dark"] .ward-drug-note,
+  [data-theme="dark"] .ast-ref-note,
+  [data-theme="dark"] .ward-no-po,
+  [data-theme="dark"] .ast-nodata,
+  [data-theme="dark"] .wt-desc,
+  [data-theme="dark"] .rec-text,
+  [data-theme="dark"] .ref-text { color: #94a3b8 !important; }
+
+  /* Section title text di dark mode */
+  [data-theme="dark"] .section-title { color: #93c5fd !important; }
+
+  /* Hasil kultur note */
+  [data-theme="dark"] .cult-class-note,
+  [data-theme="dark"] .cult-note { color: #94a3b8 !important; }
+
+  /* Empty state di dark mode — background dan text */
+  [data-theme="dark"] .empty-state {
+    background: rgba(30,41,59,.60) !important;
+    border-color: rgba(148,163,184,.20) !important;
+    color: #94a3b8 !important;
+  }
+  [data-theme="dark"] .empty-state p { color: #94a3b8 !important; }
+  [data-theme="dark"] .empty-state svg { color: #64748b !important; }
+
+  /* Placeholder text — lebih terang di dark mode */
+  [data-theme="dark"] input::placeholder,
+  [data-theme="dark"] select::placeholder { color: #64748b !important; opacity: 1; }
+
+  /* Organ card border & text */
+  [data-theme="dark"] .organ-name { color: #93c5fd !important; }
+  [data-theme="dark"] .organ-score { color: #bfdbfe !important; background: rgba(30,58,138,.40) !important; }
+
+  /* CPD card param name */
+  [data-theme="dark"] .cpd-param-name { color: #93c5fd !important; }
+  [data-theme="dark"] .cpd-cutoff-badge { background: rgba(30,58,138,.40) !important; color: #93c5fd !important; border-color: rgba(96,165,250,.30) !important; }
+
+  /* SOFA total */
+  [data-theme="dark"] .sofa-total-label { color: #94a3b8 !important; }
+  [data-theme="dark"] .sofa-total-val { color: #bfdbfe !important; }
+  [data-theme="dark"] .sofa-bar-bg { background: rgba(30,58,138,.40) !important; }
+
+  /* Result blocks dark */
+  [data-theme="dark"] .result-block-title { color: #93c5fd !important; }
+  [data-theme="dark"] .rec-arrow { color: #60a5fa !important; }
+  [data-theme="dark"] .cpd-result-name { color: #93c5fd !important; }
+
+  /* Ward tab active */
+  [data-theme="dark"] .ward-tab { background: rgba(30,41,59,.70) !important; color: #94a3b8 !important; border-color: rgba(148,163,184,.20) !important; }
+  [data-theme="dark"] .ward-tab.active { background: #1e40af !important; color: #fff !important; }
+  [data-theme="dark"] .ward-drug-name { color: #bfdbfe !important; }
+  [data-theme="dark"] .ward-drug-dose { color: #e2e8f0 !important; }
+  [data-theme="dark"] .ward-route-iv { background: rgba(30,58,138,.40) !important; color: #93c5fd !important; }
+  [data-theme="dark"] .ward-route-po { background: rgba(6,78,59,.40) !important; color: #6ee7b7 !important; }
+
+  /* AST tag */
+  [data-theme="dark"] .ast-tag-s { background: rgba(6,78,59,.40) !important; color: #6ee7b7 !important; border-color: rgba(52,211,153,.25) !important; }
+  [data-theme="dark"] .ast-tag-r { background: rgba(127,29,29,.40) !important; color: #fca5a5 !important; border-color: rgba(239,68,68,.25) !important; }
+  [data-theme="dark"] .ast-col-header { opacity: .9; }
+  [data-theme="dark"] .ast-std-label { color: #93c5fd !important; }
+
+  /* WT cards dark */
+  [data-theme="dark"] .wt-label { opacity: .9; }
+  [data-theme="dark"] .wt-phenotype.nwt { background: rgba(127,29,29,.40) !important; color: #fca5a5 !important; }
+  [data-theme="dark"] .wt-phenotype.wt { background: rgba(6,78,59,.40) !important; color: #6ee7b7 !important; }
+
+  /* Inline style helper — text yang pakai style inline */
+  [data-theme="dark"] .sofa-total-row .sofa-total-label { color: #94a3b8 !important; }
+
+  /* Header inner text (subtitle) */
+  [data-theme="dark"] .logo-sub { color: rgba(147,197,253,.80) !important; }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html {
-    scroll-padding-top: 155px;
+    scroll-padding-top: calc(120px + env(safe-area-inset-top, 0px));
     scroll-behavior: smooth;
   }
 
@@ -631,13 +714,13 @@
   .header {
     background: linear-gradient(135deg, #1E40AF 0%, #2563EB 45%, #1D4ED8 100%);
     border-bottom: none;
-    padding: 14px 20px;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 12px;
     position: sticky;
     top: 0;
     z-index: 100;
     box-shadow: 0 4px 30px rgba(30,64,175,.40), 0 1px 0 rgba(255,255,255,.08) inset;
-    height: 86px;
-    overflow: hidden;
+    min-height: calc(64px + env(safe-area-inset-top, 0px));
+    overflow: visible;
   }
   .header::before {
     content: '';
@@ -716,7 +799,7 @@
     border-bottom: 1px solid rgba(37,99,235,.10);
     padding: 0 16px;
     position: sticky;
-    top: 86px;
+    top: calc(64px + env(safe-area-inset-top, 0px));
     z-index: 99;
     box-shadow: 0 2px 12px rgba(37,99,235,.07);
   }
@@ -5116,6 +5199,56 @@ function renderAbout() {
         </tbody>
       </table>
       <div class="ref-text" style="margin-top:10px">${t.cpdRef.replace(/\n/g,'<br>')}</div>
+    </div>
+
+    <!-- DAFTAR REFERENSI -->
+    <div style="margin-top:24px">
+      <div class="section-title" style="margin-top:0">
+        📚 ${lang==='en' ? 'Scientific References' : 'Daftar Referensi Ilmiah'}
+      </div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
+        ${[
+          { num:1, text: lang==='en'
+            ? 'Singer M, Deutschman CS, Seymour CW, et al. The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA.</em> 2016;315(8):801–810.'
+            : 'Singer M, Deutschman CS, Seymour CW, et al. Definisi Konsensus Internasional Ketiga untuk Sepsis dan Syok Septik (Sepsis-3). <em>JAMA.</em> 2016;315(8):801–810.' },
+          { num:2, text: lang==='en'
+            ? 'Wiyono AR, Wardhani P, Indrasari YN, Semedi BP. Cell Population Data (CPD) of Sysmex XN-Series as Sepsis Screening Tool in Emergency Department. <em>Folia Medica Indonesiana.</em> 2025. [In review]'
+            : 'Wiyono AR, Wardhani P, Indrasari YN, Semedi BP. Cell Population Data (CPD) Sysmex XN-Series sebagai Alat Skrining Sepsis di Unit Gawat Darurat. <em>Folia Medica Indonesiana.</em> 2025. [In review]' },
+          { num:3, text: lang==='en'
+            ? 'Evans L, Rhodes A, Alhazzani W, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. <em>Intensive Care Med.</em> 2021;47(11):1181–1247.'
+            : 'Evans L, Rhodes A, Alhazzani W, et al. Surviving Sepsis Campaign: Panduan Internasional Manajemen Sepsis dan Syok Septik 2021. <em>Intensive Care Med.</em> 2021;47(11):1181–1247.' },
+          { num:4, text: lang==='en'
+            ? 'Seymour CW, Liu VX, Iwashyna TJ, et al. Assessment of Clinical Criteria for Sepsis: For the Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA.</em> 2016;315(8):762–774.'
+            : 'Seymour CW, Liu VX, Iwashyna TJ, et al. Penilaian Kriteria Klinis untuk Sepsis: Untuk Definisi Konsensus Internasional Ketiga (Sepsis-3). <em>JAMA.</em> 2016;315(8):762–774.' },
+          { num:5, text: lang==='en'
+            ? 'Royal College of Physicians. National Early Warning Score (NEWS) 2: Standardising the Assessment of Acute-Illness Severity in the NHS. RCP, London. 2017.'
+            : 'Royal College of Physicians. National Early Warning Score (NEWS) 2: Standardisasi Penilaian Keparahan Penyakit Akut di NHS. RCP, London. 2017.' },
+          { num:6, text: lang==='en'
+            ? 'Centers for Disease Control and Prevention (CDC). Bloodstream Infection Event (Central Line-Associated Bloodstream Infection and non-central line-associated Bloodstream Infection). NHSN Patient Safety Component Manual, Chapter 4. January 2024.'
+            : 'Centers for Disease Control and Prevention (CDC). Bloodstream Infection Event (CLABSI dan Non-CLABSI). NHSN Patient Safety Component Manual, Bab 4. Januari 2024.' },
+          { num:7, text: lang==='en'
+            ? 'The European Committee on Antimicrobial Susceptibility Testing (EUCAST). Breakpoint Tables for Interpretation of MICs and Zone Diameters. Version 15.0. 2025. Available at: www.eucast.org'
+            : 'The European Committee on Antimicrobial Susceptibility Testing (EUCAST). Tabel Breakpoint untuk Interpretasi MIC dan Diameter Zona Hambat. Versi 15.0. 2025. Tersedia di: www.eucast.org' },
+          { num:8, text: lang==='en'
+            ? 'Clinical and Laboratory Standards Institute (CLSI). Performance Standards for Antimicrobial Susceptibility Testing. 36th ed. CLSI supplement M100. Clinical and Laboratory Standards Institute, USA, 2026.'
+            : 'Clinical and Laboratory Standards Institute (CLSI). Standar Kinerja untuk Uji Kepekaan Antimikroba. Edisi ke-36. Suplemen CLSI M100. Clinical and Laboratory Standards Institute, USA, 2026.' },
+          { num:9, text: lang==='en'
+            ? 'Mermel LA, Allon M, Bouza E, et al. Clinical Practice Guidelines for the Diagnosis and Management of Intravascular Catheter-Related Infection: 2009 Update by the Infectious Diseases Society of America. <em>Clin Infect Dis.</em> 2009;49(1):1–45.'
+            : 'Mermel LA, Allon M, Bouza E, et al. Panduan Praktik Klinis untuk Diagnosis dan Manajemen Infeksi terkait Kateter Intravaskular: Pembaruan 2009 oleh IDSA. <em>Clin Infect Dis.</em> 2009;49(1):1–45.' },
+          { num:10, text: lang==='en'
+            ? 'Hotchkiss RS, Monneret G, Payen D. Sepsis-induced immunosuppression: from cellular dysfunctions to immunotherapy. <em>Nat Rev Immunol.</em> 2013;13(12):862–874.'
+            : 'Hotchkiss RS, Monneret G, Payen D. Imunosupresi akibat sepsis: dari disfungsi seluler hingga imunoterapi. <em>Nat Rev Immunol.</em> 2013;13(12):862–874.' },
+        ].map(r => `
+          <div style="display:flex;gap:10px;padding:10px 12px;background:rgba(37,99,235,.04);border:1px solid rgba(37,99,235,.10);border-radius:10px;border-left:3px solid rgba(37,99,235,.35)">
+            <span style="font-size:11px;font-weight:800;color:#2563EB;font-family:'JetBrains Mono',monospace;min-width:20px;padding-top:1px">${r.num}.</span>
+            <span style="font-size:12px;color:var(--text);line-height:1.65;font-family:'Plus Jakarta Sans',sans-serif">${r.text}</span>
+          </div>`).join('')}
+      </div>
+      <div class="ref-text" style="margin-top:14px;font-size:10px">
+        ${lang==='en'
+          ? '⚠ SepsiGo is a clinical decision-support tool intended to assist, not replace, clinical judgement. All results should be interpreted in the context of the full clinical picture.'
+          : '⚠ SepsiGo adalah alat bantu pengambilan keputusan klinis yang dimaksudkan untuk mendukung, bukan menggantikan, penilaian klinis. Semua hasil harus diinterpretasikan dalam konteks gambaran klinis secara keseluruhan.'}
+      </div>
     </div>`;
 
   // Disclaimer text
