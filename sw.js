@@ -1,96 +1,96 @@
 // ─── SepsiGo Service Worker ──────────────────────────────────────────────────
-// Versi cache — naikkan angka ini setiap kali ada update file agar cache lama
-// otomatis dihapus dan diganti yang baru.
-const CACHE_NAME = 'sepsigo-v6';
+const CACHE_NAME = 'sepsigo-v7';
 
-// File-file yang di-cache saat install (App Shell)
-const APP_SHELL = [
-  './index.html',
-  './SepsiGo.html',
-  './manifest.json',
+// Aset statis yang aman di-cache lama (icons, logo — jarang berubah)
+const STATIC_ASSETS = [
   './Logo.png',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
 
-// ── INSTALL: cache semua file app shell ──────────────────────────────────────
+// ── INSTALL: cache hanya aset statis ─────────────────────────────────────────
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())  // aktifkan SW baru segera
+      .then(cache => cache.addAll(STATIC_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
-// ── ACTIVATE: hapus cache versi lama ────────────────────────────────────────
+// ── ACTIVATE: hapus semua cache versi lama ───────────────────────────────────
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())  // ambil kendali semua tab segera
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
-// ── FETCH: strategi Cache-First dengan fallback ke network ──────────────────
-// Semua request dicoba dari cache dulu.
-// Jika tidak ada di cache (misal font Google), coba ambil dari network dan
-// simpan ke cache untuk request berikutnya.
-// Jika network juga gagal (offline), kembalikan halaman utama dari cache.
+// ── FETCH ─────────────────────────────────────────────────────────────────────
+// HTML (index.html, SepsiGo.html)  → Network-First: selalu ambil versi terbaru,
+//                                    fallback ke cache jika offline.
+// Aset statis (icons, Logo, fonts) → Cache-First: cepat, jarang berubah.
+// Lainnya                          → Network only.
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Hanya handle GET request
   if (request.method !== 'GET') return;
-
-  // Lewati request ke chrome-extension atau non-http
   if (!url.protocol.startsWith('http')) return;
 
-  event.respondWith(
-    caches.match(request)
-      .then(cached => {
-        if (cached) return cached;
+  const isHTML = request.destination === 'document' ||
+    url.pathname.endsWith('.html') ||
+    url.pathname === '/' ||
+    url.pathname === '';
 
-        // Tidak ada di cache — ambil dari network
-        return fetch(request)
-          .then(response => {
-            // Hanya cache response yang valid (status 200, bukan opaque)
-            if (
-              response &&
-              response.status === 200 &&
-              response.type !== 'opaque'
-            ) {
-              const responseClone = response.clone();
-              caches.open(CACHE_NAME).then(cache => {
-                // Cache font Google dan aset statis
-                if (
-                  url.hostname === 'fonts.googleapis.com' ||
-                  url.hostname === 'fonts.gstatic.com' ||
-                  url.pathname.startsWith('./icons/')
-                ) {
-                  cache.put(request, responseClone);
-                }
-              });
-            }
-            return response;
-          })
-          .catch(() => {
-            // Network gagal — kembalikan halaman utama dari cache
-            if (request.destination === 'document') {
-              return caches.match('./SepsiGo.html');
-            }
-            // Untuk resource lain, kembalikan response kosong
-            return new Response('', { status: 408, statusText: 'Offline' });
-          });
+  const isStaticAsset =
+    url.hostname === 'fonts.googleapis.com' ||
+    url.hostname === 'fonts.gstatic.com' ||
+    url.pathname.includes('/icons/') ||
+    url.pathname.endsWith('Logo.png') ||
+    url.pathname.endsWith('manifest.json');
+
+  if (isHTML) {
+    // Network-First untuk HTML — update selalu terlihat
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(c => c.put(request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request)
+          .then(cached => cached || caches.match('./SepsiGo.html'))
+        )
+    );
+    return;
+  }
+
+  if (isStaticAsset) {
+    // Cache-First untuk aset statis
+    event.respondWith(
+      caches.match(request).then(cached => {
+        if (cached) return cached;
+        return fetch(request).then(response => {
+          if (response && response.status === 200 && response.type !== 'opaque') {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(c => c.put(request, clone));
+          }
+          return response;
+        });
       })
-  );
+    );
+    return;
+  }
+
+  // Semua request lain: network langsung (API, dll.)
 });
 
-// ── MESSAGE: handle pesan dari halaman utama ─────────────────────────────────
+// ── MESSAGE ───────────────────────────────────────────────────────────────────
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
