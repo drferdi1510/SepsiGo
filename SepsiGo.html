@@ -52,7 +52,248 @@
     --shadow-lg: 0 8px 40px rgba(37,99,235,.2), 0 16px 48px rgba(0,0,0,.10);
   }
 
+  /* ── DARK MODE ── */
+  [data-theme="dark"], @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --card: #1e293b;
+    --border: #334155;
+    --accent: #60a5fa;
+    --accent2: #93c5fd;
+    --accent-dark: #3b82f6;
+    --red: #f87171;
+    --red-dark: #ef4444;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --purple: #a78bfa;
+    --cyan: #22d3ee;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --dim: #475569;
+    --header-bg: #1e3a8a;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+    --shadow-md: 0 4px 24px rgba(0,0,0,.3), 0 8px 32px rgba(0,0,0,.2);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,.4), 0 16px 48px rgba(0,0,0,.3);
+  }}
+  [data-theme="dark"] {
+    --bg: #0f172a; --surface: #1e293b; --card: #1e293b; --border: #334155;
+    --accent: #60a5fa; --accent2: #93c5fd; --accent-dark: #3b82f6;
+    --red: #f87171; --red-dark: #ef4444; --green: #34d399;
+    --yellow: #fbbf24; --purple: #a78bfa; --cyan: #22d3ee;
+    --text: #f1f5f9; --muted: #94a3b8; --dim: #475569;
+    --header-bg: #1e3a8a;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+    --shadow-md: 0 4px 24px rgba(0,0,0,.3), 0 8px 32px rgba(0,0,0,.2);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,.4), 0 16px 48px rgba(0,0,0,.3);
+  }
+  [data-theme="dark"] body { background: var(--bg); color: var(--text); }
+  [data-theme="dark"] .section,
+  [data-theme="dark"] .cpd-card,
+  [data-theme="dark"] .organ-card,
+  [data-theme="dark"] .sofa-total,
+  [data-theme="dark"] .result { background: var(--card) !important; border-color: var(--border) !important; }
+  [data-theme="dark"] .nav { background: rgba(30,41,59,.95) !important; border-color: var(--border) !important; }
+  [data-theme="dark"] input[type=number],
+  [data-theme="dark"] input[type=text],
+  [data-theme="dark"] input[type=date],
+  [data-theme="dark"] select {
+    background: #0f172a !important; border-color: var(--border) !important;
+    color: var(--text) !important;
+  }
+  [data-theme="dark"] .cpd-card { background: rgba(30,41,59,.8) !important; }
+  [data-theme="dark"] .organ-card { background: #0f172a !important; }
+  [data-theme="dark"] .ast-body { background: rgba(30,41,59,.9) !important; }
+  [data-theme="dark"] .ast-tag-wrap { background: #0f172a !important; border-color: var(--border) !important; }
+  [data-theme="dark"] .ward-panel { background: #0f172a !important; border-color: var(--border) !important; }
+  [data-theme="dark"] .wt-card.wt { background: rgba(16,185,129,.08) !important; }
+  [data-theme="dark"] .wt-card.nwt { background: rgba(239,68,68,.08) !important; }
+  [data-theme="dark"] .btn-reset { background: rgba(30,41,59,.9) !important; border-color: var(--border) !important; color: var(--muted) !important; }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-padding-top: 155px;
+    scroll-behavior: smooth;
+  }
+
+  /* ── MOTION TOKENS — consistent easing & duration ── */
+  :root {
+    --ease-spring:    cubic-bezier(0.16, 1, 0.3, 1);   /* expo-out — snappy, natural */
+    --ease-out:       cubic-bezier(0.4, 0, 0.2, 1);    /* Material standard */
+    --ease-bounce:    cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot */
+    --dur-fast:       150ms;
+    --dur-mid:        220ms;
+    --dur-slow:       350ms;
+    --dur-xslow:      500ms;
+  }
+
+  /* ── THEME TRANSITION — smooth dark/light switch ── */
+  body, .section, .nav, .cpd-card, .organ-card, .sofa-total,
+  input, select, .result, .ward-panel, .ast-body, .sofa-chip,
+  .cult-toggle, .btn-reset {
+    transition:
+      background var(--dur-mid) var(--ease-out),
+      background-color var(--dur-mid) var(--ease-out),
+      border-color var(--dur-mid) var(--ease-out),
+      color var(--dur-mid) var(--ease-out),
+      box-shadow var(--dur-mid) var(--ease-out) !important;
+  }
+
+  /* ── CURSOR POINTER — semua interactive elements ── */
+  button, [role="button"], .cult-toggle, .nav-btn, .lang-btn,
+  .ast-std-btn, .ast-toggle-btn, .ast-add-btn, .ward-tab,
+  .sofa-chip, .cpd-result-card, .cpd-card, label[for],
+  .dark-toggle-btn, select { cursor: pointer; }
+
+  /* ── TAB PANELS — crossfade transition ── */
+  .tab-panel-fade {
+    animation: tabFadeIn var(--dur-slow) var(--ease-spring) both;
+  }
+  @keyframes tabFadeIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.99); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ── PRESS / ACTIVE STATES — scale feedback ── */
+  button:active:not(:disabled),
+  .cult-toggle:active,
+  .ast-std-btn:active,
+  .ast-add-btn:active,
+  .ward-tab:active {
+    transform: scale(0.96) !important;
+    transition: transform 80ms ease-in !important;
+  }
+  .btn-calc:active:not(:disabled) {
+    transform: translateY(1px) scale(0.98) !important;
+    transition: transform 80ms ease-in !important;
+  }
+  .nav-btn:active { transform: scale(0.95) !important; }
+  .cpd-card:active  { transform: scale(0.99) !important; }
+  .sofa-chip:active { transform: scale(0.95) !important; }
+
+  /* ── NAV BUTTON — smooth active transition ── */
+  .nav-btn {
+    transition:
+      background var(--dur-mid) var(--ease-spring),
+      color var(--dur-mid) var(--ease-spring),
+      box-shadow var(--dur-mid) var(--ease-spring),
+      transform var(--dur-fast) var(--ease-spring) !important;
+  }
+
+  /* ── SECTION CARD ENTRANCE — stagger ── */
+  .section:nth-child(1) { animation-delay: 0ms; }
+  .section:nth-child(2) { animation-delay: 40ms; }
+  .section:nth-child(3) { animation-delay: 80ms; }
+  .section:nth-child(4) { animation-delay: 120ms; }
+  .section:nth-child(5) { animation-delay: 160ms; }
+
+  /* ── SMOOTH CARD HOVER — upgrade to spring easing ── */
+  .section, .cpd-card, .organ-card, .cpd-result-card {
+    transition:
+      transform var(--dur-mid) var(--ease-spring),
+      box-shadow var(--dur-mid) var(--ease-spring),
+      background var(--dur-mid) var(--ease-out),
+      border-color var(--dur-mid) var(--ease-out) !important;
+    will-change: transform;
+  }
+
+  /* ── SLOWER SHIMMER — less distracting (6s cycle) ── */
+  .section::before {
+    animation-duration: 6s !important;
+    animation-timing-function: ease-in-out !important;
+  }
+
+  /* ── SLOWER ABNORMAL GLOW ── */
+  .cpd-result-card.abnormal {
+    animation-duration: 3s !important;
+  }
+
+  /* ── RESULT CARD REVEAL — smooth entrance ── */
+  .result {
+    animation: resultReveal var(--dur-xslow) var(--ease-spring) both !important;
+  }
+  @keyframes resultReveal {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ── COLLAPSE/EXPAND AST SECTION — smooth ── */
+  .ast-body {
+    transition:
+      opacity var(--dur-mid) var(--ease-out),
+      transform var(--dur-mid) var(--ease-spring) !important;
+  }
+  .ast-body:not(.open) {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.99);
+    pointer-events: none;
+  }
+  .ast-body.open {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── WARD TAB CONTENT — crossfade ── */
+  .ward-panel {
+    animation: tabFadeIn var(--dur-mid) var(--ease-spring) both !important;
+  }
+
+  /* ── CULT TOGGLE SMOOTH ── */
+  .cult-toggle {
+    transition:
+      background var(--dur-mid) var(--ease-spring),
+      color var(--dur-mid) var(--ease-spring),
+      box-shadow var(--dur-mid) var(--ease-spring),
+      border-color var(--dur-mid) var(--ease-spring) !important;
+  }
+
+  /* ── BUTTON HOVER LIFT — spring feel ── */
+  .btn-calc, .btn-reset {
+    transition:
+      transform var(--dur-mid) var(--ease-spring),
+      box-shadow var(--dur-mid) var(--ease-spring),
+      opacity var(--dur-fast) var(--ease-out) !important;
+  }
+  .btn-calc:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* ── SOFA BAR — smooth fill animation ── */
+  .sofa-bar {
+    transition: width 0.7s var(--ease-spring) !important;
+  }
+
+  /* ── FOCUS RING — smooth appear ── */
+  :focus-visible {
+    transition: box-shadow var(--dur-fast) var(--ease-out) !important;
+  }
+
+  /* ── DARK TOGGLE BUTTON — smooth icon swap ── */
+  #dark-toggle-btn {
+    transition:
+      background var(--dur-mid) var(--ease-spring),
+      transform var(--dur-fast) var(--ease-spring) !important;
+  }
+  #dark-toggle-btn:hover { transform: rotate(20deg) scale(1.1); }
+  #dark-toggle-btn:active { transform: rotate(30deg) scale(0.95); }
+
+  /* ── MESH BACKGROUND — GPU layer ── */
+  body::before, body::after {
+    will-change: transform, opacity;
+  }
+
+  /* ── REDUCED MOTION OVERRIDE — flatten all above ── */
+  @media (prefers-reduced-motion: reduce) {
+    .section::before { animation: none !important; }
+    body::before, body::after { animation: none !important; }
+    .cpd-result-card.abnormal { animation: none !important; }
+    .result.sepsis { animation: none !important; }
+    .tab-panel-fade, .result, .ward-panel { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .ast-body, .cult-toggle, .nav-btn, .btn-calc,
+    .btn-reset, .section, .cpd-card, .organ-card { transition-duration: 0.01ms !important; }
+  }
 
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -63,6 +304,327 @@
     color: var(--text);
     min-height: 100vh;
     line-height: 1.5;
+  }
+
+  /* ── REDUCED MOTION (WCAG 2.1 AA) ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 32px 16px; text-align: center;
+    color: var(--muted); gap: 10px;
+  }
+  .empty-state svg { opacity: .35; }
+  .empty-state p { font-size: 13px; line-height: 1.6; max-width: 280px; }
+
+  /* ══════════════════════════════════════════════════════════════
+     GLASSMORPHISM + MODERN DYNAMIC EFFECTS
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── ANIMATED GRADIENT BACKGROUND MESH ── */
+  body {
+    background: #EEF2FF;
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(37,99,235,.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(139,92,246,.14) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 60% at 90% 20%, rgba(6,182,212,.10) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 40% at 10% 90%, rgba(16,185,129,.08) 0%, transparent 50%);
+    animation: meshDrift 16s ease-in-out infinite alternate;
+  }
+  @keyframes meshDrift {
+    0%   { opacity: .8; transform: scale(1) rotate(0deg); }
+    50%  { opacity: 1;  transform: scale(1.04) rotate(.5deg); }
+    100% { opacity: .9; transform: scale(1) rotate(0deg); }
+  }
+
+  /* ── FLOATING ORBS (background ambient) ── */
+  body::after {
+    content: '';
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(37,99,235,.07) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    z-index: 0; pointer-events: none;
+    animation: orbPulse 10s ease-in-out infinite;
+  }
+  @keyframes orbPulse {
+    0%, 100% { transform: scale(1) translate(0, 0); opacity: .6; }
+    50%       { transform: scale(1.15) translate(-20px, 30px); opacity: 1; }
+  }
+
+  /* ── GLASS CARDS (.section) — frosted glass ── */
+  .section {
+    background: rgba(255,255,255,.65) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(255,255,255,.8) !important;
+    box-shadow:
+      0 2px 4px rgba(0,0,0,.04),
+      0 8px 32px rgba(37,99,235,.10),
+      0 1px 0 rgba(255,255,255,.9) inset !important;
+    transition: box-shadow .3s cubic-bezier(.4,0,.2,1), transform .3s cubic-bezier(.4,0,.2,1) !important;
+    position: relative; z-index: 1;
+  }
+  .section:hover {
+    box-shadow:
+      0 4px 8px rgba(0,0,0,.06),
+      0 16px 48px rgba(37,99,235,.16),
+      0 1px 0 rgba(255,255,255,.9) inset !important;
+    transform: translateY(-2px);
+  }
+
+  /* ── SHIMMER TOP ACCENT — animated gradient border top ── */
+  .section::before {
+    background: linear-gradient(90deg, #2563EB, #8B5CF6, #06B6D4, #2563EB) !important;
+    background-size: 200% 100% !important;
+    animation: shimmerBorder 3s linear infinite !important;
+    height: 2px !important;
+  }
+  @keyframes shimmerBorder {
+    0%   { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* ── CPD CARDS — glass variant ── */
+  .cpd-card {
+    background: rgba(240,247,255,.70) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255,255,255,.75) !important;
+    box-shadow: 0 2px 12px rgba(37,99,235,.08), 0 1px 0 rgba(255,255,255,.8) inset !important;
+    transition: all .25s cubic-bezier(.4,0,.2,1) !important;
+  }
+  .cpd-card:hover {
+    background: rgba(255,255,255,.85) !important;
+    box-shadow: 0 4px 20px rgba(37,99,235,.18), 0 1px 0 rgba(255,255,255,.9) inset !important;
+    transform: translateY(-3px) !important;
+  }
+
+  /* ── ORGAN CARDS ── */
+  .organ-card {
+    background: rgba(248,250,255,.80) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255,255,255,.75) !important;
+    transition: all .25s cubic-bezier(.4,0,.2,1) !important;
+  }
+  .organ-card:hover {
+    border-left-color: #2563EB !important;
+    box-shadow: 0 6px 24px rgba(37,99,235,.14), 0 1px 0 rgba(255,255,255,.9) inset !important;
+    transform: translateX(3px);
+    background: rgba(255,255,255,.92) !important;
+  }
+
+  /* ── SOFA TOTAL BOX ── */
+  .sofa-total {
+    background: linear-gradient(135deg, rgba(239,246,255,.85), rgba(245,243,255,.75)) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255,255,255,.80) !important;
+    box-shadow: 0 4px 20px rgba(37,99,235,.12), 0 1px 0 rgba(255,255,255,.9) inset !important;
+  }
+
+  /* ── RESULT CARDS — dramatic glass glow ── */
+  .result {
+    backdrop-filter: blur(16px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+    border: 1.5px solid rgba(255,255,255,.6) !important;
+    transition: box-shadow .35s ease !important;
+  }
+  .result.sepsis {
+    background: linear-gradient(135deg, rgba(255,241,242,.80), rgba(254,226,226,.70)) !important;
+    border-color: rgba(239,68,68,.35) !important;
+    box-shadow: 0 8px 40px rgba(239,68,68,.18), 0 2px 8px rgba(239,68,68,.12),
+                0 0 0 1px rgba(239,68,68,.12) inset !important;
+    animation: sepsisPulse 2.5s ease-in-out infinite !important;
+  }
+  @keyframes sepsisPulse {
+    0%, 100% { box-shadow: 0 8px 40px rgba(239,68,68,.18), 0 2px 8px rgba(239,68,68,.12); }
+    50%       { box-shadow: 0 12px 50px rgba(239,68,68,.28), 0 4px 16px rgba(239,68,68,.18); }
+  }
+  .result.no-sepsis {
+    background: linear-gradient(135deg, rgba(240,253,244,.80), rgba(220,252,231,.70)) !important;
+    border-color: rgba(16,185,129,.30) !important;
+    box-shadow: 0 6px 32px rgba(16,185,129,.14), 0 0 0 1px rgba(16,185,129,.10) inset !important;
+  }
+
+  /* ── BUTTONS — glow on hover ── */
+  .btn-calc:hover {
+    box-shadow: 0 8px 32px rgba(239,68,68,.45), 0 1px 0 rgba(255,255,255,.15) inset,
+                0 0 20px rgba(239,68,68,.25) !important;
+  }
+  .btn-calc.blue:hover {
+    box-shadow: 0 8px 32px rgba(37,99,235,.45), 0 1px 0 rgba(255,255,255,.15) inset,
+                0 0 20px rgba(37,99,235,.25) !important;
+  }
+  .nav-btn.active {
+    box-shadow: 0 3px 12px rgba(37,99,235,.35), 0 0 16px rgba(37,99,235,.20) !important;
+  }
+
+  /* ── INPUTS — glass style ── */
+  input[type=number], input[type=text], input[type=date], select {
+    background: rgba(248,250,255,.85) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1.5px solid rgba(219,234,254,.9) !important;
+    transition: all .22s cubic-bezier(.4,0,.2,1) !important;
+  }
+  input:focus, select:focus {
+    background: rgba(255,255,255,.98) !important;
+    box-shadow: 0 0 0 4px rgba(37,99,235,.12), 0 2px 8px rgba(37,99,235,.10) !important;
+  }
+
+  /* ── WARD PANELS — glass ── */
+  .ward-panel {
+    background: rgba(248,250,255,.80) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-color: rgba(219,234,254,.8) !important;
+  }
+  .wt-card.wt   { background: rgba(240,253,244,.75) !important; backdrop-filter: blur(8px) !important; }
+  .wt-card.nwt  { background: rgba(254,242,242,.75) !important; backdrop-filter: blur(8px) !important; }
+
+  /* ── CPD RESULT CARDS — glass micro ── */
+  .cpd-result-card {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    transition: all .22s cubic-bezier(.4,0,.2,1) !important;
+  }
+  .cpd-result-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 28px rgba(37,99,235,.18) !important;
+  }
+  .cpd-result-card.abnormal { animation: abnormalGlow 2s ease-in-out infinite !important; }
+  @keyframes abnormalGlow {
+    0%,100% { box-shadow: 0 3px 12px rgba(239,68,68,.10); }
+    50%      { box-shadow: 0 6px 20px rgba(239,68,68,.22); }
+  }
+
+  /* ── SECTION TITLE BADGES — glass pill ── */
+  .section-title {
+    background: linear-gradient(135deg, rgba(37,99,235,.12), rgba(139,92,246,.08)) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(37,99,235,.20) !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,.08) !important;
+    transition: all .2s !important;
+  }
+  .section-title:hover { box-shadow: 0 4px 12px rgba(37,99,235,.15) !important; }
+
+  /* ── CULT TOGGLE BUTTONS — active glow ── */
+  .cult-toggle.active {
+    box-shadow: 0 3px 16px rgba(37,99,235,.35), 0 0 12px rgba(37,99,235,.18) !important;
+  }
+  .cult-toggle { transition: all .22s cubic-bezier(.4,0,.2,1) !important; }
+
+  /* ── SOFA/CPD CHIPS ── */
+  .sofa-chip, .cpd-stat {
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    transition: transform .2s !important;
+  }
+  .sofa-chip:hover { transform: translateY(-3px) scale(1.04) !important; }
+
+  /* ── WARD TABS — glass active ── */
+  .ward-tab.active {
+    box-shadow: 0 2px 12px rgba(30,64,175,.30), 0 0 8px rgba(37,99,235,.15) !important;
+  }
+
+  /* ── NAVIGATION BAR — glass ── */
+  .nav {
+    background: rgba(255,255,255,.82) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255,255,255,.7) !important;
+    box-shadow: 0 4px 20px rgba(37,99,235,.08), 0 1px 0 rgba(255,255,255,.8) inset !important;
+  }
+
+  /* ── EMPTY STATE — glass card ── */
+  .empty-state {
+    background: rgba(248,250,255,.60);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px dashed rgba(37,99,235,.20);
+    border-radius: 16px;
+    margin: 8px 0;
+  }
+
+  /* ── DARK MODE GLASSMORPHISM ── */
+  [data-theme="dark"] body::before {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(37,99,235,.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(139,92,246,.10) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 60% at 90% 20%, rgba(6,182,212,.08) 0%, transparent 50%);
+  }
+  [data-theme="dark"] .section {
+    background: rgba(30,41,59,.65) !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,.30), 0 1px 0 rgba(255,255,255,.06) inset !important;
+  }
+  [data-theme="dark"] .section:hover {
+    box-shadow: 0 8px 40px rgba(0,0,0,.40), 0 1px 0 rgba(255,255,255,.08) inset !important;
+  }
+  [data-theme="dark"] .cpd-card {
+    background: rgba(15,23,42,.60) !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+  }
+  [data-theme="dark"] .organ-card {
+    background: rgba(15,23,42,.60) !important;
+    border-color: rgba(255,255,255,.06) !important;
+  }
+  [data-theme="dark"] .nav {
+    background: rgba(15,23,42,.80) !important;
+    border-bottom-color: rgba(255,255,255,.06) !important;
+  }
+  [data-theme="dark"] .result.sepsis {
+    background: linear-gradient(135deg, rgba(127,29,29,.50), rgba(153,27,27,.40)) !important;
+    border-color: rgba(239,68,68,.40) !important;
+  }
+  [data-theme="dark"] .result.no-sepsis {
+    background: linear-gradient(135deg, rgba(6,78,59,.50), rgba(4,120,87,.40)) !important;
+    border-color: rgba(52,211,153,.30) !important;
+  }
+  [data-theme="dark"] input[type=number],
+  [data-theme="dark"] input[type=text],
+  [data-theme="dark"] input[type=date],
+  [data-theme="dark"] select {
+    background: rgba(15,23,42,.70) !important;
+    border-color: rgba(255,255,255,.12) !important;
+  }
+  [data-theme="dark"] .ward-panel,
+  [data-theme="dark"] .ast-body {
+    background: rgba(15,23,42,.70) !important;
+    border-color: rgba(255,255,255,.08) !important;
+  }
+  [data-theme="dark"] .sofa-chip {
+    background: rgba(30,41,59,.80) !important;
+    border-color: rgba(255,255,255,.10) !important;
+  }
+
+  /* ── TIPOGRAFI — JetBrains Mono hanya untuk data/angka/kode ── */
+  .rec-text, .cult-note, .about-body, .wt-desc, .ward-drug-note,
+  .sofa-interpret, .sofa-hint, .cpd-result-cutoff, .ast-ref-note,
+  .ward-no-po, .ast-nodata {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 13px;
+    line-height: 1.65;
   }
 
   /* ── HEADER ── */
@@ -256,6 +818,29 @@
     border-color: #2563EB;
     background: #fff;
     box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── TOUCH TARGETS min 44×44px (Apple HIG / WCAG) ── */
+  button, .cult-toggle, .nav-btn, .lang-btn, .ast-std-btn,
+  .ast-toggle-btn, .ast-add-btn, .ward-tab,
+  input[type=date], select {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+  .btn-calc, .btn-reset { min-height: 48px; }
+  .ast-add-btn { min-height: 36px; min-width: 36px; }
+
+  /* ── FOCUS RING — keyboard nav (WCAG 2.1 AA) ── */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid #2563EB;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(37,99,235,.25) !important;
+  }
+  [data-theme="dark"] :focus-visible {
+    outline-color: #60a5fa;
+    box-shadow: 0 0 0 4px rgba(96,165,250,.35) !important;
   }
   input[type=number] { width: 110px; }
   input[type=text]   { width: 100%; }
@@ -1303,6 +1888,7 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         <span id="pwa-install-label">Install</span>
       </button>
+      <button class="lang-btn" id="dark-toggle-btn" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode" style="margin-right:6px;padding:7px 10px;font-size:15px">🌙</button>
       <button class="lang-btn" onclick="toggleLang()">🇬🇧 EN</button>
     </div>
   </div>
@@ -1311,10 +1897,22 @@
 <!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
-    <button class="nav-btn active" onclick="showTab('calc',this)" data-t="navCalc"><span class="nav-icon">⚡</span><span data-t="navCalc">Deteksi Cepat</span></button>
-    <button class="nav-btn" onclick="showTab('extra',this)" data-t="navExtra"><span class="nav-icon">📋</span><span data-t="navExtra">Skor Sepsis</span></button>
-    <button class="nav-btn" onclick="showTab('kultur',this)" data-t="navKultur"><span class="nav-icon">🔬</span><span data-t="navKultur">Identifikasi Kultur</span></button>
-    <button class="nav-btn" onclick="showTab('about',this)" data-t="navAbout"><span class="nav-icon">ℹ️</span><span data-t="navAbout">Tentang</span></button>
+    <button class="nav-btn active" onclick="showTab('calc',this)" data-t="navCalc" aria-label="Deteksi Cepat">
+      <span class="nav-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+      <span data-t="navCalc">Deteksi Cepat</span>
+    </button>
+    <button class="nav-btn" onclick="showTab('extra',this)" data-t="navExtra" aria-label="Skor Sepsis">
+      <span class="nav-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg></span>
+      <span data-t="navExtra">Skor Sepsis</span>
+    </button>
+    <button class="nav-btn" onclick="showTab('kultur',this)" data-t="navKultur" aria-label="Identifikasi Kultur">
+      <span class="nav-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>
+      <span data-t="navKultur">Identifikasi Kultur</span>
+    </button>
+    <button class="nav-btn" onclick="showTab('about',this)" data-t="navAbout" aria-label="Tentang">
+      <span class="nav-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span>
+      <span data-t="navAbout">Tentang</span>
+    </button>
   </div>
 </div>
 
@@ -1337,7 +1935,7 @@
       </div>
       <div class="patient-field" style="flex:0 0 80px">
         <div class="patient-label" data-t="lblAge">Usia (thn)</div>
-        <input type="number" id="age" min="18" placeholder="≥18">
+        <input type="number" id="age" inputmode="numeric" min="18" placeholder="≥18">
       </div>
       <div class="patient-field" style="flex:0 0 100px">
         <div class="patient-label" data-t="lblSex">Jenis Kelamin</div>
@@ -1373,7 +1971,7 @@
       </div>
       <div class="cpd-input-row">
         <div class="cpd-input-label" data-t="inputLabel">Nilai:</div>
-        <input type="number" id="ne_wy" step="0.01" placeholder="—" oninput="updateCPDFlag('ne_wy', this.value, 736.00)">
+        <input type="number" id="ne_wy" inputmode="decimal" step="0.01" placeholder="—" oninput="updateCPDFlag('ne_wy', this.value, 736.00)">
         <span id="flag-ne_wy"></span>
       </div>
     </div>
@@ -1443,7 +2041,7 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="newsRRLabel">Laju Napas (×/menit)</div>
-          <input type="number" id="news_rr" placeholder="e.g. 18" oninput="calcNews2()">
+          <input type="number" id="news_rr" inputmode="numeric" placeholder="e.g. 18" oninput="calcNews2()">
         </div>
       </div>
       <div class="sofa-hint">≤8=3 · 9–11=1 · 12–20=0 · 21–24=2 · ≥25=3</div>
@@ -1457,7 +2055,7 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="newsSpo2Label">SpO₂ (%)</div>
-          <input type="number" id="news_spo2" min="50" max="100" placeholder="e.g. 98" oninput="calcNews2()">
+          <input type="number" id="news_spo2" inputmode="numeric" min="50" max="100" placeholder="e.g. 98" oninput="calcNews2()">
         </div>
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="newsO2Label">Suplementasi O₂?</div>
@@ -1478,7 +2076,7 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="newsSbpLabel">SBP (mmHg)</div>
-          <input type="number" id="news_sbp" placeholder="e.g. 120" oninput="calcNews2()">
+          <input type="number" id="news_sbp" inputmode="numeric" placeholder="e.g. 120" oninput="calcNews2()">
         </div>
       </div>
       <div class="sofa-hint">≤90=3 · 91–100=2 · 101–110=1 · 111–219=0 · ≥220=3</div>
@@ -1492,7 +2090,7 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="newsHrLabel">Nadi (×/menit)</div>
-          <input type="number" id="news_hr" placeholder="e.g. 80" oninput="calcNews2()">
+          <input type="number" id="news_hr" inputmode="numeric" placeholder="e.g. 80" oninput="calcNews2()">
         </div>
       </div>
       <div class="sofa-hint">≤40=3 · 41–50=1 · 51–90=0 · 91–110=1 · 111–130=2 · ≥131=3</div>
@@ -1523,7 +2121,7 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="newsTempLabel">Suhu (°C)</div>
-          <input type="number" id="news_temp" step="0.1" placeholder="e.g. 37.0" oninput="calcNews2()">
+          <input type="number" id="news_temp" inputmode="decimal" step="0.1" placeholder="e.g. 37.0" oninput="calcNews2()">
         </div>
       </div>
       <div class="sofa-hint">≤35.0=3 · 35.1–36.0=1 · 36.1–38.0=0 · 38.1–39.0=1 · ≥39.1=2</div>
@@ -1555,7 +2153,7 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label">GCS (3–15)</div>
-          <input type="number" id="gcs" min="3" max="15" placeholder="15" oninput="calcSofa()">
+          <input type="number" id="gcs" inputmode="numeric" min="3" max="15" placeholder="15" oninput="calcSofa()">
         </div>
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="deliriumLabel">Obat anti-delirium?</div>
@@ -1577,11 +2175,11 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="sfSpo2Label">SpO₂ (%)</div>
-          <input type="number" id="sf_spo2" min="50" max="100" placeholder="e.g. 96" oninput="calcSofa()">
+          <input type="number" id="sf_spo2" inputmode="numeric" min="50" max="100" placeholder="e.g. 96" oninput="calcSofa()">
         </div>
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="sfFio2Label">FiO₂ (%, 21–100)</div>
-          <input type="number" id="sf_fio2" min="21" max="100" placeholder="e.g. 21" oninput="calcSofa()">
+          <input type="number" id="sf_fio2" inputmode="numeric" min="21" max="100" placeholder="e.g. 21" oninput="calcSofa()">
         </div>
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="advVentLabel">Bantuan ventilasi lanjut?</div>
@@ -1603,7 +2201,7 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label">MAP (mmHg)</div>
-          <input type="number" id="map" placeholder="e.g. 70" oninput="calcSofa()">
+          <input type="number" id="map" inputmode="numeric" placeholder="e.g. 70" oninput="calcSofa()">
         </div>
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="vasoLabel">Dukungan Vasopresor/Inotropik</div>
@@ -1626,7 +2224,7 @@
       </div>
       <div class="organ-input-group" style="max-width:210px">
         <div class="organ-input-label" data-t="biliLabel">Bilirubin Total (mg/dL)</div>
-        <input type="number" id="bili" step="0.1" placeholder="e.g. 1.0" oninput="calcSofa()">
+        <input type="number" id="bili" inputmode="decimal" step="0.1" placeholder="e.g. 1.0" oninput="calcSofa()">
       </div>
       <div class="sofa-hint" data-t="hintLiver2">≤1.2=0 · &gt;1.2–3.0=1 · &gt;3.0–6.0=2 · &gt;6.0–12.0=3 · &gt;12.0=4</div>
     </div>
@@ -1640,11 +2238,11 @@
       <div class="organ-inputs">
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="crLabel">Creatinine (mg/dL)</div>
-          <input type="number" id="cr" step="0.1" placeholder="e.g. 1.0" oninput="calcSofa()">
+          <input type="number" id="cr" inputmode="decimal" step="0.1" placeholder="e.g. 1.0" oninput="calcSofa()">
         </div>
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="uoRateLabel">Urine Output (mL/kgBB/jam)</div>
-          <input type="number" id="uo_rate" step="0.01" placeholder="e.g. 0.6" oninput="calcSofa()">
+          <input type="number" id="uo_rate" inputmode="decimal" step="0.01" placeholder="e.g. 0.6" oninput="calcSofa()">
         </div>
         <div class="organ-input-group">
           <div class="organ-input-label" data-t="dialysisLabel">Dialisis (akut/kronik)?</div>
@@ -1665,7 +2263,7 @@
       </div>
       <div class="organ-input-group" style="max-width:210px">
         <div class="organ-input-label" data-t="pltLabel">Platelets (×10³/µL)</div>
-        <input type="number" id="plt" placeholder="e.g. 180" oninput="calcSofa()">
+        <input type="number" id="plt" inputmode="numeric" placeholder="e.g. 180" oninput="calcSofa()">
       </div>
       <div class="sofa-hint" data-t="hintCoag2">&gt;150=0 · ≤150=1 · ≤100=2 · 50–80=3 · ≤50=4</div>
     </div>
@@ -4025,6 +4623,10 @@ function switchWardTab(btn, panelId) {
 
 function identifyKultur() {
   const resArea = document.getElementById('kultur-result-area');
+  const btn = document.getElementById('btn-identify-kultur');
+
+  // Loading state — cegah double submit
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin .7s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Menganalisis...</span>'; }
 
   // Trigger full recalc first
   recalcAllSets();
@@ -4117,6 +4719,9 @@ function identifyKultur() {
 
   // Simpan data kultur otomatis ke localStorage
   saveKulturData(true);
+
+  // Restore button
+  if (btn) { btn.disabled = false; btn.innerHTML = '🔬 Analisa &amp; Identifikasi'; }
 }
 
 function switchToCalcAndCalculate() {
@@ -4276,10 +4881,13 @@ function _runCalculate() {
   let resultHTMLBlocks = '';
 
   // BLOCK 1: SKRINING AWAL (CPD only)
+  const iconAwal = isSepsisAwal
+    ? `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px;color:var(--red-dark)"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
+    : `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px;color:var(--green)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
   resultHTMLBlocks += `
-    <div class="result ${resultClassAwal}">
+    <div class="result ${resultClassAwal}" style="border-style:${isSepsisAwal ? 'solid' : 'solid'};border-width:${isSepsisAwal ? '2px' : '1.5px'}">
       <div class="result-label" data-t="resultAwalLabel">SKRINING AWAL (CPD)</div>
-      <div class="result-verdict" style="color:${verdictAwalColor}">${verdictAwal}</div>
+      <div class="result-verdict" style="color:${verdictAwalColor};display:flex;align-items:center">${iconAwal}${verdictAwal}</div>
       <div class="result-block">
         <div class="result-block-title">${t.resultCPDLabel}</div>
         <div class="cpd-result-grid">${cpdCards}</div>
@@ -4331,10 +4939,13 @@ function _runCalculate() {
       `<div class="rec-item"><span class="rec-arrow" style="color:${recColor}">→</span><span class="rec-text">${r}</span></div>`
     ).join('');
 
+    const iconLanjutan = isSepsisLanjutan
+      ? `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px;color:var(--red-dark)"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:8px;color:var(--green)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
     resultHTMLBlocks += `
-      <div class="result ${resultClassLanjutan}" style="margin-top:16px">
+      <div class="result ${resultClassLanjutan}" style="margin-top:16px;border-width:${isSepsisLanjutan ? '2px' : '1.5px'}">
         <div class="result-label" data-t="resultLanjutanLabel">SKRINING LANJUTAN</div>
-        <div class="result-verdict" style="color:${verdictLanjutanColor}">${verdictLanjutan}</div>`;
+        <div class="result-verdict" style="color:${verdictLanjutanColor};display:flex;align-items:center">${iconLanjutan}${verdictLanjutan}</div>`;
 
     if (hasSOFAData) {
       resultHTMLBlocks += `
@@ -4388,6 +4999,10 @@ function _runCalculate() {
 
 // ─── RESET ────────────────────────────────────────────────────────────────
 function resetAll() {
+  const msg = lang === 'en'
+    ? 'Reset all data? This action cannot be undone.'
+    : 'Reset semua data? Tindakan ini tidak bisa dibatalkan.';
+  if (!confirm(msg)) return;
   ['no_rm','sid','age','gcs','sf_spo2','sf_fio2','map','bili','cr','uo_rate','plt','ne_wy',
    'news_rr','news_spo2','news_sbp','news_hr','news_temp'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
@@ -4534,7 +5149,12 @@ function showTab(name, btn) {
     document.getElementById('tab-'+t).style.display = 'none';
   });
   _showTabLoader(() => {
-    document.getElementById('tab-'+name).style.display = '';
+    const el = document.getElementById('tab-'+name);
+    el.style.display = '';
+    // Tab crossfade entrance
+    el.classList.remove('tab-panel-fade');
+    void el.offsetWidth; // reflow trigger
+    el.classList.add('tab-panel-fade');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (name === 'extra')   setTimeout(previewExtraLink,  50);
     if (name === 'kultur')  setTimeout(previewKulturLink, 50);
@@ -4706,6 +5326,34 @@ function applyLang() {
   calcSofa();
 }
 function toggleLang() { lang = lang === 'id' ? 'en' : 'id'; applyLang(); }
+
+// ── DARK MODE ──────────────────────────────────────────────────────────────────
+let darkMode = localStorage.getItem('sepsigo_dark') === '1' ||
+  (localStorage.getItem('sepsigo_dark') === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+function applyDark() {
+  document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  const btn = document.getElementById('dark-toggle-btn');
+  if (btn) btn.textContent = darkMode ? '☀️' : '🌙';
+  try { localStorage.setItem('sepsigo_dark', darkMode ? '1' : '0'); } catch(e) {}
+}
+function toggleDark() { darkMode = !darkMode; applyDark(); }
+applyDark();
+
+// ── EMPTY STATES ────────────────────────────────────────────────────────────
+const _emptyCalc = `<div class="empty-state">
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+  <p>Isi parameter CPD di atas, lalu tekan <strong>Hitung Risiko</strong> untuk melihat hasil skrining sepsis.</p>
+</div>`;
+const _emptyKultur = `<div class="empty-state">
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+  <p>Pilih organisme pada set positif, isi data kepekaan antibiotik (opsional), lalu tekan <strong>Analisa &amp; Identifikasi</strong>.</p>
+</div>`;
+(function initEmptyStates() {
+  const rs = document.getElementById('result-section');
+  if (rs && !rs.innerHTML.trim()) rs.innerHTML = _emptyCalc;
+  const kr = document.getElementById('kultur-result-area');
+  if (kr && !kr.innerHTML.trim()) kr.innerHTML = _emptyKultur;
+})();
 
 // ─── CSV EXPORT ───────────────────────────────────────────────────────────
 // Storage untuk semua data yang pernah dihitung
