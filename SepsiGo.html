@@ -1735,7 +1735,11 @@
   @keyframes spOrb         { 0%,100%{opacity:.18;transform:translate(0,0) scale(1);} 33%{opacity:.28;transform:translate(20px,-15px) scale(1.05);} 66%{opacity:.20;transform:translate(-10px,20px) scale(0.95);} }
 
   #app-splash .sp-card {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     z-index: 2;
     display: -webkit-flex;
     display: flex;
@@ -1745,9 +1749,6 @@
     align-items: center;
     width: 90vw;
     max-width: 360px;
-    margin: 0 auto; /* fallback horizontal centering */
-    -webkit-align-self: center;
-    align-self: center;
     -webkit-animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
     animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
   }
