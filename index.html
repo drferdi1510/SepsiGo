@@ -13,9 +13,11 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html, body { height: 100%; }
     body {
-      min-height: 100vh;
-      min-height: 100dvh;
+      /* position:fixed+inset:0 lebih reliable dari min-height:100vh di iOS PWA */
+      position: fixed;
+      inset: 0;
       background: #060E24;
       font-family: 'Plus Jakarta Sans', sans-serif;
       overflow: hidden;
@@ -139,11 +141,12 @@
 
     /* ── TAGLINE ── */
     .tagline {
-      font-size: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      color: rgba(255,255,255,.50);
-      letter-spacing: 3px;
-      text-transform: uppercase;
+      font-size: 14px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-style: italic;
+      color: rgba(255,255,255,.65);
+      letter-spacing: .4px;
       margin-bottom: 36px;
       animation: fadeSlideUp .8s .4s cubic-bezier(.4,0,.2,1) both;
     }
@@ -280,7 +283,7 @@
     </div>
 
     <!-- Tagline -->
-    <div class="tagline">Sepsis Early Detection System</div>
+    <div class="tagline">Detect Fast, Save Lives.</div>
 
     <!-- ECG pulse line -->
     <div class="pulse-wrap">
@@ -314,7 +317,7 @@
   </div>
 
   <!-- Version -->
-  <div class="version">v0.1.0 &nbsp;·&nbsp; SEPSIS EARLY DETECTION</div>
+  <div class="version">v0.1.0 &nbsp;·&nbsp; DETECT FAST, SAVE LIVES.</div>
 
   <script>
     // ── Particles
