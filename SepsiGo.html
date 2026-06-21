@@ -1266,7 +1266,9 @@
   details summary::-webkit-details-marker { color: #2563EB; }
 
   /* ── ABOUT ── */
-  .about-text { font-size: 13px; color: #334155; line-height: 1.85; margin-bottom: 16px; }
+  .about-text { font-size: 13px; color: #334155; line-height: 1.85; margin-bottom: 16px; text-align: justify; }
+  #about-desc { text-align: justify; }
+  #tab-about p { text-align: justify; }
   .about-list-item { display: flex; gap: 8px; margin-bottom: 7px; font-size: 13px; color: #1E3A5F; }
   .about-dot { color: #EF4444; flex-shrink: 0; }
   .disclaimer {
@@ -1296,8 +1298,10 @@
     .main { padding: 12px 4px 100px; }
     .section { border-radius: 12px; padding: 16px 14px; }
     .cpd-result-card { min-width: 120px; }
-    .nav-btn { padding: 7px 10px; font-size: 12px; gap: 4px; }
-    .nav-btn .nav-icon { font-size: 14px; }
+    .nav-inner { gap: 1px; padding: 6px 2px; }
+    .nav-btn { padding: 6px 3px; font-size: 10.5px; gap: 3px; letter-spacing: 0; }
+    .nav-btn .nav-icon { font-size: 13px; }
+    .nav-btn .nav-icon svg { width: 13px; height: 13px; }
   }
 
   /* ── PWA INSTALL BANNER ── */
