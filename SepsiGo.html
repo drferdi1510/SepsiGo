@@ -6282,6 +6282,35 @@ function dismissIOSBanner() {
 }
 
 // ─── PWA: SERVICE WORKER REGISTRATION ────────────────────────────────────────
+// ── VERSION GUARD — force clear semua cache jika versi baru terdeteksi ───────
+(function versionGuard() {
+  var APP_VER = 'v10';
+  try {
+    if (localStorage.getItem('sg_app_ver') !== APP_VER) {
+      localStorage.setItem('sg_app_ver', APP_VER);
+      // Unregister SEMUA service workers dan hapus SEMUA cache
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          return Promise.all(regs.map(function(r) { return r.unregister(); }));
+        }).then(function() {
+          if ('caches' in window) {
+            return caches.keys().then(function(keys) {
+              return Promise.all(keys.map(function(k) { return caches.delete(k); }));
+            });
+          }
+        }).then(function() {
+          // Hard reload — bypass semua cache
+          window.location.reload(true);
+        }).catch(function() {
+          window.location.reload(true);
+        });
+      } else {
+        window.location.reload(true);
+      }
+    }
+  } catch(e) {}
+})();
+
 (function registerSW() {
   if (!('serviceWorker' in navigator)) return;  // browser tidak support
 
