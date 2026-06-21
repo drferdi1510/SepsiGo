@@ -1311,9 +1311,9 @@
 <!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
-    <button class="nav-btn active" onclick="showTab('calc',this)" data-t="navCalc"><span class="nav-icon">⚡</span><span data-t="navCalc">Kalkulator</span></button>
-    <button class="nav-btn" onclick="showTab('extra',this)" data-t="navExtra"><span class="nav-icon">📋</span><span data-t="navExtra">Data Tambahan</span></button>
-    <button class="nav-btn" onclick="showTab('kultur',this)" data-t="navKultur"><span class="nav-icon">🔬</span><span data-t="navKultur">Hasil Kultur</span></button>
+    <button class="nav-btn active" onclick="showTab('calc',this)" data-t="navCalc"><span class="nav-icon">⚡</span><span data-t="navCalc">Deteksi Cepat</span></button>
+    <button class="nav-btn" onclick="showTab('extra',this)" data-t="navExtra"><span class="nav-icon">📋</span><span data-t="navExtra">Skor Sepsis</span></button>
+    <button class="nav-btn" onclick="showTab('kultur',this)" data-t="navKultur"><span class="nav-icon">🔬</span><span data-t="navKultur">Identifikasi Kultur</span></button>
     <button class="nav-btn" onclick="showTab('about',this)" data-t="navAbout"><span class="nav-icon">ℹ️</span><span data-t="navAbout">Tentang</span></button>
   </div>
 </div>
@@ -4557,10 +4557,8 @@ function applyLang() {
     if (t[key] !== undefined) el.textContent = t[key];
   });
 
-  // ── Update nav buttons (hardcoded) ──
-  const navLabels = isEN
-    ? ['Calculator','Additional Data','Culture Results','About']
-    : ['Kalkulator','Data Tambahan','Hasil Kultur','Tentang'];
+  // ── Update nav buttons (dari i18n) ──
+  const navLabels = [t.navCalc, t.navExtra, t.navKultur, t.navAbout];
   document.querySelectorAll('.nav-btn').forEach((btn, i) => {
     if (navLabels[i]) {
       const textSpan = btn.querySelector('span[data-t]') || btn.querySelector('span:not(.nav-icon)');
