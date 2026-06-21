@@ -1699,8 +1699,6 @@
     justify-content: center;
     -webkit-flex-direction: column;
     flex-direction: column;
-    padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow: hidden;
     -webkit-transition: opacity .5s ease;
@@ -1735,11 +1733,7 @@
   @keyframes spOrb         { 0%,100%{opacity:.18;transform:translate(0,0) scale(1);} 33%{opacity:.28;transform:translate(20px,-15px) scale(1.05);} 66%{opacity:.20;transform:translate(-10px,20px) scale(0.95);} }
 
   #app-splash .sp-card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    position: relative;
     z-index: 2;
     display: -webkit-flex;
     display: flex;
