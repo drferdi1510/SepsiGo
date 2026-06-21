@@ -24,6 +24,7 @@
 
 <!-- ── Splash screen safe-area untuk notch/punch-hole ── -->
 <style>
+  html, body { overflow-x: hidden; }
   body { padding-bottom: env(safe-area-inset-bottom); }
 </style>
 <style>
@@ -1424,7 +1425,7 @@
     position: fixed;
     top: 50vh;
     top: 50dvh;
-    left: 50%;
+    left: 50vw;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     z-index: 99991;
@@ -1562,7 +1563,7 @@
     position: fixed;
     top: 50vh;
     top: 50dvh;
-    left: 50%;
+    left: 50vw;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     z-index: 99996;
@@ -1714,7 +1715,7 @@
     position: fixed;
     top: 50vh;
     top: 50dvh;
-    left: 50%;
+    left: 50vw;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     z-index: 100000;
