@@ -6293,9 +6293,10 @@ function dismissIOSBanner() {
           const newWorker = reg.installing;
           if (!newWorker) return;
           newWorker.addEventListener('statechange', function() {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // Ada versi baru — tampilkan notifikasi update
-              showUpdateBanner(newWorker);
+            // Saat SW baru selesai install → langsung aktifkan (skip waiting)
+            // tanpa perlu user klik banner
+            if (newWorker.state === 'installed') {
+              newWorker.postMessage({ type: 'SKIP_WAITING' });
             }
           });
         });
