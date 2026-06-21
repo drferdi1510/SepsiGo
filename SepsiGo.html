@@ -722,6 +722,49 @@
   [data-theme="dark"] a[style*="color:#1565C0"],
   [data-theme="dark"] a[style*="color:#2563EB"] { color: #60a5fa !important; }
 
+  /* ── DARK MODE: Tab Tentang — card backgrounds ── */
+  /* Scoped ke #tab-about agar tidak false-positive ke elemen lain */
+  [data-theme="dark"] #tab-about [style*="background:rgba(255,255,255,.92)"],
+  [data-theme="dark"] #tab-about [style*="background:rgba(255,255,255, .92)"] {
+    background: rgba(30,41,59,.90) !important;
+    border-color: rgba(255,255,255,.08) !important;
+  }
+  /* Card kuning "Komitmen" */
+  [data-theme="dark"] #tab-about [style*="rgba(255,251,235"] {
+    background: rgba(30,41,59,.85) !important;
+    border-color: rgba(255,255,255,.08) !important;
+  }
+  /* Team member cards (gradient pastel → dark) */
+  [data-theme="dark"] #tab-about [style*="background:linear-gradient(135deg,#EFF6FF"],
+  [data-theme="dark"] #tab-about [style*="background:linear-gradient(135deg,#F0FDF4"],
+  [data-theme="dark"] #tab-about [style*="background:linear-gradient(135deg,#F5F3FF"],
+  [data-theme="dark"] #tab-about [style*="background:linear-gradient(135deg,#FFF1F2"] {
+    background: rgba(30,41,59,.70) !important;
+    border-color: rgba(255,255,255,.06) !important;
+  }
+  /* Contact info card (biru muda) */
+  [data-theme="dark"] #tab-about [style*="background:#e8f0fe"] {
+    background: rgba(30,58,138,.35) !important;
+    border-color: rgba(96,165,250,.20) !important;
+  }
+  /* Reference cards */
+  [data-theme="dark"] #about-main-section [style*="background:rgba(37,99,235,.04)"] {
+    background: rgba(37,99,235,.14) !important;
+    border-color: rgba(37,99,235,.25) !important;
+  }
+
+  /* ── DARK MODE: Tab Tentang — text colors ── */
+  [data-theme="dark"] #tab-about [style*="color:#1E3A5F"],
+  [data-theme="dark"] #tab-about [style*="color:#334155"] { color: #e2e8f0 !important; }
+  [data-theme="dark"] #tab-about [style*="color:#0F172A"] { color: #f1f5f9 !important; }
+  [data-theme="dark"] #tab-about [style*="color:#78350F"],
+  [data-theme="dark"] #tab-about [style*="color:#B45309"] { color: #fbbf24 !important; }
+  [data-theme="dark"] #tab-about [style*="color:#1E40AF"],
+  [data-theme="dark"] #tab-about [style*="color:#1565C0"] { color: #93c5fd !important; }
+  [data-theme="dark"] #tab-about [style*="color:#D32F2F"] { color: #f87171 !important; }
+  [data-theme="dark"] #tab-about [style*="color:#546e8a"],
+  [data-theme="dark"] #tab-about [style*="color:#3a5a7a"] { color: #94a3b8 !important; }
+
   /* ── TIPOGRAFI — JetBrains Mono hanya untuk data/angka/kode ── */
   .rec-text, .cult-note, .about-body, .wt-desc, .ward-drug-note,
   .sofa-interpret, .sofa-hint, .cpd-result-cutoff, .ast-ref-note,
@@ -1656,7 +1699,7 @@
     justify-content: flex-start;
     -webkit-flex-direction: column;
     flex-direction: column;
-    padding-top: max(28vh, calc(28vh + env(safe-area-inset-top, 0px)));
+    padding-top: 28vh;
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow: hidden;
     -webkit-transition: opacity .5s ease;
@@ -6347,6 +6390,23 @@ function showUpdateBanner(newWorker) {
 (function() {
   var splash = document.getElementById('app-splash');
   if (!splash) return;
+
+  // Center splash: posisikan logo card di tengah layar secara presisi
+  // Logo card height ≈ 120px, jadi centernya di 60px dari atas sp-card
+  // Kita ingin 60px itu berada di screen center (window.innerHeight / 2)
+  // Maka padding-top = (screen_height / 2) - 60px - safe_area
+  (function centerSplash() {
+    var h = window.innerHeight;
+    var safeTop = 0;
+    try {
+      var cs = getComputedStyle(document.documentElement);
+      var env = cs.getPropertyValue('--sat') || '0px';
+      safeTop = parseInt(env) || 0;
+    } catch(e) {}
+    var pt = Math.max((h / 2) - 60 - safeTop, 60);
+    splash.style.paddingTop = pt + 'px';
+    splash.style.justifyContent = 'flex-start';
+  })();
 
   // Show splash — cycle status messages
   var spMsgs = ['Memuat sistem','Menginisialisasi algoritma','Menyiapkan parameter CPD','Siap digunakan'];
