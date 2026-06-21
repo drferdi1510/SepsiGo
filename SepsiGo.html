@@ -1691,8 +1691,6 @@
     top: 0; right: 0; bottom: 0; left: 0;
     z-index: 99999;
     background: #060E24;
-    display: grid;
-    place-items: center;
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow: hidden;
     -webkit-transition: opacity .5s ease;
@@ -1727,7 +1725,9 @@
   @keyframes spOrb         { 0%,100%{opacity:.18;transform:translate(0,0) scale(1);} 33%{opacity:.28;transform:translate(20px,-15px) scale(1.05);} 66%{opacity:.20;transform:translate(-10px,20px) scale(0.95);} }
 
   #app-splash .sp-card {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     z-index: 2;
     display: -webkit-flex;
     display: flex;
@@ -1740,8 +1740,8 @@
     -webkit-animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
     animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
   }
-  @-webkit-keyframes spCardIn { from { opacity:0; -webkit-transform:scale(.80) translateY(30px); } to { opacity:1; -webkit-transform:none; } }
-  @keyframes spCardIn         { from { opacity:0; transform:scale(.80) translateY(30px); }          to { opacity:1; transform:none; } }
+  @-webkit-keyframes spCardIn { from { opacity:0; -webkit-transform:translate(-50%, calc(-50% + 30px)) scale(.80); } to { opacity:1; -webkit-transform:translate(-50%, -50%); } }
+  @keyframes spCardIn         { from { opacity:0; transform:translate(-50%, calc(-50% + 30px)) scale(.80); }          to { opacity:1; transform:translate(-50%, -50%); } }
   #app-splash .sp-logo-wrap { position: relative; margin-bottom: 28px; }
   #app-splash .sp-ring {
     position: absolute;
@@ -6290,7 +6290,7 @@ function dismissIOSBanner() {
 // ─── PWA: SERVICE WORKER REGISTRATION ────────────────────────────────────────
 // ── VERSION GUARD — force clear semua cache jika versi baru terdeteksi ───────
 (function versionGuard() {
-  var APP_VER = 'v11';
+  var APP_VER = 'v12';
   try {
     if (localStorage.getItem('sg_app_ver') !== APP_VER) {
       localStorage.setItem('sg_app_ver', APP_VER);
