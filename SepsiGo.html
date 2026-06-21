@@ -1742,8 +1742,11 @@
     flex-direction: column;
     -webkit-align-items: center;
     align-items: center;
-    width: min(90vw, 360px);
-    margin-top: 0;
+    width: 90vw;
+    max-width: 360px;
+    margin: 0 auto; /* fallback horizontal centering */
+    -webkit-align-self: center;
+    align-self: center;
     -webkit-animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
     animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
   }
