@@ -722,21 +722,6 @@
   [data-theme="dark"] a[style*="color:#1565C0"],
   [data-theme="dark"] a[style*="color:#2563EB"] { color: #60a5fa !important; }
 
-  /* Background putih/terang pada section konten about */
-  [data-theme="dark"] [style*="background:#fff"],
-  [data-theme="dark"] [style*="background: #fff"],
-  [data-theme="dark"] [style*="background-color:#fff"] { background: #1e293b !important; }
-
-  [data-theme="dark"] [style*="background:linear-gradient(135deg,#EFF6FF"],
-  [data-theme="dark"] [style*="background:linear-gradient(135deg, #EFF6FF"],
-  [data-theme="dark"] [style*="background:rgba(239,246,255"] { background: rgba(30,58,138,.25) !important; }
-
-  [data-theme="dark"] [style*="background:rgba(37,99,235,.04)"],
-  [data-theme="dark"] [style*="background: rgba(37,99,235,.04)"] { background: rgba(37,99,235,.12) !important; }
-
-  /* Teks putih/gelap di dalam elemen hero about (sudah OK tapi pastikan) */
-  [data-theme="dark"] [style*="color:rgba(255,255,255"] { color: #f1f5f9 !important; }
-
   /* ── TIPOGRAFI — JetBrains Mono hanya untuk data/angka/kode ── */
   .rec-text, .cult-note, .about-body, .wt-desc, .ward-drug-note,
   .sofa-interpret, .sofa-hint, .cpd-result-cutoff, .ast-ref-note,
@@ -2894,6 +2879,10 @@
     </div>
 
   </div>
+    <!-- renderAbout() target — SOFA table, NEWS-2, CPD, referensi -->
+    <div id="about-main-section" style="margin-top:8px"></div>
+    <div id="disclaimer-text-el" style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;font-style:italic"></div>
+
 </div><!-- end tab-about -->
 
 
