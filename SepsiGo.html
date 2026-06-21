@@ -6803,6 +6803,168 @@ function renderHasil() {
     </div>`;
 }
 
+function _buildKulturPDFSection(T, isEN) {
+  const kulturResultArea = document.getElementById('kultur-result-area');
+  const hasKultur = kulturResultArea && kulturResultArea.innerHTML.trim() !== '';
+  const kulturStatus = document.getElementById('culture-status') ? document.getElementById('culture-status').value : 'notdone';
+
+  if (!hasKultur || kulturStatus === 'notdone') {
+    return '<span class="pr-nd">' + T.hasilNotDone + '</span>';
+  }
+
+  // Rekonstruksi data dari global state
+  const positiveOrgs = [];
+  for (let i = 1; i <= totalSetsSelected; i++) {
+    if (setResults[i] === 'pos') {
+      const org = getSetOrganism(i);
+      if (org) positiveOrgs.push({ set: i, organism: org, cls: classifyOrganism(org) });
+    }
+  }
+
+  if (positiveOrgs.length === 0) {
+    const statusMap = {
+      pending: isEN ? 'Pending — awaiting result' : 'Menunggu hasil',
+      neg: isEN ? 'Negative' : 'Negatif'
+    };
+    return '<div class="pr-row"><span class="pr-row-label">' + T.hasilKulturStatus + '</span><span class="pr-row-val">' + (statusMap[kulturStatus] || T.hasilNotDone) + '</span></div>';
+  }
+
+  // Kelompokkan per organisme
+  const orgGroups = {};
+  positiveOrgs.forEach(function(s) {
+    const key = s.organism.toLowerCase();
+    if (!orgGroups[key]) orgGroups[key] = { organism: s.organism, cls: s.cls, sets: [] };
+    orgGroups[key].sets.push(s.set);
+  });
+
+  const stdRef = astStandard === 'eucast'
+    ? 'EUCAST Clinical Breakpoint Tables v15.0 (2025)'
+    : 'CLSI M100 Performance Standards Ed36 (2026)';
+
+  let html = '';
+
+  Object.values(orgGroups).forEach(function(g) {
+    const cls = g.cls;
+    const gramLabel = cls.gram === 'neg' ? (isEN ? 'Gram Negative' : 'Gram Negatif')
+      : cls.gram === 'pos' ? (isEN ? 'Gram Positive' : 'Gram Positif')
+      : cls.gram === 'fungi' ? (isEN ? 'Fungi' : 'Jamur') : (isEN ? 'Unknown' : 'Tidak Dikenal');
+
+    let verdict, lcbi, note;
+    if (cls.gram === 'fungi' || cls.type === 'true') {
+      verdict = isEN ? 'PATHOGEN' : 'PATOGEN';
+      lcbi = 'LCBI 1';
+      note = isEN
+        ? 'True pathogen per CDC NHSN — 1 positive set meets LCBI 1 criteria.'
+        : 'True pathogen menurut CDC NHSN — 1 set positif memenuhi kriteria LCBI 1.';
+    } else if (cls.type === 'comm') {
+      if (g.sets.length >= 2) {
+        verdict = isEN ? 'SIGNIFICANT PATHOGEN' : 'PATOGEN SIGNIFIKAN';
+        lcbi = 'LCBI 2';
+        note = isEN
+          ? 'Commensal with ' + g.sets.length + '/' + totalSetsSelected + ' positive sets. Meets LCBI 2 criteria.'
+          : 'Komensal dengan ' + g.sets.length + '/' + totalSetsSelected + ' set positif. Memenuhi kriteria LCBI 2.';
+      } else {
+        verdict = isEN ? 'COMMENSAL / PROBABLE CONTAMINANT' : 'KOMENSAL / PROBABLE KONTAMINASI';
+        lcbi = isEN ? 'Not LCBI' : 'Belum LCBI';
+        note = isEN
+          ? 'NHSN Common Commensal. Only 1/' + totalSetsSelected + ' set positive — does not meet LCBI 2. Requires ≥2 draws of same organism.'
+          : 'NHSN Common Commensal. Hanya 1/' + totalSetsSelected + ' set positif — belum memenuhi LCBI 2. Dibutuhkan ≥2 draw organisme yang sama.';
+      }
+    } else {
+      verdict = isEN ? 'UNCLASSIFIED' : 'TIDAK DIKENAL';
+      lcbi = '?';
+      note = isEN ? 'Organism not found in NHSN 2024 database. Clinical evaluation required.' : 'Organisme tidak ditemukan dalam database NHSN 2024. Evaluasi klinis diperlukan.';
+    }
+
+    const isPathogen = (cls.gram === 'fungi' || cls.type === 'true') || (cls.type === 'comm' && g.sets.length >= 2);
+    const verdictCls = isPathogen ? 'red' : '';
+    const setsStr = g.sets.map(function(s){ return 'Set ' + s; }).join(', ');
+
+    html += '<div style="margin-bottom:10px;padding:8px 10px;background:#F8FAFF;border:1px solid #CBD5E1;border-radius:6px;page-break-inside:avoid">';
+    html += '<div class="pr-row"><span class="pr-row-label">' + (isEN?'Organism':'Organisme') + '</span><span class="pr-row-val" style="font-weight:800">' + g.organism + '</span></div>';
+    html += '<div class="pr-row"><span class="pr-row-label">' + (isEN?'Gram Type':'Tipe Gram') + '</span><span class="pr-row-val">' + gramLabel + '</span></div>';
+    html += '<div class="pr-row"><span class="pr-row-label">Verdict</span><span class="pr-row-val ' + verdictCls + '">' + verdict + '</span></div>';
+    html += '<div class="pr-row"><span class="pr-row-label">' + (isEN?'LCBI Criteria':'Kriteria LCBI') + '</span><span class="pr-row-val">' + lcbi + '</span></div>';
+    html += '<div class="pr-row"><span class="pr-row-label">' + (isEN?'Positive Sets':'Set Positif') + '</span><span class="pr-row-val">' + setsStr + '</span></div>';
+    html += '<div style="font-size:9px;color:#475569;padding:5px 0 2px;border-top:1px solid #E2E8F0;margin-top:3px;line-height:1.55">' + note + '</div>';
+    html += '</div>';
+
+    // AST per set
+    g.sets.forEach(function(setNum) {
+      const rList = astData[setNum].r;
+      const sList = astData[setNum].s;
+      if (rList.length === 0 && sList.length === 0) return;
+
+      const wt = analyzeWildtype(g.organism, rList, sList);
+      if (!wt) return;
+
+      const wtCls = wt.isWT ? 'grn' : 'red';
+      const wtLabel = wt.isWT ? 'WILD-TYPE' : 'NON-WILD-TYPE';
+
+      html += '<div style="margin-bottom:8px;padding:8px 10px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;page-break-inside:avoid">';
+      html += '<div style="font-size:9px;font-weight:800;color:#78350F;letter-spacing:.8px;margin-bottom:5px">';
+      html += (isEN ? 'AST ANALYSIS' : 'ANALISIS KEPEKAAN ANTIBIOTIK') + ' — SET ' + setNum + ' (' + astStandard.toUpperCase() + ')</div>';
+      html += '<div class="pr-row"><span class="pr-row-label">' + (isEN?'WT Status':'Status WT') + '</span><span class="pr-row-val ' + wtCls + '">' + wtLabel + '</span></div>';
+      html += '<div class="pr-row"><span class="pr-row-label">' + (isEN?'Resistance Pattern':'Pola Resistensi') + '</span><span class="pr-row-val">' + wt.pattern.label + '</span></div>';
+      if (rList.length > 0) html += '<div class="pr-row"><span class="pr-row-label">R (' + (isEN?'Resistant':'Resisten') + ')</span><span class="pr-row-val red">' + rList.join(', ') + '</span></div>';
+      if (sList.length > 0) html += '<div class="pr-row"><span class="pr-row-label">S (' + (isEN?'Susceptible':'Sensitif') + ')</span><span class="pr-row-val grn">' + sList.join(', ') + '</span></div>';
+
+      // Rekomendasi antibiotik
+      const recKey = getRecKey(g.organism, wt.pattern.id);
+      if (recKey && ABIO_REC[recKey]) {
+        const rec = ABIO_REC[recKey];
+        const wards = ['ICU', 'General Ward', 'Low Care'];
+        const wardLabels = isEN ? ['ICU', 'General Ward', 'Low Care'] : ['ICU', 'Rawat Inap Umum', 'Rawat Inap Low Care'];
+
+        html += '<div style="margin-top:7px;padding-top:6px;border-top:1px dashed #FDE68A">';
+        html += '<div style="font-size:9px;font-weight:800;color:#78350F;margin-bottom:3px">' + (isEN?'ANTIBIOTIC RECOMMENDATIONS':'REKOMENDASI ANTIBIOTIK') + '</div>';
+        html += '<div style="font-size:9px;color:#92400E;margin-bottom:5px;font-style:italic">' + rec.notes + '</div>';
+
+        wards.forEach(function(w, wi) {
+          const wdata = rec.wards[w];
+          if (!wdata) return;
+          html += '<div style="margin-bottom:5px">';
+          html += '<div style="font-size:9px;font-weight:700;color:#ffffff;background:#1E3A5F;padding:2px 8px;border-radius:3px;margin-bottom:3px;display:inline-block">' + wardLabels[wi] + '</div>';
+          (wdata.iv || []).forEach(function(item) {
+            if (!item.d) return;
+            html += '<div style="padding:3px 0 2px;border-bottom:1px solid #E2E8F0">';
+            html += '<span style="font-weight:700;font-size:10px;color:#111111">' + item.d + '</span>';
+            if (item.dose) html += ' <span style="font-size:9px;color:#475569">— ' + item.dose + '</span>';
+            if (item.n) html += '<div style="font-size:8.5px;color:#64748B;font-style:italic;margin-top:1px">' + item.n + '</div>';
+            html += '</div>';
+          });
+          if (w === 'Low Care' && wdata.po && wdata.po.length > 0) {
+            html += '<div style="font-size:9px;font-weight:600;color:#166534;margin-top:3px">PO (step-down):</div>';
+            (wdata.po || []).forEach(function(item) {
+              if (!item.d) return;
+              html += '<div style="padding:2px 0">';
+              html += '<span style="font-weight:700;font-size:10px;color:#111111">' + item.d + '</span>';
+              if (item.dose) html += ' <span style="font-size:9px;color:#475569">— ' + item.dose + '</span>';
+              if (item.n) html += '<div style="font-size:8.5px;color:#64748B;font-style:italic;margin-top:1px">' + item.n + '</div>';
+              html += '</div>';
+            });
+          }
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    });
+  });
+
+  // Referensi
+  html += '<div style="margin-top:8px;padding:7px 10px;background:#F1F5F9;border-radius:5px;font-size:8.5px;color:#334155;line-height:1.7">';
+  html += '<strong style="color:#1E3A5F;display:block;margin-bottom:2px">' + (isEN?'References:':'Referensi:') + '</strong>';
+  html += '1. CDC NHSN BSI Event Chapter 4 — LCBI Criteria (2024)<br>';
+  html += '2. ' + stdRef + '<br>';
+  html += '3. Evans L, et al. Surviving Sepsis Campaign: International Guidelines 2021. <em>Crit Care Med.</em> 2021;49(11):e1063–e1143<br>';
+  html += '4. Bhatt PJ, et al. IDSA Bacteremia Guidelines 2023. <em>Clin Infect Dis.</em> 2023<br>';
+  html += '5. CDC NHSN Organism Database — cdcnhsn.clinicalarchitecture.com (2024)';
+  html += '</div>';
+
+  return html;
+}
+
 function downloadPDF() {
   if (!_cpdDone) return;
   const pl = _pdfLang;
@@ -6856,9 +7018,7 @@ function downloadPDF() {
        <div class="pr-row"><span class="pr-row-label">NEWS-2 ${isEN?'Score':'Skor'}</span><span class="pr-row-val ${newsCls}">${d.newsTotal}/20 &mdash; ${newsRisk}</span></div>`
     : `<span class="pr-nd">${T.hasilNotDone}</span>`;
 
-  const sec3Body = (d.hasKultur && d.kulturStatus !== 'notdone')
-    ? `<div class="pr-row"><span class="pr-row-label">${T.hasilKulturStatus}</span><span class="pr-row-val ${kulturCls}">${kulturStatusTxt}</span></div>`
-    : `<span class="pr-nd">${T.hasilNotDone}</span>`;
+  const sec3Body = _buildKulturPDFSection(T, isEN);
 
   const html = `
     <div class="pr-header">
