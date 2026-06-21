@@ -1656,6 +1656,18 @@
     background-size: 28px 28px;
     pointer-events: none;
   }
+  /* Floating orbs untuk splash */
+  #app-splash .sp-orb {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0;
+    -webkit-animation: spOrb 9s ease-in-out infinite; animation: spOrb 9s ease-in-out infinite;
+    pointer-events: none;
+  }
+  #app-splash .sp-orb-1 { width:300px;height:300px;background:#2563EB;top:-80px;left:-80px;-webkit-animation-duration:9s;animation-duration:9s; }
+  #app-splash .sp-orb-2 { width:250px;height:250px;background:#7C3AED;bottom:-60px;right:-60px;-webkit-animation-delay:1.5s;animation-delay:1.5s;-webkit-animation-duration:11s;animation-duration:11s; }
+  #app-splash .sp-orb-3 { width:200px;height:200px;background:#0891B2;top:40%;left:70%;-webkit-animation-delay:3s;animation-delay:3s;-webkit-animation-duration:10s;animation-duration:10s; }
+  @-webkit-keyframes spOrb { 0%,100%{opacity:.18;-webkit-transform:translate(0,0) scale(1);} 33%{opacity:.28;-webkit-transform:translate(20px,-15px) scale(1.05);} 66%{opacity:.20;-webkit-transform:translate(-10px,20px) scale(0.95);} }
+  @keyframes spOrb         { 0%,100%{opacity:.18;transform:translate(0,0) scale(1);} 33%{opacity:.28;transform:translate(20px,-15px) scale(1.05);} 66%{opacity:.20;transform:translate(-10px,20px) scale(0.95);} }
+
   #app-splash .sp-card {
     position: relative;
     z-index: 2;
@@ -1666,6 +1678,7 @@
     -webkit-align-items: center;
     align-items: center;
     width: min(90vw, 360px);
+    margin-top: -6vh; /* kompensasi visual ring yang extend ke atas */
     -webkit-animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
     animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
   }
@@ -1695,8 +1708,9 @@
   @-webkit-keyframes spLogoFloat { 0%,100%{-webkit-transform:translateY(0);}50%{-webkit-transform:translateY(-4px);} }
   @keyframes spLogoFloat         { 0%,100%{transform:translateY(0);}         50%{transform:translateY(-4px);} }
   #app-splash .sp-tagline {
-    font-size: 11px; font-family: 'JetBrains Mono', monospace;
-    color: rgba(255,255,255,.50); letter-spacing: 3px; text-transform: uppercase;
+    font-size: 14px; font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600; font-style: italic;
+    color: rgba(255,255,255,.65); letter-spacing: .4px;
     margin-bottom: 28px;
     -webkit-animation: spFadeUp .8s .4s cubic-bezier(.4,0,.2,1) both;
     animation: spFadeUp .8s .4s cubic-bezier(.4,0,.2,1) both;
@@ -1747,6 +1761,9 @@
 <div id="app-splash">
   <div class="sp-bg"></div>
   <div class="sp-dot-grid"></div>
+  <div class="sp-orb sp-orb-1"></div>
+  <div class="sp-orb sp-orb-2"></div>
+  <div class="sp-orb sp-orb-3"></div>
   <div class="sp-card">
     <div class="sp-logo-wrap">
       <div class="sp-ring"></div>
@@ -1756,7 +1773,7 @@
         <img src="./Logo.png" alt="SepsiGo" onerror="this.src='./icons/icon-192.png';this.style.width='80px';this.style.padding='4px'">
       </div>
     </div>
-    <div class="sp-tagline">Sepsis Early Detection System</div>
+    <div class="sp-tagline">Detect Fast, Save Lives.</div>
     <div class="sp-pulse-wrap">
       <svg class="sp-ecg" viewBox="0 0 400 36" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         <path d="M0 18 L60 18 L75 18 L80 6 L87 30 L92 2 L100 34 L107 18 L120 18 L180 18 L195 18 L200 6 L207 30 L212 2 L220 34 L227 18 L240 18 L300 18 L315 18 L320 6 L327 30 L332 2 L340 34 L347 18 L360 18 L400 18"
@@ -1968,9 +1985,9 @@
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <button id="pwa-install-btn" onclick="triggerPWAInstall()" style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:7px 14px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .25s;backdrop-filter:blur(8px);letter-spacing:.3px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <span id="pwa-install-label">Install</span>
+      <button id="pwa-install-btn" onclick="triggerPWAInstall()" aria-label="Install SepsiGo" title="Install SepsiGo" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:9px 11px;color:#fff;cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,.15);min-width:40px;min-height:40px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span id="pwa-install-label" style="display:none"></span>
       </button>
       <button class="lang-btn" id="dark-toggle-btn" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode" style="margin-right:6px;padding:7px 10px;font-size:15px">🌙</button>
       <button class="lang-btn" onclick="toggleLang()">🇬🇧 EN</button>
@@ -5415,8 +5432,7 @@ function applyLang() {
   if (csvLabel) csvLabel.textContent = isEN ? 'records stored in this browser' : 'data tersimpan di browser ini';
 
   // ── Update install button ──
-  const installBtn = document.getElementById('pwa-install-btn');
-  if (installBtn) installBtn.innerHTML = isEN ? '&#10515; Install App' : '&#10515; Install App';
+  // Install button: icon only, no text label
 
   // ── Update admin modal texts ──
   const modalSub = document.querySelector('#admin-modal .modal-sub');
@@ -6331,13 +6347,6 @@ function showUpdateBanner(newWorker) {
 (function() {
   var splash = document.getElementById('app-splash');
   if (!splash) return;
-
-  // Skip splash if user came through index.html (which already showed one)
-  if (sessionStorage.getItem('sp_from_index') === '1') {
-    sessionStorage.removeItem('sp_from_index');
-    splash.parentNode.removeChild(splash);
-    return;
-  }
 
   // Show splash — cycle status messages
   var spMsgs = ['Memuat sistem','Menginisialisasi algoritma','Menyiapkan parameter CPD','Siap digunakan'];
