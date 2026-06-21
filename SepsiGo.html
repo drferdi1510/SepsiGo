@@ -1892,37 +1892,127 @@
   /* ── HASIL AKHIR PDF PRINT ── */
   #print-report { display:none; }
   @media print {
+    /* Force white/light mode for ALL print output */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-scheme: light !important;
+    }
+    :root, [data-theme="dark"], [data-theme="light"] {
+      --text: #111111 !important;
+      --bg: #ffffff !important;
+    }
     body > *:not(#print-report) { display:none !important; }
+    body { background:#fff !important; margin:0 !important; padding:0 !important; }
+
     #print-report {
       display:block !important;
-      font-family:'Plus Jakarta Sans',sans-serif;
-      color:#0F172A;
-      background:#fff;
-      padding:24px;
-      font-size:12px;
-      line-height:1.6;
+      font-family:'Plus Jakarta Sans',Arial,sans-serif !important;
+      color:#111111 !important;
+      background:#ffffff !important;
+      padding:20px 22px !important;
+      font-size:11px !important;
+      line-height:1.65 !important;
+      max-width:100% !important;
     }
-    .pr-header { border-bottom:3px solid #2563EB;padding-bottom:12px;margin-bottom:16px; }
-    .pr-logo { font-size:22px;font-weight:800;color:#2563EB;letter-spacing:-0.5px; }
-    .pr-logo span { color:#7C3AED; }
-    .pr-sub { font-size:10px;color:#64748B;margin-top:2px; }
-    .pr-title { font-size:16px;font-weight:700;color:#0F172A;margin-top:6px; }
-    .pr-meta { display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;background:#F1F5F9;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px; }
-    .pr-meta-label { color:#64748B;font-weight:600; }
-    .pr-meta-val { color:#0F172A;font-weight:500; }
-    .pr-section { margin-bottom:14px;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden; }
-    .pr-sec-header { background:#1E3A5F;color:#fff;padding:7px 12px;font-size:11px;font-weight:700;letter-spacing:.5px; }
-    .pr-sec-body { padding:10px 12px; }
-    .pr-row { display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #F1F5F9; }
-    .pr-row:last-child { border-bottom:none; }
-    .pr-row-label { color:#475569;font-size:11px; }
-    .pr-row-val { font-weight:700;font-size:12px;color:#0F172A; }
-    .pr-verdict { font-size:14px;font-weight:800;padding:8px 12px;border-radius:6px;margin-bottom:8px;text-align:center; }
-    .pr-verdict.sepsis { background:#FEE2E2;color:#B91C1C; }
-    .pr-verdict.ok { background:#DCFCE7;color:#166534; }
-    .pr-verdict.nd { background:#F1F5F9;color:#64748B; }
-    .pr-disclaimer { margin-top:16px;padding:8px 12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;font-size:10px;color:#92400E;line-height:1.5; }
-    .pr-footer { margin-top:14px;text-align:center;font-size:10px;color:#94A3B8;border-top:1px solid #E2E8F0;padding-top:8px; }
+    #print-report * { font-family:'Plus Jakarta Sans',Arial,sans-serif !important; box-sizing:border-box !important; }
+
+    /* ── HEADER ── */
+    .pr-header {
+      display:flex !important; align-items:flex-start !important;
+      justify-content:space-between !important;
+      padding-bottom:12px !important; margin-bottom:14px !important;
+      border-bottom:3px solid #1E40AF !important;
+    }
+    .pr-logo {
+      font-size:28px !important; font-weight:900 !important;
+      color:#1E40AF !important; letter-spacing:-1px !important; line-height:1 !important;
+    }
+    .pr-logo span { color:#7C3AED !important; }
+    .pr-logo-sub { font-size:9px !important; color:#64748B !important; margin-top:3px !important; }
+    .pr-logo-badge {
+      display:inline-block !important; margin-top:5px !important;
+      background:#1E40AF !important; color:#ffffff !important;
+      font-size:8px !important; font-weight:800 !important;
+      letter-spacing:1.5px !important; padding:2px 8px !important;
+      border-radius:99px !important;
+    }
+    .pr-header-right { text-align:right !important; }
+    .pr-title { font-size:13px !important; font-weight:800 !important; color:#111111 !important; margin-bottom:2px !important; }
+    .pr-subtitle { font-size:9px !important; color:#64748B !important; }
+    .pr-datetime { font-size:9px !important; color:#94A3B8 !important; margin-top:4px !important; }
+
+    /* ── PATIENT META ── */
+    .pr-meta-box {
+      display:grid !important; grid-template-columns:repeat(3,1fr) !important;
+      gap:6px 12px !important; background:#F0F7FF !important;
+      border:1px solid #BFDBFE !important; border-radius:8px !important;
+      padding:10px 14px !important; margin-bottom:14px !important;
+    }
+    .pr-meta-item {}
+    .pr-meta-label {
+      font-size:7.5px !important; font-weight:700 !important;
+      color:#475569 !important; text-transform:uppercase !important;
+      letter-spacing:.6px !important; display:block !important;
+    }
+    .pr-meta-val { font-size:11px !important; font-weight:700 !important; color:#111111 !important; display:block !important; margin-top:1px !important; }
+
+    /* ── SECTIONS ── */
+    .pr-section {
+      margin-bottom:11px !important; border:1px solid #CBD5E1 !important;
+      border-radius:8px !important; overflow:hidden !important; page-break-inside:avoid !important;
+    }
+    .pr-sec-header {
+      background:#1E3A5F !important; color:#ffffff !important;
+      padding:7px 12px !important; font-size:9.5px !important;
+      font-weight:800 !important; letter-spacing:1px !important;
+      text-transform:uppercase !important; display:flex !important; align-items:center !important; gap:8px !important;
+    }
+    .pr-sec-num {
+      display:inline-flex !important; align-items:center !important; justify-content:center !important;
+      background:rgba(255,255,255,.22) !important; color:#ffffff !important;
+      border-radius:4px !important; width:16px !important; height:16px !important;
+      font-size:9px !important; font-weight:800 !important; flex-shrink:0 !important;
+    }
+    .pr-sec-body { padding:10px 12px !important; background:#ffffff !important; }
+
+    /* ── VERDICT BADGES ── */
+    .pr-verdict {
+      font-size:12.5px !important; font-weight:800 !important;
+      padding:8px 14px !important; border-radius:6px !important;
+      margin-bottom:9px !important; text-align:center !important;
+      letter-spacing:.2px !important;
+    }
+    .pr-verdict.sepsis { background:#FEE2E2 !important; color:#991B1B !important; border:1.5px solid #FECACA !important; }
+    .pr-verdict.ok { background:#DCFCE7 !important; color:#14532D !important; border:1.5px solid #BBF7D0 !important; }
+    .pr-verdict.nd { background:#F1F5F9 !important; color:#475569 !important; border:1.5px solid #CBD5E1 !important; }
+
+    /* ── ROWS ── */
+    .pr-row {
+      display:flex !important; justify-content:space-between !important;
+      align-items:center !important; padding:5px 0 !important;
+      border-bottom:1px solid #F1F5F9 !important;
+    }
+    .pr-row:last-child { border-bottom:none !important; }
+    .pr-row-label { color:#475569 !important; font-size:10px !important; font-weight:500 !important; }
+    .pr-row-val { font-weight:700 !important; font-size:11px !important; color:#111111 !important; text-align:right !important; }
+    .pr-row-val.red { color:#B91C1C !important; }
+    .pr-row-val.grn { color:#166534 !important; }
+    .pr-row-val.org { color:#9A3412 !important; }
+
+    /* ── DISCLAIMER & FOOTER ── */
+    .pr-nd { color:#94A3B8 !important; font-size:10px !important; font-style:italic !important; padding:4px 0 !important; display:block !important; }
+    .pr-disclaimer {
+      margin-top:12px !important; padding:8px 12px !important;
+      background:#FFFBEB !important; border:1px solid #FDE68A !important;
+      border-radius:6px !important; font-size:9px !important;
+      color:#78350F !important; line-height:1.6 !important;
+    }
+    .pr-footer {
+      margin-top:10px !important; text-align:center !important;
+      font-size:9px !important; color:#94A3B8 !important;
+      border-top:1px solid #E2E8F0 !important; padding-top:8px !important;
+    }
   }
 </style>
 <style>
@@ -6722,66 +6812,89 @@ function downloadPDF() {
 
   const sexLabel = d.sexEl ? (d.sexEl.value === 'm' ? (isEN ? 'Male' : 'Laki-laki') : (isEN ? 'Female' : 'Perempuan')) : '—';
   const settingLabel = d.setSel ? d.setSel.value : '—';
-  const newyFlag = d.newyFlag;
-  const cpdSepsis = newyFlag === 'high';
-  const newyLabel = newyFlag === 'high' ? (isEN ? 'HIGH ↑' : 'TINGGI ↑') : (isEN ? 'NORMAL' : 'NORMAL');
-  const newyColor = cpdSepsis ? '#B91C1C' : '#166534';
-
+  const cpdSepsis = d.newyFlag === 'high';
+  const newyLabel = cpdSepsis ? (isEN ? 'HIGH ↑' : 'TINGGI ↑') : 'NORMAL';
+  const newyValCls = cpdSepsis ? 'red' : 'grn';
   const verdictCls = cpdSepsis ? 'sepsis' : 'ok';
-  const verdictTxt = cpdSepsis ? (isEN ? '⚠ SEPSIS SUSPECTED' : '⚠ SEPSIS DICURIGAI') : (isEN ? '✓ LOW SEPSIS RISK' : '✓ RISIKO SEPSIS RENDAH');
+  const verdictTxt = cpdSepsis
+    ? (isEN ? '⚠ SEPSIS SUSPECTED' : '⚠ SEPSIS DICURIGAI')
+    : (isEN ? '✓ LOW SEPSIS RISK' : '✓ RISIKO SEPSIS RENDAH');
 
-  const sofaColor = d.sofaTotal >= 2 ? '#B91C1C' : '#166534';
-  const newsColor = d.newsTotal >= 5 ? '#9A3412' : d.newsTotal >= 3 ? '#92400E' : '#166534';
-  const sofaVerdict = d.sofaTotal >= 2 ? (isEN ? 'Organ dysfunction (≥2)' : 'Disfungsi organ (≥2)') : (isEN ? 'No dysfunction' : 'Tidak ada disfungsi');
+  const sofaCls = d.sofaTotal >= 2 ? 'red' : 'grn';
+  const newsCls = d.newsTotal >= 5 ? 'org' : d.newsTotal >= 3 ? 'org' : 'grn';
+  const sofaVerdict = d.sofaTotal >= 2
+    ? (isEN ? 'Organ dysfunction (SOFA ≥2)' : 'Disfungsi organ (SOFA ≥2)')
+    : (isEN ? 'No significant dysfunction' : 'Tidak ada disfungsi signifikan');
+  const newsRisk = d.newsTotal >= 5 ? (isEN ? 'High risk' : 'Risiko tinggi')
+    : d.newsTotal >= 3 ? (isEN ? 'Medium risk' : 'Risiko sedang')
+    : (isEN ? 'Low risk' : 'Risiko rendah');
 
-  const kulturStatusMap = { notdone: isEN ? 'Not performed' : 'Tidak dilakukan', pending: isEN ? 'Pending (awaiting result)' : 'Menunggu hasil', neg: isEN ? 'Negative' : 'Negatif', pos: isEN ? 'Positive' : 'Positif' };
+  const kulturStatusMap = {
+    notdone: isEN ? 'Not performed' : 'Tidak dilakukan',
+    pending: isEN ? 'Pending — awaiting result' : 'Menunggu hasil kultur',
+    neg: isEN ? 'Negative' : 'Negatif',
+    pos: isEN ? 'Positive' : 'Positif'
+  };
   const kulturStatusTxt = kulturStatusMap[d.kulturStatus] || (isEN ? 'Not performed' : 'Tidak dilakukan');
+  const kulturCls = d.kulturStatus === 'pos' ? 'red' : d.kulturStatus === 'neg' ? 'grn' : '';
 
   const now = new Date();
-  const dateStr = now.toLocaleDateString(isEN ? 'en-GB' : 'id-ID', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  const dateStr = now.toLocaleDateString(isEN ? 'en-GB' : 'id-ID', {day:'2-digit',month:'long',year:'numeric'})
+    + ', ' + now.toLocaleTimeString(isEN ? 'en-GB' : 'id-ID', {hour:'2-digit',minute:'2-digit'});
 
-  const sec2HTML = d.hasSofa
-    ? `<div class="pr-row"><span class="pr-row-label">${T.hasilSofaTotal}</span><span class="pr-row-val" style="color:${sofaColor}">${d.sofaTotal} / 24 — ${sofaVerdict}</span></div>
-       <div class="pr-row"><span class="pr-row-label">${T.hasilNewsTotal}</span><span class="pr-row-val" style="color:${newsColor}">${d.newsTotal} / 20</span></div>`
-    : `<div style="color:#64748B;font-size:11px;padding:4px 0;font-style:italic">${T.hasilNotDone}</div>`;
+  const sec1Body = `
+    <div class="pr-verdict ${verdictCls}">${verdictTxt}</div>
+    ${d.newyVal
+      ? `<div class="pr-row"><span class="pr-row-label">NE-WY</span><span class="pr-row-val ${newyValCls}">${parseFloat(d.newyVal).toFixed(2)} &mdash; ${newyLabel}</span></div>
+         <div class="pr-row"><span class="pr-row-label">${T.hasilCutoff}</span><span class="pr-row-val">736.00</span></div>
+         <div class="pr-row"><span class="pr-row-label">${isEN?'Sensitivity':'Sensitivitas'}</span><span class="pr-row-val">80.8%</span></div>
+         <div class="pr-row"><span class="pr-row-label">${isEN?'Specificity':'Spesifisitas'}</span><span class="pr-row-val">66.7%</span></div>`
+      : `<span class="pr-nd">${isEN?'NE-WY value not entered':'Nilai NE-WY belum diisi'}</span>`}`;
 
-  const sec3HTML = (d.hasKultur && d.kulturStatus !== 'notdone')
-    ? `<div class="pr-row"><span class="pr-row-label">${T.hasilKulturStatus}</span><span class="pr-row-val">${kulturStatusTxt}</span></div>`
-    : `<div style="color:#64748B;font-size:11px;padding:4px 0;font-style:italic">${T.hasilNotDone}</div>`;
+  const sec2Body = d.hasSofa
+    ? `<div class="pr-row"><span class="pr-row-label">SOFA-2 ${isEN?'Score':'Skor'}</span><span class="pr-row-val ${sofaCls}">${d.sofaTotal}/24 &mdash; ${sofaVerdict}</span></div>
+       <div class="pr-row"><span class="pr-row-label">NEWS-2 ${isEN?'Score':'Skor'}</span><span class="pr-row-val ${newsCls}">${d.newsTotal}/20 &mdash; ${newsRisk}</span></div>`
+    : `<span class="pr-nd">${T.hasilNotDone}</span>`;
+
+  const sec3Body = (d.hasKultur && d.kulturStatus !== 'notdone')
+    ? `<div class="pr-row"><span class="pr-row-label">${T.hasilKulturStatus}</span><span class="pr-row-val ${kulturCls}">${kulturStatusTxt}</span></div>`
+    : `<span class="pr-nd">${T.hasilNotDone}</span>`;
 
   const html = `
     <div class="pr-header">
-      <div class="pr-logo">Sepsi<span>Go</span></div>
-      <div class="pr-sub">Sepsis Early Detection System — sepsi-go.vercel.app</div>
-      <div class="pr-title">${T.hasilTitle}</div>
-    </div>
-    <div class="pr-meta">
-      <span class="pr-meta-label">${T.hasilRM}</span><span class="pr-meta-val">${d.rm}</span>
-      <span class="pr-meta-label">${T.hasilSID}</span><span class="pr-meta-val">${d.sid}</span>
-      <span class="pr-meta-label">${T.hasilAge}</span><span class="pr-meta-val">${d.ageVal}</span>
-      <span class="pr-meta-label">${T.hasilSex}</span><span class="pr-meta-val">${sexLabel}</span>
-      <span class="pr-meta-label">${T.hasilSetting}</span><span class="pr-meta-val">${settingLabel}</span>
-      <span class="pr-meta-label">${T.hasilDate}</span><span class="pr-meta-val">${dateStr}</span>
-    </div>
-    <div class="pr-section">
-      <div class="pr-sec-header">${T.hasilSec1}</div>
-      <div class="pr-sec-body">
-        <div class="pr-verdict ${verdictCls}">${verdictTxt}</div>
-        ${d.newyVal ? `<div class="pr-row"><span class="pr-row-label">NE-WY</span><span class="pr-row-val" style="color:${newyColor}">${parseFloat(d.newyVal).toFixed(2)} — ${newyLabel}</span></div>
-        <div class="pr-row"><span class="pr-row-label">${T.hasilCutoff}</span><span class="pr-row-val">736.00</span></div>`
-        : `<div style="color:#64748B;font-size:11px;padding:4px 0;font-style:italic">${isEN ? 'NE-WY value not entered' : 'Nilai NE-WY belum diisi'}</div>`}
+      <div>
+        <div class="pr-logo">Sepsi<span>Go</span></div>
+        <div class="pr-logo-sub">Sepsis Early Detection System</div>
+        <div class="pr-logo-badge">CPD &middot; SOFA &middot; NEWS-2 &middot; KULTUR</div>
+      </div>
+      <div class="pr-header-right">
+        <div class="pr-title">${T.hasilTitle}</div>
+        <div class="pr-subtitle">sepsi-go.vercel.app</div>
+        <div class="pr-datetime">${isEN?'Generated':'Dicetak'}: ${dateStr}</div>
       </div>
     </div>
-    <div class="pr-section">
-      <div class="pr-sec-header">${T.hasilSec2}</div>
-      <div class="pr-sec-body">${sec2HTML}</div>
+    <div class="pr-meta-box">
+      <div class="pr-meta-item"><span class="pr-meta-label">${T.hasilRM}</span><span class="pr-meta-val">${d.rm}</span></div>
+      <div class="pr-meta-item"><span class="pr-meta-label">${T.hasilSID}</span><span class="pr-meta-val">${d.sid}</span></div>
+      <div class="pr-meta-item"><span class="pr-meta-label">${T.hasilAge}</span><span class="pr-meta-val">${d.ageVal}</span></div>
+      <div class="pr-meta-item"><span class="pr-meta-label">${T.hasilSex}</span><span class="pr-meta-val">${sexLabel}</span></div>
+      <div class="pr-meta-item"><span class="pr-meta-label">${T.hasilSetting}</span><span class="pr-meta-val">${settingLabel}</span></div>
+      <div class="pr-meta-item"><span class="pr-meta-label">${isEN?'Language':'Bahasa'}</span><span class="pr-meta-val">${isEN?'English':'Indonesia'}</span></div>
     </div>
     <div class="pr-section">
-      <div class="pr-sec-header">${T.hasilSec3}</div>
-      <div class="pr-sec-body">${sec3HTML}</div>
+      <div class="pr-sec-header"><span class="pr-sec-num">1</span>${T.hasilSec1}</div>
+      <div class="pr-sec-body">${sec1Body}</div>
     </div>
-    <div class="pr-disclaimer">⚠ ${T.hasilDisclaimer}</div>
-    <div class="pr-footer">SepsiGo • ${isEN ? 'Generated' : 'Dicetak'} ${dateStr} • sepsi-go.vercel.app</div>`;
+    <div class="pr-section">
+      <div class="pr-sec-header"><span class="pr-sec-num">2</span>${T.hasilSec2}</div>
+      <div class="pr-sec-body">${sec2Body}</div>
+    </div>
+    <div class="pr-section">
+      <div class="pr-sec-header"><span class="pr-sec-num">3</span>${T.hasilSec3}</div>
+      <div class="pr-sec-body">${sec3Body}</div>
+    </div>
+    <div class="pr-disclaimer">&#9888; ${T.hasilDisclaimer}</div>
+    <div class="pr-footer">SepsiGo v0.1.0 &nbsp;&bull;&nbsp; FK Universitas Airlangga &nbsp;&bull;&nbsp; ${dateStr} &nbsp;&bull;&nbsp; sepsi-go.vercel.app</div>`;
 
   document.getElementById('print-report').innerHTML = html;
   window.print();
