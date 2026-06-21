@@ -1652,10 +1652,11 @@
     display: flex;
     -webkit-align-items: center;
     align-items: center;
-    -webkit-justify-content: center;
-    justify-content: center;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
     -webkit-flex-direction: column;
     flex-direction: column;
+    padding-top: max(28vh, calc(28vh + env(safe-area-inset-top, 0px)));
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow: hidden;
     -webkit-transition: opacity .5s ease;
@@ -1699,7 +1700,7 @@
     -webkit-align-items: center;
     align-items: center;
     width: min(90vw, 360px);
-    margin-top: -12vh; /* kompensasi visual: logo di top 1/3 card, tapi layout center di tengah */
+    margin-top: 0;
     -webkit-animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
     animation: spCardIn .8s cubic-bezier(.34,1.56,.64,1) both;
   }
@@ -2958,11 +2959,8 @@
 </div>
 
 <!-- ── FOOTER ── -->
-<div id="app-footer" style="text-align:center;padding:20px 16px 28px;font-size:11px;color:#94A3B8;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;border-top:1px solid rgba(37,99,235,.10);margin-top:4px;background:linear-gradient(180deg,transparent,rgba(37,99,235,.04))">
-  <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.7);border:1px solid rgba(37,99,235,.12);border-radius:999px;padding:6px 18px;backdrop-filter:blur(8px)">
-    <span style="width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#2563EB,#8B5CF6);display:inline-block"></span>
-    Versi Pengembangan 0.1.0 &nbsp;|&nbsp; &copy; 2026 SepsiGo Research Team
-  </div>
+<div id="app-footer" style="text-align:center;padding:16px 16px 28px;font-size:11px;font-family:'Plus Jakarta Sans',sans-serif;border-top:1px solid rgba(37,99,235,.10);margin-top:4px">
+  <span style="color:var(--muted)">&copy; 2026 SepsiGo Research Team</span>
 </div>
 
 <script>
@@ -3118,7 +3116,7 @@ const LANG = {
     aboutRole4:"Staf Pengajar, Departemen Anestesiologi dan Terapi Intensif",
     aboutCommitHeading:"Komitmen dan Pengembangan",
     aboutCommitBody:"Pengembangan SepsiGo adalah upaya berkelanjutan untuk menghadirkan teknologi tepat guna dalam praktik medis. Kami mendedikasikan aplikasi ini untuk membantu klinisi memberikan pelayanan yang lebih cepat, terukur, dan berorientasi pada keselamatan pasien (<em>patient-centered care</em>).",
-    appFooter:"Versi Pengembangan 0.1.0 &nbsp;|&nbsp; &copy; 2026 SepsiGo Research Team",
+    appFooter:"&copy; 2026 SepsiGo Research Team",
   },
   en: {
     logoSub:"Detect Fast, Save Lives.",
@@ -5187,116 +5185,56 @@ function renderAbout() {
   const t = LANG[lang];
   const section = document.getElementById('about-main-section');
   if (!section) return;
+  const isEN = lang === 'en';
 
-  const sofaListHTML = t.aboutSOFAItems.map(item =>
-    `<div class="about-list-item"><span class="about-dot">•</span><span>${item}</span></div>`
-  ).join('');
-
-  const news2ListHTML = t.aboutNEWS2Items.map(item =>
-    `<div class="about-list-item"><span class="about-dot">•</span><span>${item}</span></div>`
-  ).join('');
-
-  const thParam = lang === 'id' ? 'Parameter' : 'Parameter';
-  const thCutoff = lang === 'id' ? 'Cut-off' : 'Cut-off';
-  const thSen = lang === 'id' ? 'Sensitivitas' : 'Sensitivity';
-  const thSpe = lang === 'id' ? 'Spesifisitas' : 'Specificity';
-
-  const aboutParas = t.aboutText.split('\n\n').map(p =>
-    `<p style="margin-bottom:10px;line-height:1.75">${p}</p>`
-  ).join('');
+  const refs = [
+    { n:1, id:'Singer M, Deutschman CS, Seymour CW, et al.',
+      en:'The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA.</em> 2016;315(8):801–810.',
+      id_:'Definisi Konsensus Internasional Ketiga untuk Sepsis dan Syok Septik (Sepsis-3). <em>JAMA.</em> 2016;315(8):801–810.' },
+    { n:2, id:'Evans L, Rhodes A, Alhazzani W, et al.',
+      en:'Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. <em>Intensive Care Med.</em> 2021;47(11):1181–1247.',
+      id_:'Surviving Sepsis Campaign: Panduan Internasional Manajemen Sepsis dan Syok Septik 2021. <em>Intensive Care Med.</em> 2021;47(11):1181–1247.' },
+    { n:3, id:'Seymour CW, Liu VX, Iwashyna TJ, et al.',
+      en:'Assessment of Clinical Criteria for Sepsis (Sepsis-3). <em>JAMA.</em> 2016;315(8):762–774.',
+      id_:'Penilaian Kriteria Klinis untuk Sepsis (Sepsis-3). <em>JAMA.</em> 2016;315(8):762–774.' },
+    { n:4, id:'Royal College of Physicians.',
+      en:'National Early Warning Score (NEWS) 2. RCP, London. 2017.',
+      id_:'National Early Warning Score (NEWS) 2. RCP, London. 2017.' },
+    { n:5, id:'CDC.',
+      en:'Bloodstream Infection Event. NHSN Patient Safety Component Manual, Chapter 4. January 2024.',
+      id_:'Bloodstream Infection Event. NHSN Patient Safety Component Manual, Bab 4. Januari 2024.' },
+    { n:6, id:'EUCAST.',
+      en:'Breakpoint Tables for Interpretation of MICs and Zone Diameters. Version 15.0. 2025. www.eucast.org',
+      id_:'Tabel Breakpoint untuk Interpretasi MIC dan Diameter Zona Hambat. Versi 15.0. 2025. www.eucast.org' },
+    { n:7, id:'CLSI.',
+      en:'Performance Standards for Antimicrobial Susceptibility Testing. 36th ed. CLSI M100. 2026.',
+      id_:'Standar Kinerja untuk Uji Kepekaan Antimikroba. Edisi ke-36. CLSI M100. 2026.' },
+    { n:8, id:'Mermel LA, Allon M, Bouza E, et al.',
+      en:'Clinical Practice Guidelines for the Diagnosis and Management of Intravascular Catheter-Related Infection: 2009 Update by IDSA. <em>Clin Infect Dis.</em> 2009;49(1):1–45.',
+      id_:'Panduan Praktik Klinis untuk Diagnosis dan Manajemen Infeksi Kateter Intravaskular: Pembaruan 2009 oleh IDSA. <em>Clin Infect Dis.</em> 2009;49(1):1–45.' },
+    { n:9, id:'Hotchkiss RS, Monneret G, Payen D.',
+      en:'Sepsis-induced immunosuppression: from cellular dysfunctions to immunotherapy. <em>Nat Rev Immunol.</em> 2013;13(12):862–874.',
+      id_:'Imunosupresi akibat sepsis: dari disfungsi seluler hingga imunoterapi. <em>Nat Rev Immunol.</em> 2013;13(12):862–874.' },
+  ];
 
   section.innerHTML = `
-    <div class="section-title">${t.aboutTitle}</div>
-    <div class="about-text" style="margin-bottom:0">${aboutParas}</div>
-
-    <div style="margin-top:14px;padding:14px 16px;background:#e8f0fe;border-radius:10px;border:1px solid #c5d8f0">
-      <div style="font-size:12px;color:#546e8a;margin-bottom:8px;font-weight:600">${t.aboutContact}</div>
-      <div style="font-size:14px;font-weight:700;color:#1565C0">${t.aboutContactName}</div>
-      <div style="margin-top:5px">
-        <a href="mailto:${t.aboutContactEmail}"
-           style="font-size:13px;color:#D32F2F;font-family:'JetBrains Mono',monospace;text-decoration:none;word-break:break-all">
-          ✉ ${t.aboutContactEmail}
-        </a>
-      </div>
-    </div>
-
-    <div class="section-title" style="margin-top:20px">${t.aboutSOFA}</div>
-    <div>${sofaListHTML}</div>
-
-    <div class="section-title" style="margin-top:20px">${t.aboutNEWS2}</div>
-    <div>${news2ListHTML}</div>
-
-    <div style="margin-top:18px">
-      <div class="section-title" style="margin-top:0">${t.aboutCPD}</div>
-      <table class="cpd-table">
-        <thead>
-          <tr>
-            <th>${thParam}</th>
-            <th>${thCutoff}</th>
-            <th>${thSen}</th>
-            <th>${thSpe}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>NE-WY</td><td>736.00</td><td>80.8%</td><td>66.7%</td></tr>
-        </tbody>
-      </table>
-      <div class="ref-text" style="margin-top:10px">${t.cpdRef.replace(/\n/g,'<br>')}</div>
-    </div>
-
-    <!-- DAFTAR REFERENSI -->
-    <div style="margin-top:24px">
+    <div style="margin-top:8px">
       <div class="section-title" style="margin-top:0">
-        📚 ${lang==='en' ? 'Scientific References' : 'Daftar Referensi Ilmiah'}
+        📚 ${isEN ? 'Scientific References' : 'Daftar Referensi Ilmiah'}
       </div>
       <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
-        ${[
-          { num:1, text: lang==='en'
-            ? 'Singer M, Deutschman CS, Seymour CW, et al. The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA.</em> 2016;315(8):801–810.'
-            : 'Singer M, Deutschman CS, Seymour CW, et al. Definisi Konsensus Internasional Ketiga untuk Sepsis dan Syok Septik (Sepsis-3). <em>JAMA.</em> 2016;315(8):801–810.' },
-          { num:2, text: lang==='en'
-            ? 'Wiyono AR, Wardhani P, Indrasari YN, Semedi BP. Cell Population Data (CPD) of Sysmex XN-Series as Sepsis Screening Tool in Emergency Department. <em>Folia Medica Indonesiana.</em> 2025. [In review]'
-            : 'Wiyono AR, Wardhani P, Indrasari YN, Semedi BP. Cell Population Data (CPD) Sysmex XN-Series sebagai Alat Skrining Sepsis di Unit Gawat Darurat. <em>Folia Medica Indonesiana.</em> 2025. [In review]' },
-          { num:3, text: lang==='en'
-            ? 'Evans L, Rhodes A, Alhazzani W, et al. Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021. <em>Intensive Care Med.</em> 2021;47(11):1181–1247.'
-            : 'Evans L, Rhodes A, Alhazzani W, et al. Surviving Sepsis Campaign: Panduan Internasional Manajemen Sepsis dan Syok Septik 2021. <em>Intensive Care Med.</em> 2021;47(11):1181–1247.' },
-          { num:4, text: lang==='en'
-            ? 'Seymour CW, Liu VX, Iwashyna TJ, et al. Assessment of Clinical Criteria for Sepsis: For the Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3). <em>JAMA.</em> 2016;315(8):762–774.'
-            : 'Seymour CW, Liu VX, Iwashyna TJ, et al. Penilaian Kriteria Klinis untuk Sepsis: Untuk Definisi Konsensus Internasional Ketiga (Sepsis-3). <em>JAMA.</em> 2016;315(8):762–774.' },
-          { num:5, text: lang==='en'
-            ? 'Royal College of Physicians. National Early Warning Score (NEWS) 2: Standardising the Assessment of Acute-Illness Severity in the NHS. RCP, London. 2017.'
-            : 'Royal College of Physicians. National Early Warning Score (NEWS) 2: Standardisasi Penilaian Keparahan Penyakit Akut di NHS. RCP, London. 2017.' },
-          { num:6, text: lang==='en'
-            ? 'Centers for Disease Control and Prevention (CDC). Bloodstream Infection Event (Central Line-Associated Bloodstream Infection and non-central line-associated Bloodstream Infection). NHSN Patient Safety Component Manual, Chapter 4. January 2024.'
-            : 'Centers for Disease Control and Prevention (CDC). Bloodstream Infection Event (CLABSI dan Non-CLABSI). NHSN Patient Safety Component Manual, Bab 4. Januari 2024.' },
-          { num:7, text: lang==='en'
-            ? 'The European Committee on Antimicrobial Susceptibility Testing (EUCAST). Breakpoint Tables for Interpretation of MICs and Zone Diameters. Version 15.0. 2025. Available at: www.eucast.org'
-            : 'The European Committee on Antimicrobial Susceptibility Testing (EUCAST). Tabel Breakpoint untuk Interpretasi MIC dan Diameter Zona Hambat. Versi 15.0. 2025. Tersedia di: www.eucast.org' },
-          { num:8, text: lang==='en'
-            ? 'Clinical and Laboratory Standards Institute (CLSI). Performance Standards for Antimicrobial Susceptibility Testing. 36th ed. CLSI supplement M100. Clinical and Laboratory Standards Institute, USA, 2026.'
-            : 'Clinical and Laboratory Standards Institute (CLSI). Standar Kinerja untuk Uji Kepekaan Antimikroba. Edisi ke-36. Suplemen CLSI M100. Clinical and Laboratory Standards Institute, USA, 2026.' },
-          { num:9, text: lang==='en'
-            ? 'Mermel LA, Allon M, Bouza E, et al. Clinical Practice Guidelines for the Diagnosis and Management of Intravascular Catheter-Related Infection: 2009 Update by the Infectious Diseases Society of America. <em>Clin Infect Dis.</em> 2009;49(1):1–45.'
-            : 'Mermel LA, Allon M, Bouza E, et al. Panduan Praktik Klinis untuk Diagnosis dan Manajemen Infeksi terkait Kateter Intravaskular: Pembaruan 2009 oleh IDSA. <em>Clin Infect Dis.</em> 2009;49(1):1–45.' },
-          { num:10, text: lang==='en'
-            ? 'Hotchkiss RS, Monneret G, Payen D. Sepsis-induced immunosuppression: from cellular dysfunctions to immunotherapy. <em>Nat Rev Immunol.</em> 2013;13(12):862–874.'
-            : 'Hotchkiss RS, Monneret G, Payen D. Imunosupresi akibat sepsis: dari disfungsi seluler hingga imunoterapi. <em>Nat Rev Immunol.</em> 2013;13(12):862–874.' },
-        ].map(r => `
+        ${refs.map(r => `
           <div style="display:flex;gap:10px;padding:10px 12px;background:rgba(37,99,235,.04);border:1px solid rgba(37,99,235,.10);border-radius:10px;border-left:3px solid rgba(37,99,235,.35)">
-            <span style="font-size:11px;font-weight:800;color:#2563EB;font-family:'JetBrains Mono',monospace;min-width:20px;padding-top:1px">${r.num}.</span>
-            <span style="font-size:12px;color:var(--text);line-height:1.65;font-family:'Plus Jakarta Sans',sans-serif">${r.text}</span>
+            <span style="font-size:11px;font-weight:800;color:#2563EB;font-family:'JetBrains Mono',monospace;min-width:22px;padding-top:1px">${r.n}.</span>
+            <span style="font-size:12px;color:var(--text);line-height:1.65;font-family:'Plus Jakarta Sans',sans-serif"><strong>${r.id}</strong> ${isEN ? r.en : r.id_}</span>
           </div>`).join('')}
       </div>
-      <div class="ref-text" style="margin-top:14px;font-size:10px">
-        ${lang==='en'
-          ? '⚠ SepsiGo is a clinical decision-support tool intended to assist, not replace, clinical judgement. All results should be interpreted in the context of the full clinical picture.'
-          : '⚠ SepsiGo adalah alat bantu pengambilan keputusan klinis yang dimaksudkan untuk mendukung, bukan menggantikan, penilaian klinis. Semua hasil harus diinterpretasikan dalam konteks gambaran klinis secara keseluruhan.'}
+      <div style="margin-top:12px;font-size:11px;color:var(--muted);font-style:italic;line-height:1.6">
+        ⚠ ${isEN
+          ? 'SepsiGo is a clinical decision-support tool intended to assist, not replace, clinical judgement.'
+          : 'SepsiGo adalah alat bantu pengambilan keputusan klinis — mendukung, bukan menggantikan, penilaian klinisi.'}
       </div>
     </div>`;
-
-  // Disclaimer text
-  const disc = document.getElementById('disclaimer-text-el');
-  if (disc) disc.textContent = t.disclaimerText;
 }
 
 // ─── TAB LOADER ───────────────────────────────────────────────────────────
