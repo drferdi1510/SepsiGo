@@ -1,5 +1,5 @@
 // ─── SepsiGo Service Worker ──────────────────────────────────────────────────
-const CACHE_NAME = 'sepsigo-v10';
+const CACHE_NAME = 'sepsigo-v11';
 
 // Aset statis yang aman di-cache lama (icons, logo — jarang berubah)
 const STATIC_ASSETS = [
