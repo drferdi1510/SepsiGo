@@ -5,7 +5,6 @@ const STATIC_ASSETS = [
   './Logo.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './jspdf.umd.min.js'
 ];
 
 self.addEventListener('install', event => {

@@ -182,10 +182,32 @@
   [data-theme="dark"] .ast-col-header { opacity: .9; }
   [data-theme="dark"] .ast-std-label { color: #93c5fd !important; }
 
+  /* WT analysis outer container dark mode */
+  [data-theme="dark"] .ast-analysis-wrap {
+    background: linear-gradient(135deg,rgba(30,41,59,.95),rgba(15,23,42,.95)) !important;
+    border-color: rgba(96,165,250,.25) !important;
+  }
+  [data-theme="dark"] .ast-analysis-wrap .ast-analysis-title {
+    color: #93c5fd !important;
+  }
+
   /* WT cards dark */
-  [data-theme="dark"] .wt-label { opacity: .9; }
-  [data-theme="dark"] .wt-phenotype.nwt { background: rgba(127,29,29,.40) !important; color: #fca5a5 !important; }
-  [data-theme="dark"] .wt-phenotype.wt { background: rgba(6,78,59,.40) !important; color: #6ee7b7 !important; }
+  [data-theme="dark"] .wt-label { opacity: 1; }
+  [data-theme="dark"] .wt-card.wt  .wt-label { color: #34d399 !important; }
+  [data-theme="dark"] .wt-card.nwt .wt-label { color: #f87171 !important; }
+  [data-theme="dark"] .wt-card.unknown .wt-label { color: #94a3b8 !important; }
+  [data-theme="dark"] .wt-phenotype.nwt {
+    background: rgba(153,27,27,.50) !important;
+    color: #fca5a5 !important;
+    border-color: rgba(239,68,68,.40) !important;
+  }
+  [data-theme="dark"] .wt-phenotype.wt {
+    background: rgba(6,78,59,.50) !important;
+    color: #6ee7b7 !important;
+    border-color: rgba(52,211,153,.35) !important;
+  }
+  [data-theme="dark"] .wt-card.wt  { background: rgba(16,185,129,.12) !important; border-color: rgba(52,211,153,.30) !important; }
+  [data-theme="dark"] .wt-card.nwt { background: rgba(239,68,68,.12) !important; border-color: rgba(239,68,68,.30) !important; }
 
   /* Inline style helper — text yang pakai style inline */
   [data-theme="dark"] .sofa-total-row .sofa-total-label { color: #94a3b8 !important; }
@@ -5016,8 +5038,8 @@ function renderASTResult(organism, setNum) {
   }
 
   return `
-    <div style="background:linear-gradient(135deg,rgba(240,247,255,.9),rgba(245,240,255,.8));border:1px solid rgba(37,99,235,.20);border-radius:12px;padding:14px 16px;margin-top:10px">
-      <div style="font-size:10px;font-weight:800;letter-spacing:2px;color:#1E40AF;font-family:'JetBrains Mono',monospace;margin-bottom:10px">🔬 ANALISIS KEPEKAAN ANTIBIOTIK — SET ${setNum} (${astStandard.toUpperCase()})</div>
+    <div class="ast-analysis-wrap" style="background:linear-gradient(135deg,rgba(240,247,255,.9),rgba(245,240,255,.8));border:1px solid rgba(37,99,235,.20);border-radius:12px;padding:14px 16px;margin-top:10px">
+      <div class="ast-analysis-title" style="font-size:10px;font-weight:800;letter-spacing:2px;color:#1E40AF;font-family:'JetBrains Mono',monospace;margin-bottom:10px">🔬 ANALISIS KEPEKAAN ANTIBIOTIK — SET ${setNum} (${astStandard.toUpperCase()})</div>
       ${wtHTML}
       ${recHTML}
     </div>`;
@@ -6681,7 +6703,6 @@ function showUpdateBanner(newWorker) {
 
 <!-- ── PRINT REPORT (hidden, only visible during window.print()) ── -->
 <div id="print-report"></div>
-<script src="jspdf.umd.min.js"></script>
 
 <script>
 // ─── HASIL AKHIR ──────────────────────────────────────────────────────────────
@@ -7067,408 +7088,50 @@ function downloadPDF() {
     <div class="pr-disclaimer">&#9888; ${T.hasilDisclaimer}</div>
     <div class="pr-footer">SepsiGo v0.1.0 &nbsp;&bull;&nbsp; FK Universitas Airlangga &nbsp;&bull;&nbsp; ${dateStr} &nbsp;&bull;&nbsp; sepsi-go.vercel.app</div>`;
 
-  if (window.Capacitor) {
-    // Android WebView: window.print() tidak didukung — generate PDF via jsPDF
-    _downloadPDFAndroid(isEN);
+  if (window.Capacitor && window.AndroidBridge) {
+    // Android: gunakan JavascriptInterface → Android PrintManager → PDF native
+    // createPrintDocumentAdapter() memakai @media print CSS secara otomatis,
+    // menghasilkan output identik dengan browser print.
+    const btn = document.getElementById('btn-download-pdf');
+    const printEl = document.getElementById('print-report');
+
+    // Loading state
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
+    if (btn) btn.innerHTML = '<span style="font-size:13px">⏳ ' + (isEN ? 'Preparing PDF...' : 'Menyiapkan PDF...') + '</span>';
+
+    // Inject report HTML so WebView renders it (print CSS hides the rest via @media print)
+    printEl.innerHTML = html;
+
+    // Wait one frame for WebView to paint, then trigger Android print dialog
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const now2 = new Date();
+        const stamp2 = now2.getFullYear()
+          + ('0'+(now2.getMonth()+1)).slice(-2)
+          + ('0'+now2.getDate()).slice(-2)
+          + '_' + ('0'+now2.getHours()).slice(-2)
+          + ('0'+now2.getMinutes()).slice(-2);
+        window.AndroidBridge.printPage('SepsiGo_' + stamp2);
+
+        // Restore UI after print dialog has opened
+        setTimeout(() => {
+          printEl.innerHTML = '';
+          if (btn) {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span data-t="hasilDownload">' + (isEN ? 'Download PDF Report' : 'Unduh Laporan PDF') + '</span>';
+          }
+        }, 1500);
+      }, 120); // 120ms — cukup untuk WebView merender konten
+    });
+
   } else {
+    // Browser (web/PWA): gunakan window.print() standar
     document.getElementById('print-report').innerHTML = html;
     window.print();
   }
 }
 
-async function _downloadPDFAndroid(isEN) {
-  const btn = document.getElementById('btn-download-pdf');
-  if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
-  try {
-    const { Filesystem, Share } = window.Capacitor.Plugins;
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const W = 210, ML = 15, MR = 15, CW = W - ML - MR;
-    const d = _getHasilData();
-    const T = LANG[isEN ? 'en' : 'id'];
-    const now = new Date();
-    const dateStr = now.toLocaleDateString(isEN ? 'en-GB' : 'id-ID', {day:'2-digit',month:'long',year:'numeric'}) + ', ' + now.toLocaleTimeString(isEN ? 'en-GB' : 'id-ID', {hour:'2-digit',minute:'2-digit'});
-    const stamp = now.getFullYear() + ('0'+(now.getMonth()+1)).slice(-2) + ('0'+now.getDate()).slice(-2) + '_' + ('0'+now.getHours()).slice(-2) + ('0'+now.getMinutes()).slice(-2);
-
-    const COL = {
-      blue:[30,64,175], darkBlue:[30,58,95], purple:[124,58,237],
-      red:[185,28,28], green:[22,101,52], orange:[154,52,18],
-      muted:[71,85,105], light:[241,245,249], metaBg:[240,247,255],
-      metaBdr:[191,219,254], verdSepBg:[254,226,226], verdOkBg:[220,252,231],
-      disclaimBg:[255,251,235], disclaimBdr:[253,230,138], disclaimTxt:[120,53,15],
-      border:[203,213,225], white:[255,255,255], black:[17,17,17], gray:[148,163,184]
-    };
-    const setColor = (c, type) => type === 'fill' ? doc.setFillColor(...c) : doc.setTextColor(...c);
-    const px = (n) => n * 0.352778;
-
-    let y = 15;
-
-    // ── HEADER ──
-    doc.setFillColor(...COL.blue);
-    doc.rect(ML, y + 14, CW, 0.8, 'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(22); setColor(COL.blue,'text');
-    doc.text('Sepsi', ML, y + 10);
-    const sepsiW = doc.getTextWidth('Sepsi');
-    setColor(COL.purple,'text'); doc.text('Go', ML + sepsiW, y + 10);
-    doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.muted,'text');
-    doc.text('Sepsis Early Detection System', ML, y + 14.5);
-    doc.setFont('helvetica','bold'); doc.setFontSize(6); setColor(COL.white,'text');
-    doc.setFillColor(...COL.blue);
-    doc.roundedRect(ML, y + 16.5, 42, 4, 1, 1, 'F');
-    doc.text('CPD  ·  SOFA  ·  NEWS-2  ·  KULTUR', ML + 2, y + 19.5);
-    doc.setFont('helvetica','bold'); doc.setFontSize(11); setColor(COL.black,'text');
-    doc.text(isEN ? 'Patient Result Report' : 'Laporan Hasil Pasien', W - MR, y + 8, {align:'right'});
-    doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.muted,'text');
-    doc.text('sepsi-go.vercel.app', W - MR, y + 12, {align:'right'});
-    setColor(COL.gray,'text'); doc.setFontSize(6.5);
-    doc.text((isEN?'Generated: ':'Dicetak: ') + dateStr, W - MR, y + 16, {align:'right'});
-    y += 24;
-
-    // ── META BOX ──
-    doc.setFillColor(...COL.metaBg); doc.setDrawColor(...COL.metaBdr);
-    doc.roundedRect(ML, y, CW, 16, 2, 2, 'FD');
-    const sexLabel = d.sexEl ? (d.sexEl.value === 'm' ? (isEN?'Male':'Laki-laki') : (isEN?'Female':'Perempuan')) : '—';
-    const settingLabel = d.setSel ? d.setSel.value : '—';
-    const metas = [
-      [T.hasilRM, d.rm], [T.hasilSID, d.sid], [T.hasilAge, d.ageVal],
-      [T.hasilSex, sexLabel], [T.hasilSetting, settingLabel], [isEN?'Language':'Bahasa', isEN?'English':'Indonesia']
-    ];
-    metas.forEach((m, i) => {
-      const col = i % 3, row = Math.floor(i / 3);
-      const mx = ML + 4 + col * (CW / 3), my = y + 4 + row * 7;
-      doc.setFont('helvetica','bold'); doc.setFontSize(6); setColor(COL.muted,'text');
-      doc.text(String(m[0]).toUpperCase(), mx, my);
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); setColor(COL.black,'text');
-      doc.text(String(m[1]).substring(0,22), mx, my + 4);
-    });
-    y += 20;
-
-    // helper: section header
-    const secHeader = (num, title) => {
-      doc.setFillColor(...COL.darkBlue);
-      doc.rect(ML, y, CW, 7, 'F');
-      doc.setFillColor(255,255,255,0.22); doc.setDrawColor(255,255,255,0.22);
-      doc.roundedRect(ML + 2, y + 1.5, 4, 4, 0.8, 0.8, 'F');
-      doc.setFont('helvetica','bold'); doc.setFontSize(7); setColor(COL.white,'text');
-      doc.text(String(num), ML + 4, y + 4.5, {align:'center'});
-      doc.setFont('helvetica','bold'); doc.setFontSize(8); setColor(COL.white,'text');
-      doc.text(title.toUpperCase(), ML + 9, y + 4.5);
-      y += 7;
-    };
-
-    // helper: row
-    const row = (label, value, valColor) => {
-      doc.setDrawColor(...COL.light); doc.line(ML, y + 5, ML + CW, y + 5);
-      doc.setFont('helvetica','normal'); doc.setFontSize(8); setColor(COL.muted,'text');
-      doc.text(String(label), ML + 3, y + 3.5);
-      doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
-      setColor(valColor || COL.black,'text');
-      doc.text(String(value).substring(0,40), ML + CW - 2, y + 3.5, {align:'right'});
-      y += 5;
-    };
-
-    // ── SECTION 1: CPD ──
-    doc.setDrawColor(...COL.border); doc.roundedRect(ML, y, CW, 1, 0, 0);
-    secHeader(1, T.hasilSec1);
-    const cpdSepsis = d.newyFlag === 'high';
-    const verdBg = cpdSepsis ? COL.verdSepBg : COL.verdOkBg;
-    const verdTxt = cpdSepsis ? COL.red : COL.green;
-    const verdLabel = cpdSepsis ? (isEN?'⚠ SEPSIS SUSPECTED':'⚠ SEPSIS DICURIGAI') : (isEN?'✓ LOW SEPSIS RISK':'✓ RISIKO SEPSIS RENDAH');
-    doc.setFillColor(...verdBg); doc.roundedRect(ML + 2, y + 1, CW - 4, 7, 1.5, 1.5, 'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(10); setColor(verdTxt,'text');
-    doc.text(verdLabel, W / 2, y + 5.8, {align:'center'});
-    y += 9;
-    if (d.newyVal) {
-      const newyNum = parseFloat(d.newyVal);
-      const newyLabel = cpdSepsis ? (isEN?'HIGH ↑':'TINGGI ↑') : 'NORMAL';
-      row('NE-WY', newyNum.toFixed(2) + ' — ' + newyLabel, cpdSepsis ? COL.red : COL.green);
-      row(T.hasilCutoff, '736.00');
-      row(isEN?'Sensitivity':'Sensitivitas', '80.8%');
-      row(isEN?'Specificity':'Spesifisitas', '66.7%');
-    } else {
-      doc.setFont('helvetica','italic'); doc.setFontSize(8); setColor(COL.gray,'text');
-      doc.text(isEN?'NE-WY value not entered':'Nilai NE-WY belum diisi', ML + 3, y + 4);
-      y += 6;
-    }
-    y += 3;
-
-    // ── SECTION 2: SOFA/NEWS ──
-    secHeader(2, T.hasilSec2);
-    if (d.hasSofa) {
-      const sofaCls = d.sofaTotal >= 2 ? COL.red : COL.green;
-      const sofaVerdict = d.sofaTotal >= 2 ? (isEN?'Organ dysfunction (SOFA ≥2)':'Disfungsi organ (SOFA ≥2)') : (isEN?'No significant dysfunction':'Tidak ada disfungsi signifikan');
-      const newsRisk = d.newsTotal >= 5 ? (isEN?'High risk':'Risiko tinggi') : d.newsTotal >= 3 ? (isEN?'Medium risk':'Risiko sedang') : (isEN?'Low risk':'Risiko rendah');
-      const newsCls = d.newsTotal >= 5 ? COL.red : d.newsTotal >= 3 ? COL.orange : COL.green;
-      row('SOFA-2 ' + (isEN?'Score':'Skor'), d.sofaTotal + '/24 — ' + sofaVerdict, sofaCls);
-      row('NEWS-2 ' + (isEN?'Score':'Skor'), d.newsTotal + '/20 — ' + newsRisk, newsCls);
-    } else {
-      doc.setFont('helvetica','italic'); doc.setFontSize(8); setColor(COL.gray,'text');
-      doc.text(T.hasilNotDone, ML + 3, y + 4); y += 6;
-    }
-    y += 3;
-
-    // ── SECTION 3: KULTUR ──
-    const checkPage = (needed) => { if (y + needed > 272) { doc.addPage(); y = 15; } };
-
-    checkPage(10);
-    secHeader(3, T.hasilSec3);
-
-    const kulturStatusMap2 = {
-      notdone: isEN?'Not performed':'Tidak dilakukan',
-      pending: isEN?'Pending — awaiting result':'Menunggu hasil kultur',
-      neg: isEN?'Negative':'Negatif',
-      pos: isEN?'Positive':'Positif'
-    };
-
-    // Rekonstruksi positive orgs dari global state
-    const posOrgs = [];
-    for (let i = 1; i <= totalSetsSelected; i++) {
-      if (setResults[i] === 'pos') {
-        const org = getSetOrganism(i);
-        if (org) posOrgs.push({ set: i, organism: org, cls: classifyOrganism(org) });
-      }
-    }
-
-    if (posOrgs.length === 0) {
-      const kulturTxt = kulturStatusMap2[d.kulturStatus] || kulturStatusMap2.notdone;
-      const kulturClr = d.kulturStatus === 'pos' ? COL.red : d.kulturStatus === 'neg' ? COL.green : COL.muted;
-      row(T.hasilKulturStatus || 'Status Kultur', kulturTxt, kulturClr);
-      y += 3;
-    } else {
-      // Kelompokkan per organisme
-      const orgGroups2 = {};
-      posOrgs.forEach(s => {
-        const key = s.organism.toLowerCase();
-        if (!orgGroups2[key]) orgGroups2[key] = { organism: s.organism, cls: s.cls, sets: [] };
-        orgGroups2[key].sets.push(s.set);
-      });
-
-      const stdRef = astStandard === 'eucast'
-        ? 'EUCAST Clinical Breakpoint Tables v15.0 (2025)'
-        : 'CLSI M100 Performance Standards Ed36 (2026)';
-
-      Object.values(orgGroups2).forEach(g => {
-        const cls = g.cls;
-        const gramLabel = cls.gram === 'neg' ? (isEN?'Gram Negative':'Gram Negatif')
-          : cls.gram === 'pos' ? (isEN?'Gram Positive':'Gram Positif')
-          : cls.gram === 'fungi' ? (isEN?'Fungi':'Jamur') : (isEN?'Unknown':'Tidak Dikenal');
-
-        let verdict, lcbi, note;
-        if (cls.gram === 'fungi' || cls.type === 'true') {
-          verdict = isEN ? 'PATHOGEN' : 'PATOGEN';
-          lcbi = 'LCBI 1';
-          note = isEN ? 'True pathogen per CDC NHSN — 1 positive set meets LCBI 1 criteria.'
-            : 'True pathogen menurut CDC NHSN — 1 set positif memenuhi kriteria LCBI 1.';
-        } else if (cls.type === 'comm') {
-          if (g.sets.length >= 2) {
-            verdict = isEN ? 'SIGNIFICANT PATHOGEN' : 'PATOGEN SIGNIFIKAN';
-            lcbi = 'LCBI 2';
-            note = isEN ? 'Commensal with ' + g.sets.length + '/' + totalSetsSelected + ' positive sets. Meets LCBI 2.'
-              : 'Komensal dengan ' + g.sets.length + '/' + totalSetsSelected + ' set positif. Memenuhi LCBI 2.';
-          } else {
-            verdict = isEN ? 'COMMENSAL / PROBABLE CONTAMINANT' : 'KOMENSAL / PROB. KONTAMINASI';
-            lcbi = isEN ? 'Not LCBI' : 'Belum LCBI';
-            note = isEN ? 'Only 1/' + totalSetsSelected + ' set positive — LCBI 2 not met. Requires ≥2 draws same organism.'
-              : 'Hanya 1/' + totalSetsSelected + ' set positif — LCBI 2 belum terpenuhi. Perlu ≥2 draw organisme sama.';
-          }
-        } else {
-          verdict = isEN ? 'UNCLASSIFIED' : 'TIDAK DIKENAL';
-          lcbi = '?';
-          note = isEN ? 'Organism not in NHSN 2024 database. Clinical evaluation required.'
-            : 'Organisme tidak ditemukan di database NHSN 2024. Evaluasi klinis diperlukan.';
-        }
-        const isPathogen = (cls.gram === 'fungi' || cls.type === 'true') || (cls.type === 'comm' && g.sets.length >= 2);
-        const setsStr = g.sets.map(s => 'Set ' + s).join(', ');
-
-        // ── Organism box ──
-        checkPage(32);
-        doc.setFillColor(248,250,255); doc.setDrawColor(...COL.border);
-        const orgBoxStart = y;
-        doc.roundedRect(ML, y, CW, 28, 1.5, 1.5, 'FD');
-        // header row dalam box
-        doc.setFillColor(isPathogen ? 254 : 220, isPathogen ? 226 : 252, isPathogen ? 226 : 231);
-        doc.roundedRect(ML + 1, y + 1, CW - 2, 7, 1, 1, 'F');
-        doc.setFont('helvetica','bold'); doc.setFontSize(9.5);
-        setColor(isPathogen ? COL.red : COL.green, 'text');
-        doc.text(g.organism, ML + 3, y + 5.5);
-        doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
-        doc.text(verdict, ML + CW - 2, y + 5.5, {align:'right'});
-        y += 9;
-        row(isEN?'Gram Type':'Tipe Gram', gramLabel);
-        row(isEN?'LCBI Criteria':'Kriteria LCBI', lcbi);
-        row(isEN?'Positive Sets':'Set Positif', setsStr);
-        // note
-        const noteLines = doc.splitTextToSize(note, CW - 8);
-        doc.setFont('helvetica','italic'); doc.setFontSize(7); setColor(COL.muted,'text');
-        doc.text(noteLines, ML + 3, y + 3);
-        y += noteLines.length * 3.5 + 5;
-
-        // ── AST per set ──
-        g.sets.forEach(setNum => {
-          const rList = astData[setNum].r;
-          const sList = astData[setNum].s;
-          if (rList.length === 0 && sList.length === 0) return;
-          const wt = analyzeWildtype(g.organism, rList, sList);
-          if (!wt) return;
-
-          checkPage(20);
-          doc.setFillColor(255,251,235); doc.setDrawColor(...COL.disclaimBdr);
-          const astBoxY = y;
-          const rLines = rList.length > 0 ? doc.splitTextToSize(rList.join(', '), CW - 8) : [];
-          const sLines = sList.length > 0 ? doc.splitTextToSize(sList.join(', '), CW - 8) : [];
-          const astRowsH = 7 + 5 + 5 + (rList.length>0 ? rLines.length*3.5+5 : 0) + (sList.length>0 ? sLines.length*3.5+5 : 0);
-          doc.roundedRect(ML, y, CW, astRowsH + 4, 1.5, 1.5, 'FD');
-
-          doc.setFont('helvetica','bold'); doc.setFontSize(7.5); setColor(COL.disclaimTxt,'text');
-          doc.text((isEN?'AST ANALYSIS':'ANALISIS KEPEKAAN ANTIBIOTIK') + ' — SET ' + setNum + ' (' + astStandard.toUpperCase() + ')', ML + 3, y + 4.5);
-          y += 7;
-
-          const wtColor = wt.isWT ? COL.green : COL.red;
-          const wtLabel = wt.isWT ? 'WILD-TYPE' : 'NON-WILD-TYPE';
-          row(isEN?'WT Status':'Status WT', wtLabel, wtColor);
-          row(isEN?'Resistance Pattern':'Pola Resistensi', wt.pattern.label);
-
-          if (rList.length > 0) {
-            doc.setFont('helvetica','normal'); doc.setFontSize(7.5); setColor(COL.muted,'text');
-            doc.text('R (' + (isEN?'Resistant':'Resisten') + ')', ML + 3, y + 3.5);
-            doc.setFont('helvetica','bold'); setColor(COL.red,'text');
-            doc.text(rLines, ML + CW - 2, y + 3.5, {align:'right'});
-            y += rLines.length * 3.5 + 2;
-          }
-          if (sList.length > 0) {
-            doc.setFont('helvetica','normal'); doc.setFontSize(7.5); setColor(COL.muted,'text');
-            doc.text('S (' + (isEN?'Susceptible':'Sensitif') + ')', ML + 3, y + 3.5);
-            doc.setFont('helvetica','bold'); setColor(COL.green,'text');
-            doc.text(sLines, ML + CW - 2, y + 3.5, {align:'right'});
-            y += sLines.length * 3.5 + 2;
-          }
-          y += 5;
-
-          // ── Rekomendasi antibiotik ──
-          const recKey = getRecKey(g.organism, wt.pattern.id);
-          if (recKey && ABIO_REC[recKey]) {
-            const rec = ABIO_REC[recKey];
-            checkPage(15);
-            doc.setFillColor(240,247,255); doc.setDrawColor(...COL.metaBdr);
-            doc.roundedRect(ML, y, CW, 6, 1, 1, 'FD');
-            doc.setFont('helvetica','bold'); doc.setFontSize(8); setColor(COL.blue,'text');
-            doc.text((isEN?'ANTIBIOTIC RECOMMENDATIONS':'REKOMENDASI ANTIBIOTIK') + ' — SET ' + setNum, ML + 3, y + 4);
-            y += 7;
-
-            const noteRLines = doc.splitTextToSize(rec.notes, CW - 6);
-            doc.setFont('helvetica','italic'); doc.setFontSize(7); setColor(COL.muted,'text');
-            doc.text(noteRLines, ML + 3, y + 3.5);
-            y += noteRLines.length * 3.5 + 3;
-
-            const wards = ['ICU', 'General Ward', 'Low Care'];
-            const wardLabels = isEN ? ['ICU', 'General Ward', 'Low Care'] : ['ICU', 'Rawat Inap Umum', 'Low Care'];
-            wards.forEach((w, wi) => {
-              const wdata = rec.wards[w];
-              if (!wdata) return;
-              const allItems = [...(wdata.iv||[]), ...(w==='Low Care'?(wdata.po||[]):[])];
-              if (allItems.length === 0) return;
-              checkPage(8 + allItems.length * 8);
-              doc.setFillColor(...COL.darkBlue);
-              doc.roundedRect(ML, y, 35, 5, 0.8, 0.8, 'F');
-              doc.setFont('helvetica','bold'); doc.setFontSize(7.5); setColor(COL.white,'text');
-              doc.text(wardLabels[wi], ML + 2, y + 3.8);
-              y += 7;
-              (wdata.iv||[]).forEach(item => {
-                if (!item.d) return;
-                checkPage(10);
-                doc.setFont('helvetica','bold'); doc.setFontSize(8.5); setColor(COL.black,'text');
-                doc.text(item.d, ML + 3, y + 3.5);
-                if (item.dose) {
-                  doc.setFont('helvetica','normal'); doc.setFontSize(7.5); setColor(COL.muted,'text');
-                  doc.text('— ' + item.dose, ML + 3 + doc.getTextWidth(item.d) + 1, y + 3.5);
-                }
-                y += 4.5;
-                if (item.n) {
-                  const nLines = doc.splitTextToSize(item.n, CW - 8);
-                  doc.setFont('helvetica','italic'); doc.setFontSize(7); setColor(COL.gray,'text');
-                  doc.text(nLines, ML + 5, y + 2.5);
-                  y += nLines.length * 3 + 1;
-                }
-                doc.setDrawColor(...COL.light); doc.line(ML + 2, y, ML + CW - 2, y);
-                y += 2;
-              });
-              if (w === 'Low Care' && (wdata.po||[]).length > 0) {
-                doc.setFont('helvetica','bold'); doc.setFontSize(7.5); setColor(COL.green,'text');
-                doc.text('PO — step-down:', ML + 3, y + 3);
-                y += 5;
-                (wdata.po||[]).forEach(item => {
-                  if (!item.d) return;
-                  checkPage(10);
-                  doc.setFont('helvetica','bold'); doc.setFontSize(8.5); setColor(COL.black,'text');
-                  doc.text(item.d, ML + 3, y + 3.5);
-                  if (item.dose) {
-                    doc.setFont('helvetica','normal'); doc.setFontSize(7.5); setColor(COL.muted,'text');
-                    doc.text('— ' + item.dose, ML + 3 + doc.getTextWidth(item.d) + 1, y + 3.5);
-                  }
-                  y += 4.5;
-                  if (item.n) {
-                    const nLines = doc.splitTextToSize(item.n, CW - 8);
-                    doc.setFont('helvetica','italic'); doc.setFontSize(7); setColor(COL.gray,'text');
-                    doc.text(nLines, ML + 5, y + 2.5);
-                    y += nLines.length * 3 + 1;
-                  }
-                  y += 2;
-                });
-              }
-              y += 3;
-            });
-          }
-        });
-        y += 4;
-      });
-
-      // Referensi
-      checkPage(20);
-      doc.setFillColor(...COL.light); doc.setDrawColor(203,213,225);
-      const refLines = doc.splitTextToSize(
-        (isEN?'References: ':'Referensi: ') +
-        '1. CDC NHSN BSI Event Ch.4 LCBI Criteria (2024)  ' +
-        '2. ' + stdRef + '  ' +
-        '3. Evans L et al. Surviving Sepsis Campaign 2021. Crit Care Med.  ' +
-        '4. Bhatt PJ et al. IDSA Bacteremia Guidelines 2023. Clin Infect Dis.', CW - 8);
-      doc.roundedRect(ML, y, CW, refLines.length * 3.5 + 6, 1.5, 1.5, 'FD');
-      doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.darkBlue,'text');
-      doc.text(refLines, ML + 4, y + 4.5);
-      y += refLines.length * 3.5 + 10;
-    }
-
-    // ── DISCLAIMER ──
-    const disc = T.hasilDisclaimer || 'Alat bantu skrining. Bukan pengganti keputusan klinis.';
-    const discLines = doc.splitTextToSize('⚠ ' + disc, CW - 8);
-    const discH = discLines.length * 4 + 6;
-    doc.setFillColor(...COL.disclaimBg); doc.setDrawColor(...COL.disclaimBdr);
-    doc.roundedRect(ML, y, CW, discH, 1.5, 1.5, 'FD');
-    doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.disclaimTxt,'text');
-    doc.text(discLines, ML + 4, y + 4.5);
-    y += discH + 4;
-
-    // ── FOOTER ──
-    doc.setDrawColor(...COL.border); doc.line(ML, 282, ML + CW, 282);
-    doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.gray,'text');
-    doc.text('SepsiGo v0.1.0  ·  FK Universitas Airlangga  ·  ' + dateStr + '  ·  sepsi-go.vercel.app', W / 2, 286, {align:'center'});
-
-    // ── SAVE & SHARE ──
-    const base64 = doc.output('datauristring').split(',')[1];
-    const fileName = 'SepsiGo_Report_' + stamp + '.pdf';
-    await Filesystem.writeFile({ path: fileName, data: base64, directory: 'CACHE' });
-    const uriResult = await Filesystem.getUri({ path: fileName, directory: 'CACHE' });
-    await Share.share({
-      title: isEN ? 'SepsiGo Patient Report' : 'SepsiGo Laporan Pasien',
-      url: uriResult.uri,
-      dialogTitle: isEN ? 'Save / Share PDF Report' : 'Simpan / Bagikan Laporan PDF',
-    });
-  } catch(e) {
-    console.error('SepsiGo PDF error:', e);
-    alert(isEN ? 'Failed to generate PDF. Please try again.' : 'Gagal membuat PDF. Silakan coba lagi.');
-  } finally {
-    if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
-  }
-}
 </script>
 </body>
 </html>
