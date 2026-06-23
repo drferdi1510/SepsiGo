@@ -2615,6 +2615,8 @@
       <select id="culture-status" onchange="onCultureStatusChange()" style="width:100%;margin-top:4px">
         <option value="notdone" data-t="cNotDone">Tidak dilakukan</option>
         <option value="pending" data-t="cPending">Menunggu hasil</option>
+        <option value="neg" data-t="cNeg">Hasil Negatif</option>
+        <option value="pos" data-t="cPos">Hasil Positif (Tersedia)</option>
       </select>
     </div>
 
@@ -6081,6 +6083,14 @@ function saveKulturData(silent) {
   };
   localStorage.setItem('cepsis_kulturlink_store', JSON.stringify(kulturLinkStore));
 
+  // Auto-update culture-status dropdown berdasarkan data yang disimpan
+  const hasPositiveOrgs = setsData.some(s => s.result === 'pos' && s.organism && s.organism !== '-');
+  const cultureStatusEl = document.getElementById('culture-status');
+  if (cultureStatusEl && cultureStatusEl.value === 'pending') {
+    cultureStatusEl.value = hasPositiveOrgs ? 'pos' : 'neg';
+    onCultureStatusChange();
+  }
+
   if (!silent && statusEl) {
     const matched = csvDataStore.some(r => makeRMKey(r["No. RM"]) === key);
     statusEl.style.display = '';
@@ -7056,8 +7066,85 @@ function downloadPDF() {
     <div class="pr-disclaimer">&#9888; ${T.hasilDisclaimer}</div>
     <div class="pr-footer">SepsiGo v0.1.0 &nbsp;&bull;&nbsp; FK Universitas Airlangga &nbsp;&bull;&nbsp; ${dateStr} &nbsp;&bull;&nbsp; sepsi-go.vercel.app</div>`;
 
-  document.getElementById('print-report').innerHTML = html;
-  window.print();
+  if (window.Capacitor) {
+    // Android WebView: window.print() tidak didukung — share sebagai file HTML
+    _downloadPDFAndroid(html, isEN);
+  } else {
+    document.getElementById('print-report').innerHTML = html;
+    window.print();
+  }
+}
+
+async function _downloadPDFAndroid(reportHtml, isEN) {
+  const btn = document.getElementById('btn-download-pdf');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
+
+  try {
+    const { Filesystem, Share } = window.Capacitor.Plugins;
+
+    const printCSS = `
+      body{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#111;background:#fff;padding:20px 22px;font-size:11px;line-height:1.65;margin:0}
+      *{box-sizing:border-box}
+      .pr-header{display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:12px;margin-bottom:14px;border-bottom:3px solid #1E40AF}
+      .pr-logo{font-size:28px;font-weight:900;color:#1E40AF;letter-spacing:-1px;line-height:1}
+      .pr-logo span{color:#7C3AED}
+      .pr-logo-sub{font-size:9px;color:#64748B;margin-top:3px}
+      .pr-logo-badge{display:inline-block;margin-top:5px;background:#1E40AF;color:#fff;font-size:8px;font-weight:800;letter-spacing:1.5px;padding:2px 8px;border-radius:99px}
+      .pr-header-right{text-align:right}
+      .pr-title{font-size:13px;font-weight:800;color:#111;margin-bottom:2px}
+      .pr-subtitle{font-size:9px;color:#64748B}
+      .pr-datetime{font-size:9px;color:#94A3B8;margin-top:4px}
+      .pr-meta-box{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 12px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;margin-bottom:14px}
+      .pr-meta-label{font-size:7.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.6px;display:block}
+      .pr-meta-val{font-size:11px;font-weight:700;color:#111;display:block;margin-top:1px}
+      .pr-section{margin-bottom:11px;border:1px solid #CBD5E1;border-radius:8px;overflow:hidden}
+      .pr-sec-header{background:#1E3A5F;color:#fff;padding:7px 12px;font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+      .pr-sec-num{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.22);color:#fff;border-radius:4px;width:16px;height:16px;font-size:9px;font-weight:800;flex-shrink:0}
+      .pr-sec-body{padding:10px 12px;background:#fff}
+      .pr-verdict{font-size:12.5px;font-weight:800;padding:8px 14px;border-radius:6px;margin-bottom:9px;text-align:center}
+      .pr-verdict.sepsis{background:#FEE2E2;color:#991B1B;border:1.5px solid #FECACA}
+      .pr-verdict.ok{background:#DCFCE7;color:#14532D;border:1.5px solid #BBF7D0}
+      .pr-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #F1F5F9}
+      .pr-row:last-child{border-bottom:none}
+      .pr-row-label{color:#475569;font-size:10px;font-weight:500}
+      .pr-row-val{font-weight:700;font-size:11px;color:#111;text-align:right}
+      .pr-row-val.red{color:#B91C1C}
+      .pr-row-val.grn{color:#166534}
+      .pr-row-val.org{color:#9A3412}
+      .pr-nd{color:#94A3B8;font-size:10px;font-style:italic;padding:4px 0;display:block}
+      .pr-disclaimer{margin-top:12px;padding:8px 12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;font-size:9px;color:#78350F;line-height:1.6}
+      .pr-footer{margin-top:10px;text-align:center;font-size:9px;color:#94A3B8;border-top:1px solid #E2E8F0;padding-top:8px}
+    `;
+
+    const now = new Date();
+    const stamp = now.getFullYear() + ('0'+(now.getMonth()+1)).slice(-2) + ('0'+now.getDate()).slice(-2) + '_' + ('0'+now.getHours()).slice(-2) + ('0'+now.getMinutes()).slice(-2);
+    const fileName = 'SepsiGo_Report_' + stamp + '.html';
+
+    const fullHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SepsiGo Report</title><style>${printCSS}</style></head><body>${reportHtml}</body></html>`;
+
+    await Filesystem.writeFile({
+      path: fileName,
+      data: fullHtml,
+      directory: 'CACHE',
+      encoding: 'utf8',
+    });
+
+    const uriResult = await Filesystem.getUri({
+      path: fileName,
+      directory: 'CACHE',
+    });
+
+    await Share.share({
+      title: 'SepsiGo — Laporan Pasien',
+      url: uriResult.uri,
+      dialogTitle: isEN ? 'Share Patient Report' : 'Bagikan Laporan Pasien',
+    });
+  } catch (e) {
+    console.error('SepsiGo PDF share error:', e);
+    alert(isEN ? 'Failed to share report. Please try again.' : 'Gagal membagikan laporan. Silakan coba lagi.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+  }
 }
 </script>
 </body>
