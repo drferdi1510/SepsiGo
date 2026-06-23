@@ -6681,6 +6681,7 @@ function showUpdateBanner(newWorker) {
 
 <!-- ── PRINT REPORT (hidden, only visible during window.print()) ── -->
 <div id="print-report"></div>
+<script src="jspdf.umd.min.js"></script>
 
 <script>
 // ─── HASIL AKHIR ──────────────────────────────────────────────────────────────
@@ -7067,81 +7068,192 @@ function downloadPDF() {
     <div class="pr-footer">SepsiGo v0.1.0 &nbsp;&bull;&nbsp; FK Universitas Airlangga &nbsp;&bull;&nbsp; ${dateStr} &nbsp;&bull;&nbsp; sepsi-go.vercel.app</div>`;
 
   if (window.Capacitor) {
-    // Android WebView: window.print() tidak didukung — share sebagai file HTML
-    _downloadPDFAndroid(html, isEN);
+    // Android WebView: window.print() tidak didukung — generate PDF via jsPDF
+    _downloadPDFAndroid(isEN);
   } else {
     document.getElementById('print-report').innerHTML = html;
     window.print();
   }
 }
 
-async function _downloadPDFAndroid(reportHtml, isEN) {
+async function _downloadPDFAndroid(isEN) {
   const btn = document.getElementById('btn-download-pdf');
   if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
-
   try {
     const { Filesystem, Share } = window.Capacitor.Plugins;
-
-    const printCSS = `
-      body{font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#111;background:#fff;padding:20px 22px;font-size:11px;line-height:1.65;margin:0}
-      *{box-sizing:border-box}
-      .pr-header{display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:12px;margin-bottom:14px;border-bottom:3px solid #1E40AF}
-      .pr-logo{font-size:28px;font-weight:900;color:#1E40AF;letter-spacing:-1px;line-height:1}
-      .pr-logo span{color:#7C3AED}
-      .pr-logo-sub{font-size:9px;color:#64748B;margin-top:3px}
-      .pr-logo-badge{display:inline-block;margin-top:5px;background:#1E40AF;color:#fff;font-size:8px;font-weight:800;letter-spacing:1.5px;padding:2px 8px;border-radius:99px}
-      .pr-header-right{text-align:right}
-      .pr-title{font-size:13px;font-weight:800;color:#111;margin-bottom:2px}
-      .pr-subtitle{font-size:9px;color:#64748B}
-      .pr-datetime{font-size:9px;color:#94A3B8;margin-top:4px}
-      .pr-meta-box{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 12px;background:#F0F7FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;margin-bottom:14px}
-      .pr-meta-label{font-size:7.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.6px;display:block}
-      .pr-meta-val{font-size:11px;font-weight:700;color:#111;display:block;margin-top:1px}
-      .pr-section{margin-bottom:11px;border:1px solid #CBD5E1;border-radius:8px;overflow:hidden}
-      .pr-sec-header{background:#1E3A5F;color:#fff;padding:7px 12px;font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-      .pr-sec-num{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.22);color:#fff;border-radius:4px;width:16px;height:16px;font-size:9px;font-weight:800;flex-shrink:0}
-      .pr-sec-body{padding:10px 12px;background:#fff}
-      .pr-verdict{font-size:12.5px;font-weight:800;padding:8px 14px;border-radius:6px;margin-bottom:9px;text-align:center}
-      .pr-verdict.sepsis{background:#FEE2E2;color:#991B1B;border:1.5px solid #FECACA}
-      .pr-verdict.ok{background:#DCFCE7;color:#14532D;border:1.5px solid #BBF7D0}
-      .pr-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #F1F5F9}
-      .pr-row:last-child{border-bottom:none}
-      .pr-row-label{color:#475569;font-size:10px;font-weight:500}
-      .pr-row-val{font-weight:700;font-size:11px;color:#111;text-align:right}
-      .pr-row-val.red{color:#B91C1C}
-      .pr-row-val.grn{color:#166534}
-      .pr-row-val.org{color:#9A3412}
-      .pr-nd{color:#94A3B8;font-size:10px;font-style:italic;padding:4px 0;display:block}
-      .pr-disclaimer{margin-top:12px;padding:8px 12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;font-size:9px;color:#78350F;line-height:1.6}
-      .pr-footer{margin-top:10px;text-align:center;font-size:9px;color:#94A3B8;border-top:1px solid #E2E8F0;padding-top:8px}
-    `;
-
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const W = 210, ML = 15, MR = 15, CW = W - ML - MR;
+    const d = _getHasilData();
+    const T = LANG[isEN ? 'en' : 'id'];
     const now = new Date();
+    const dateStr = now.toLocaleDateString(isEN ? 'en-GB' : 'id-ID', {day:'2-digit',month:'long',year:'numeric'}) + ', ' + now.toLocaleTimeString(isEN ? 'en-GB' : 'id-ID', {hour:'2-digit',minute:'2-digit'});
     const stamp = now.getFullYear() + ('0'+(now.getMonth()+1)).slice(-2) + ('0'+now.getDate()).slice(-2) + '_' + ('0'+now.getHours()).slice(-2) + ('0'+now.getMinutes()).slice(-2);
-    const fileName = 'SepsiGo_Report_' + stamp + '.html';
 
-    const fullHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SepsiGo Report</title><style>${printCSS}</style></head><body>${reportHtml}</body></html>`;
+    const COL = {
+      blue:[30,64,175], darkBlue:[30,58,95], purple:[124,58,237],
+      red:[185,28,28], green:[22,101,52], orange:[154,52,18],
+      muted:[71,85,105], light:[241,245,249], metaBg:[240,247,255],
+      metaBdr:[191,219,254], verdSepBg:[254,226,226], verdOkBg:[220,252,231],
+      disclaimBg:[255,251,235], disclaimBdr:[253,230,138], disclaimTxt:[120,53,15],
+      border:[203,213,225], white:[255,255,255], black:[17,17,17], gray:[148,163,184]
+    };
+    const setColor = (c, type) => type === 'fill' ? doc.setFillColor(...c) : doc.setTextColor(...c);
+    const px = (n) => n * 0.352778;
 
-    await Filesystem.writeFile({
-      path: fileName,
-      data: fullHtml,
-      directory: 'CACHE',
-      encoding: 'utf8',
+    let y = 15;
+
+    // ── HEADER ──
+    doc.setFillColor(...COL.blue);
+    doc.rect(ML, y + 14, CW, 0.8, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(22); setColor(COL.blue,'text');
+    doc.text('Sepsi', ML, y + 10);
+    const sepsiW = doc.getTextWidth('Sepsi');
+    setColor(COL.purple,'text'); doc.text('Go', ML + sepsiW, y + 10);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.muted,'text');
+    doc.text('Sepsis Early Detection System', ML, y + 14.5);
+    doc.setFont('helvetica','bold'); doc.setFontSize(6); setColor(COL.white,'text');
+    doc.setFillColor(...COL.blue);
+    doc.roundedRect(ML, y + 16.5, 42, 4, 1, 1, 'F');
+    doc.text('CPD  ·  SOFA  ·  NEWS-2  ·  KULTUR', ML + 2, y + 19.5);
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); setColor(COL.black,'text');
+    doc.text(isEN ? 'Patient Result Report' : 'Laporan Hasil Pasien', W - MR, y + 8, {align:'right'});
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.muted,'text');
+    doc.text('sepsi-go.vercel.app', W - MR, y + 12, {align:'right'});
+    setColor(COL.gray,'text'); doc.setFontSize(6.5);
+    doc.text((isEN?'Generated: ':'Dicetak: ') + dateStr, W - MR, y + 16, {align:'right'});
+    y += 24;
+
+    // ── META BOX ──
+    doc.setFillColor(...COL.metaBg); doc.setDrawColor(...COL.metaBdr);
+    doc.roundedRect(ML, y, CW, 16, 2, 2, 'FD');
+    const sexLabel = d.sexEl ? (d.sexEl.value === 'm' ? (isEN?'Male':'Laki-laki') : (isEN?'Female':'Perempuan')) : '—';
+    const settingLabel = d.setSel ? d.setSel.value : '—';
+    const metas = [
+      [T.hasilRM, d.rm], [T.hasilSID, d.sid], [T.hasilAge, d.ageVal],
+      [T.hasilSex, sexLabel], [T.hasilSetting, settingLabel], [isEN?'Language':'Bahasa', isEN?'English':'Indonesia']
+    ];
+    metas.forEach((m, i) => {
+      const col = i % 3, row = Math.floor(i / 3);
+      const mx = ML + 4 + col * (CW / 3), my = y + 4 + row * 7;
+      doc.setFont('helvetica','bold'); doc.setFontSize(6); setColor(COL.muted,'text');
+      doc.text(String(m[0]).toUpperCase(), mx, my);
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); setColor(COL.black,'text');
+      doc.text(String(m[1]).substring(0,22), mx, my + 4);
     });
+    y += 20;
 
-    const uriResult = await Filesystem.getUri({
-      path: fileName,
-      directory: 'CACHE',
-    });
+    // helper: section header
+    const secHeader = (num, title) => {
+      doc.setFillColor(...COL.darkBlue);
+      doc.rect(ML, y, CW, 7, 'F');
+      doc.setFillColor(255,255,255,0.22); doc.setDrawColor(255,255,255,0.22);
+      doc.roundedRect(ML + 2, y + 1.5, 4, 4, 0.8, 0.8, 'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(7); setColor(COL.white,'text');
+      doc.text(String(num), ML + 4, y + 4.5, {align:'center'});
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); setColor(COL.white,'text');
+      doc.text(title.toUpperCase(), ML + 9, y + 4.5);
+      y += 7;
+    };
 
+    // helper: row
+    const row = (label, value, valColor) => {
+      doc.setDrawColor(...COL.light); doc.line(ML, y + 5, ML + CW, y + 5);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8); setColor(COL.muted,'text');
+      doc.text(String(label), ML + 3, y + 3.5);
+      doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+      setColor(valColor || COL.black,'text');
+      doc.text(String(value).substring(0,40), ML + CW - 2, y + 3.5, {align:'right'});
+      y += 5;
+    };
+
+    // ── SECTION 1: CPD ──
+    doc.setDrawColor(...COL.border); doc.roundedRect(ML, y, CW, 1, 0, 0);
+    secHeader(1, T.hasilSec1);
+    const cpdSepsis = d.newyFlag === 'high';
+    const verdBg = cpdSepsis ? COL.verdSepBg : COL.verdOkBg;
+    const verdTxt = cpdSepsis ? COL.red : COL.green;
+    const verdLabel = cpdSepsis ? (isEN?'⚠ SEPSIS SUSPECTED':'⚠ SEPSIS DICURIGAI') : (isEN?'✓ LOW SEPSIS RISK':'✓ RISIKO SEPSIS RENDAH');
+    doc.setFillColor(...verdBg); doc.roundedRect(ML + 2, y + 1, CW - 4, 7, 1.5, 1.5, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); setColor(verdTxt,'text');
+    doc.text(verdLabel, W / 2, y + 5.8, {align:'center'});
+    y += 9;
+    if (d.newyVal) {
+      const newyNum = parseFloat(d.newyVal);
+      const newyLabel = cpdSepsis ? (isEN?'HIGH ↑':'TINGGI ↑') : 'NORMAL';
+      row('NE-WY', newyNum.toFixed(2) + ' — ' + newyLabel, cpdSepsis ? COL.red : COL.green);
+      row(T.hasilCutoff, '736.00');
+      row(isEN?'Sensitivity':'Sensitivitas', '80.8%');
+      row(isEN?'Specificity':'Spesifisitas', '66.7%');
+    } else {
+      doc.setFont('helvetica','italic'); doc.setFontSize(8); setColor(COL.gray,'text');
+      doc.text(isEN?'NE-WY value not entered':'Nilai NE-WY belum diisi', ML + 3, y + 4);
+      y += 6;
+    }
+    y += 3;
+
+    // ── SECTION 2: SOFA/NEWS ──
+    secHeader(2, T.hasilSec2);
+    if (d.hasSofa) {
+      const sofaCls = d.sofaTotal >= 2 ? COL.red : COL.green;
+      const sofaVerdict = d.sofaTotal >= 2 ? (isEN?'Organ dysfunction (SOFA ≥2)':'Disfungsi organ (SOFA ≥2)') : (isEN?'No significant dysfunction':'Tidak ada disfungsi signifikan');
+      const newsRisk = d.newsTotal >= 5 ? (isEN?'High risk':'Risiko tinggi') : d.newsTotal >= 3 ? (isEN?'Medium risk':'Risiko sedang') : (isEN?'Low risk':'Risiko rendah');
+      const newsCls = d.newsTotal >= 5 ? COL.red : d.newsTotal >= 3 ? COL.orange : COL.green;
+      row('SOFA-2 ' + (isEN?'Score':'Skor'), d.sofaTotal + '/24 — ' + sofaVerdict, sofaCls);
+      row('NEWS-2 ' + (isEN?'Score':'Skor'), d.newsTotal + '/20 — ' + newsRisk, newsCls);
+    } else {
+      doc.setFont('helvetica','italic'); doc.setFontSize(8); setColor(COL.gray,'text');
+      doc.text(T.hasilNotDone, ML + 3, y + 4); y += 6;
+    }
+    y += 3;
+
+    // ── SECTION 3: KULTUR ──
+    secHeader(3, T.hasilSec3);
+    const kulturStatusMap = {
+      notdone: isEN?'Not performed':'Tidak dilakukan',
+      pending: isEN?'Pending — awaiting result':'Menunggu hasil kultur',
+      neg: isEN?'Negative':'Negatif',
+      pos: isEN?'Positive':'Positif'
+    };
+    const kulturStatusTxt = kulturStatusMap[d.kulturStatus] || kulturStatusMap.notdone;
+    const kulturCls = d.kulturStatus === 'pos' ? COL.red : d.kulturStatus === 'neg' ? COL.green : COL.muted;
+    row(T.hasilKulturStatus || 'Status Kultur', kulturStatusTxt, kulturCls);
+    if (d.hasKultur && d.kulturResultArea) {
+      const orgEls = d.kulturResultArea.querySelectorAll('.kultur-org-name, .org-name, [data-org]');
+      if (orgEls.length > 0) {
+        orgEls.forEach(el => { row(isEN?'Organism':'Organisme', el.textContent.trim()); });
+      }
+    }
+    y += 3;
+
+    // ── DISCLAIMER ──
+    const disc = T.hasilDisclaimer || 'Alat bantu skrining. Bukan pengganti keputusan klinis.';
+    const discLines = doc.splitTextToSize('⚠ ' + disc, CW - 8);
+    const discH = discLines.length * 4 + 6;
+    doc.setFillColor(...COL.disclaimBg); doc.setDrawColor(...COL.disclaimBdr);
+    doc.roundedRect(ML, y, CW, discH, 1.5, 1.5, 'FD');
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.disclaimTxt,'text');
+    doc.text(discLines, ML + 4, y + 4.5);
+    y += discH + 4;
+
+    // ── FOOTER ──
+    doc.setDrawColor(...COL.border); doc.line(ML, 282, ML + CW, 282);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); setColor(COL.gray,'text');
+    doc.text('SepsiGo v0.1.0  ·  FK Universitas Airlangga  ·  ' + dateStr + '  ·  sepsi-go.vercel.app', W / 2, 286, {align:'center'});
+
+    // ── SAVE & SHARE ──
+    const base64 = doc.output('datauristring').split(',')[1];
+    const fileName = 'SepsiGo_Report_' + stamp + '.pdf';
+    await Filesystem.writeFile({ path: fileName, data: base64, directory: 'CACHE' });
+    const uriResult = await Filesystem.getUri({ path: fileName, directory: 'CACHE' });
     await Share.share({
-      title: 'SepsiGo — Laporan Pasien',
+      title: isEN ? 'SepsiGo Patient Report' : 'SepsiGo Laporan Pasien',
       url: uriResult.uri,
-      dialogTitle: isEN ? 'Share Patient Report' : 'Bagikan Laporan Pasien',
+      dialogTitle: isEN ? 'Save / Share PDF Report' : 'Simpan / Bagikan Laporan PDF',
     });
-  } catch (e) {
-    console.error('SepsiGo PDF share error:', e);
-    alert(isEN ? 'Failed to share report. Please try again.' : 'Gagal membagikan laporan. Silakan coba lagi.');
+  } catch(e) {
+    console.error('SepsiGo PDF error:', e);
+    alert(isEN ? 'Failed to generate PDF. Please try again.' : 'Gagal membuat PDF. Silakan coba lagi.');
   } finally {
     if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
   }
